@@ -13,11 +13,6 @@ type
     Tlo: TImage;
     btn_new_process: TButton;
     Wzor_label: TLabel;
-    Rectangle1: TRectangle;
-    Label1: TLabel;
-    Rectangle2: TRectangle;
-    Label2: TLabel;
-    Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure WzorObiektuMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
