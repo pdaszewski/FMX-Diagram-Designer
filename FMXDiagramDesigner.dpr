@@ -3,7 +3,9 @@ program FMXDiagramDesigner;
 uses
   System.StartUpCopy,
   FMX.Forms,
-  MainForm_frm in 'MainForm_frm.pas' {AOknoGl};
+  MainForm_frm in 'MainForm_frm.pas' {AOknoGl},
+  RamkaEdycjaProcesu_frm in 'RamkaEdycjaProcesu_frm.pas' {RamkaEdycjaProcesu: TFrame},
+  RamkaMenuGlowne_frm in 'RamkaMenuGlowne_frm.pas' {RamkaMenuGlowne: TFrame};
 
 {$R *.res}
 

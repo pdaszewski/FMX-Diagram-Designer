@@ -1,0 +1,67 @@
+object RamkaMenuGlowne: TRamkaMenuGlowne
+  Size.Width = 937.000000000000000000
+  Size.Height = 456.000000000000000000
+  Size.PlatformDefault = False
+  object BackGround: TRectangle
+    Align = Client
+    Fill.Color = xAA191919
+    Size.Width = 937.000000000000000000
+    Size.Height = 456.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    XRadius = 3.000000000000000000
+    YRadius = 3.000000000000000000
+    object BlurEffect1: TBlurEffect
+      Softness = 0.300000011920929000
+    end
+  end
+  object Menu: TRectangle
+    Align = Center
+    Fill.Color = xAA0B064F
+    Size.Width = 400.000000000000000000
+    Size.Height = 213.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claAliceblue
+    XRadius = 3.000000000000000000
+    YRadius = 3.000000000000000000
+    object btn_new_diagram: TButton
+      Align = Top
+      StyledSettings = [Family]
+      Position.Y = 17.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 0
+      Text = 'nowy diagram'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object lbl_menu_name: TLabel
+      Align = Top
+      StyledSettings = [Family, Style]
+      Size.Width = 400.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claAliceblue
+      TextSettings.HorzAlign = Center
+      Text = 'Menu aplikacji'
+      TabOrder = 1
+    end
+    object btn_close_menu: TButton
+      Align = Bottom
+      StyledSettings = [Family]
+      Position.Y = 163.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 2
+      Text = 'zamknij menu'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+  end
+end

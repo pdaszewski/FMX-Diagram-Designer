@@ -1,0 +1,68 @@
+object RamkaEdycjaProcesu: TRamkaEdycjaProcesu
+  Size.Width = 937.000000000000000000
+  Size.Height = 456.000000000000000000
+  Size.PlatformDefault = False
+  object BackGround: TRectangle
+    Align = Client
+    Fill.Color = xAA191919
+    Size.Width = 937.000000000000000000
+    Size.Height = 456.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    XRadius = 3.000000000000000000
+    YRadius = 3.000000000000000000
+    object BlurEffect1: TBlurEffect
+      Softness = 0.300000011920929000
+    end
+  end
+  object Menu: TRectangle
+    Align = Center
+    Fill.Color = xAA0B064F
+    Size.Width = 400.000000000000000000
+    Size.Height = 274.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claAliceblue
+    XRadius = 3.000000000000000000
+    YRadius = 3.000000000000000000
+    object Label1: TLabel
+      Align = Top
+      StyledSettings = [Family, Style]
+      Size.Width = 400.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claAliceblue
+      TextSettings.HorzAlign = Center
+      Text = 'Nazwa procesu:'
+      TabOrder = 0
+    end
+    object btn_save_process_data: TButton
+      Align = Bottom
+      StyledSettings = [Family]
+      Position.Y = 224.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 1
+      Text = 'zapisz dane procesu'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object memo_process_name: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Align = Top
+      Margins.Left = 10.000000000000000000
+      Margins.Right = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 17.000000000000000000
+      Size.Width = 380.000000000000000000
+      Size.Height = 72.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Viewport.Width = 376.000000000000000000
+      Viewport.Height = 68.000000000000000000
+    end
+  end
+end
