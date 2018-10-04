@@ -21926,12 +21926,12 @@ object AOknoGl: TAOknoGl
       Size.Height = 514.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
-      Viewport.Width = 1021.000000000000000000
+      Viewport.Width = 1037.000000000000000000
       Viewport.Height = 514.000000000000000000
       object WzorLinii: TLine
         LineType = Left
-        Position.X = 936.000000000000000000
-        Position.Y = 472.000000000000000000
+        Position.X = 880.000000000000000000
+        Position.Y = 448.000000000000000000
         Size.Width = 50.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
@@ -21966,6 +21966,30 @@ object AOknoGl: TAOknoGl
           TabOrder = 0
           OnDblClick = Wzor_labelDblClick
         end
+      end
+      object WzorStrzalki: TImage
+        MultiResBitmap = <
+          item
+            Width = 20
+            Height = 20
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
+              0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              007049444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
+              5180094A63038C40033981F406520DC50980067901F14F20FE414D437D80F817
+              B50DF5A585A17EC4188A2F52D0012394A61C10EB3AA200D000EA851FB50DA36E
+              72011AE24E4ED6C30BA85A380C57C0C00000E7BA956E20BAB2B8000000004945
+              4E44AE426082}
+            FileName = 
+              'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
+              '0.3.0\Projektowanie\arrow.png'
+          end>
+        Position.X = 944.000000000000000000
+        Position.Y = 472.000000000000000000
+        Size.Width = 20.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Visible = False
       end
     end
   end
@@ -22004,9 +22028,6 @@ object AOknoGl: TAOknoGl
       Size.Height = 514.000000000000000000
     end
     inherited Menu: TRectangle
-      OnMouseDown = nil
-      OnMouseMove = nil
-      OnMouseUp = nil
       inherited btn_new_diagram: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         OnClick = RamkaMenuGlowne1btn_new_diagramClick

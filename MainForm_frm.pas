@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ExtCtrls, FMX.Objects, FMX.Effects,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListBox, RamkaEdycjaProcesu_frm, FMX.ScrollBox, FMX.Memo,
-  RamkaMenuGlowne_frm;
+  RamkaMenuGlowne_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList;
 
 type
  obiekt = record
@@ -20,6 +20,8 @@ type
     do_obiektu: Integer;
     od_strzalka: Boolean;
     do_strzalka: Boolean;
+    strzalka_od: TImage;
+    strzalka_do: TImage;
     linia: TLine;
     linia2: TLine;
     linia3: TLine;
@@ -45,13 +47,14 @@ type
     RamkaEdycjaProcesu1: TRamkaEdycjaProcesu;
     Rysowanie: TTimer;
     RamkaMenuGlowne1: TRamkaMenuGlowne;
+    WzorStrzalki: TImage;
 
     procedure Deaktywuj_obiekt;
     procedure Czysc_obiekty_i_powiazania;
     function Ostatni_obiekt: Integer;
     procedure Dodaj_wskaznik(proces : TRectangle; index_procesu : Integer);
     procedure Rysuj_powiazania;
-    procedure Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean; linia, linia2, linia3: TLine);
+    procedure Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean; linia, linia2, linia3: TLine; strzalka_od, strzalka_do: TImage);
     procedure Dodaj_powiazanie(od_obiektu_index, do_obiektu_index: Integer; od_strzalka, do_strzalka: Boolean);
     procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     procedure Edycja_danych_procesu;
@@ -151,6 +154,7 @@ var
   i: Integer;
   nowy: Integer;
   tmpl, tmpl2, tmpl3: TLine;
+  img1, img2: TImage;
 Begin
  nowy:=0;
  for i := 1 to max_powiazan do
@@ -179,6 +183,16 @@ Begin
    tmpl3.Parent := ScrollBox;
    tmpl3.Visible:=True;
    Powiazania[nowy].linia3:=tmpl3;
+
+   img1 := TImage(WzorStrzalki.Clone(Self));
+   img1.Parent := ScrollBox;
+   img1.Visible := True;
+   powiazania[nowy].strzalka_od:=img1;
+
+   img2 := TImage(WzorStrzalki.Clone(Self));
+   img2.Parent := ScrollBox;
+   img2.Visible := True;
+   powiazania[nowy].strzalka_do:=img2;
 
    Rysuj_powiazania;
   End;
@@ -280,12 +294,12 @@ Begin
       Begin
         if Obiekty[o].id_obiektu = Powiazania[i].do_obiektu then obiekt_index_do := o;
       End;
-      Rysuj_powiazanie(obiekt_index_od, obiekt_index_do, Powiazania[i].od_strzalka, Powiazania[i].do_strzalka, Powiazania[i].linia, Powiazania[i].linia2, Powiazania[i].linia3);
+      Rysuj_powiazanie(obiekt_index_od, obiekt_index_do, Powiazania[i].od_strzalka, Powiazania[i].do_strzalka, Powiazania[i].linia, Powiazania[i].linia2, Powiazania[i].linia3, Powiazania[i].strzalka_od, Powiazania[i].strzalka_do);
     End;
   End;
 End;
 
-procedure TAOknoGl.Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean; linia, linia2, linia3: TLine);
+procedure TAOknoGl.Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean; linia, linia2, linia3: TLine; strzalka_od, strzalka_do: TImage);
 var
   od_rect, do_rect: TRectangle;
   poy, koy : Single;
@@ -385,6 +399,22 @@ begin
       DrawLineBetweenPoints(linia, PointF(x1, y1), PointF(x1, oy));
       DrawLineBetweenPoints(linia2, PointF(x1, oy), PointF(x2, oy));
       DrawLineBetweenPoints(linia3, PointF(x2, oy), PointF(x2, y2));
+      if do_strzalka=True then
+       Begin
+        strzalka_do.Visible:=True;
+        strzalka_do.Position.X:=x2-(WzorStrzalki.Width/2);
+        strzalka_do.Position.Y:=y2-WzorStrzalki.Height+7;
+        strzalka_do.RotationAngle:=90;
+       End
+      else strzalka_do.Visible:=False;
+      if od_strzalka=True then
+       Begin
+        strzalka_od.Visible:=True;
+        strzalka_od.Position.X:=x1-(WzorStrzalki.Width/2);
+        strzalka_od.Position.Y:=y1-7;
+        strzalka_od.RotationAngle:=270;
+       End
+      else strzalka_od.Visible:=False;
      End;
    if kier='G' then
      Begin
@@ -392,6 +422,22 @@ begin
       DrawLineBetweenPoints(linia, PointF(x1, y1), PointF(x1, oy));
       DrawLineBetweenPoints(linia2, PointF(x1, oy), PointF(x2, oy));
       DrawLineBetweenPoints(linia3, PointF(x2, oy), PointF(x2, y2));
+      if do_strzalka=True then
+       Begin
+        strzalka_do.Visible:=True;
+        strzalka_do.Position.X:=x2-(WzorStrzalki.Width/2);
+        strzalka_do.Position.Y:=y2-7;
+        strzalka_do.RotationAngle:=270;
+       End
+      else strzalka_do.Visible:=False;
+      if od_strzalka=True then
+       Begin
+        strzalka_od.Visible:=True;
+        strzalka_od.Position.X:=x1-(WzorStrzalki.Width/2);
+        strzalka_od.Position.Y:=y1-WzorStrzalki.Height+7;
+        strzalka_od.RotationAngle:=90;
+       End
+      else strzalka_od.Visible:=False;
      End;
 
     if kier='P' then
@@ -400,6 +446,22 @@ begin
       DrawLineBetweenPoints(linia, PointF(x1, y1), PointF(ox, y1));
       DrawLineBetweenPoints(linia2, PointF(ox, y1), PointF(ox, y2));
       DrawLineBetweenPoints(linia3, PointF(ox, y2), PointF(x2, y2));
+      if do_strzalka=True then
+       Begin
+        strzalka_do.Visible:=True;
+        strzalka_do.Position.X:=x2-(WzorStrzalki.Width)+7;
+        strzalka_do.Position.Y:=y2-(WzorStrzalki.Height/2);
+        strzalka_do.RotationAngle:=0;
+       End
+      else strzalka_do.Visible:=False;
+      if od_strzalka=True then
+       Begin
+        strzalka_od.Visible:=True;
+        strzalka_od.Position.X:=x1-7;
+        strzalka_od.Position.Y:=y1-(WzorStrzalki.Height/2);
+        strzalka_od.RotationAngle:=180;
+       End
+      else strzalka_od.Visible:=False;
      End;
     if kier='L' then
      Begin
@@ -407,6 +469,22 @@ begin
       DrawLineBetweenPoints(linia, PointF(x1, y1), PointF(ox, y1));
       DrawLineBetweenPoints(linia2, PointF(ox, y1), PointF(ox, y2));
       DrawLineBetweenPoints(linia3, PointF(ox, y2), PointF(x2, y2));
+      if do_strzalka=True then
+       Begin
+        strzalka_do.Visible:=True;
+        strzalka_do.Position.X:=x2-7;
+        strzalka_do.Position.Y:=y2-(WzorStrzalki.Height/2);
+        strzalka_do.RotationAngle:=180;
+       End
+      else strzalka_do.Visible:=False;
+      if od_strzalka=True then
+       Begin
+        strzalka_od.Visible:=True;
+        strzalka_od.Position.X:=x1-(WzorStrzalki.Width)+7;
+        strzalka_od.Position.Y:=y1-(WzorStrzalki.Height/2);
+        strzalka_od.RotationAngle:=0;
+       End
+      else strzalka_od.Visible:=False;
      End;
 
     od_rect.BringToFront;
@@ -473,7 +551,7 @@ begin
   End;
 
  { TODO : Usun¹æ dodawanie powi¹zania przy zak³adaniu, na rzecz jakiegoœ interfejsu do projektowania powi¹zañ. }
- if index_obiektu>1 then Dodaj_powiazanie(1,index_obiektu,False,True);
+ if index_obiektu>1 then Dodaj_powiazanie(1,index_obiektu,True,True);
 
  Rysuj_powiazania;
 end;
@@ -508,6 +586,8 @@ Begin
     Powiazania[i].linia.DisposeOf;
     Powiazania[i].linia2.DisposeOf;
     Powiazania[i].linia3.DisposeOf;
+    Powiazania[i].strzalka_od.DisposeOf;
+    Powiazania[i].strzalka_do.DisposeOf;
    {$ELSE}
     Powiazania[i].linia.Free;
     Powiazania[i].linia:=nil;
@@ -515,6 +595,10 @@ Begin
     Powiazania[i].linia2:=nil;
     Powiazania[i].linia3.Free;
     Powiazania[i].linia3:=nil;
+    Powiazania[i].strzalka_od.Free;
+    Powiazania[i].strzalka_od:=nil;
+    Powiazania[i].strzalka_do.Free;
+    Powiazania[i].strzalka_do:=nil;
    {$ENDIF}
   End;
  Rysuj_powiazania;
