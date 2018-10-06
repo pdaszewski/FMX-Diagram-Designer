@@ -5,7 +5,8 @@ uses
   FMX.Forms,
   MainForm_frm in 'MainForm_frm.pas' {AOknoGl},
   RamkaEdycjaProcesu_frm in 'RamkaEdycjaProcesu_frm.pas' {RamkaEdycjaProcesu: TFrame},
-  RamkaMenuGlowne_frm in 'RamkaMenuGlowne_frm.pas' {RamkaMenuGlowne: TFrame};
+  RamkaMenuGlowne_frm in 'RamkaMenuGlowne_frm.pas' {RamkaMenuGlowne: TFrame},
+  RamkaPowiazanie_frm in 'RamkaPowiazanie_frm.pas' {RamkaPowiazanie: TFrame};
 
 {$R *.res}
 

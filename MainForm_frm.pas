@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ExtCtrls, FMX.Objects, FMX.Effects,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListBox, RamkaEdycjaProcesu_frm, FMX.ScrollBox, FMX.Memo,
-  RamkaMenuGlowne_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList;
+  RamkaMenuGlowne_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList, RamkaPowiazanie_frm;
 
 type
  obiekt = record
@@ -48,6 +48,8 @@ type
     Rysowanie: TTimer;
     RamkaMenuGlowne1: TRamkaMenuGlowne;
     WzorStrzalki: TImage;
+    btn_laczenie_procesow: TButton;
+    RamkaPowiazanie1: TRamkaPowiazanie;
 
     procedure Deaktywuj_obiekt;
     procedure Czysc_obiekty_i_powiazania;
@@ -63,6 +65,9 @@ type
     procedure Dodaj_punkt_styku(x,y : Single);
     function Czy_juz_jest_tu_punkt_styku(x,y : Single): Boolean;
 
+    procedure Odznacz_wybrane(pierwszy, drugi : Boolean);
+    procedure Ustaw_strzalke_powiazania(strzalka : String);
+
     procedure FormCreate(Sender: TObject);
     procedure WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
     procedure WzorObiektuMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
@@ -75,6 +80,13 @@ type
     procedure RysowanieTimer(Sender: TObject);
     procedure RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
     procedure RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
+    procedure RamkaPowiazanie1but_cancelClick(Sender: TObject);
+    procedure btn_laczenie_procesowClick(Sender: TObject);
+    procedure RamkaPowiazanie1rec_doClick(Sender: TObject);
+    procedure RamkaPowiazanie1img_doClick(Sender: TObject);
+    procedure RamkaPowiazanie1rec_odClick(Sender: TObject);
+    procedure RamkaPowiazanie1img_odClick(Sender: TObject);
+    procedure RamkaPowiazanie1btn_addClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -82,8 +94,8 @@ type
   end;
 
 const
- wersja = '0.2.0';
- data_kompilacji = '2018-10-02';
+ wersja = '0.4.0';
+ data_kompilacji = '2018-10-05';
 
  max_obiektow = 100;
  max_powiazan = 1000;
@@ -96,6 +108,8 @@ var
   MouseIsDown: Boolean;
   X1, Y1: Integer;
   wybrany: TRectangle;
+  wybrany_pierwszy: TRectangle;
+  wybrany_drugi: TRectangle;
   label_wybranego: Integer;
 
   obiekty : array[1..max_obiektow] of obiekt;
@@ -105,6 +119,35 @@ var
 implementation
 
 {$R *.fmx}
+
+procedure TAOknoGl.Ustaw_strzalke_powiazania(strzalka: string);
+begin
+ strzalka:=Trim(AnsiLowerCase(strzalka));
+ if strzalka='do' then
+  Begin
+   if RamkaPowiazanie1.img_do.Visible then RamkaPowiazanie1.img_do.Visible:=False
+   else RamkaPowiazanie1.img_do.Visible:=True;
+  End
+ else
+  Begin
+   if RamkaPowiazanie1.img_od.Visible then RamkaPowiazanie1.img_od.Visible:=False
+   else RamkaPowiazanie1.img_od.Visible:=True;
+  End;
+end;
+
+procedure TAOknoGl.Odznacz_wybrane(pierwszy, drugi : Boolean);
+Begin
+ if (pierwszy) and (wybrany_pierwszy<>nil) then
+  Begin
+   wybrany_pierwszy.Fill.Color:=TAlphaColor($AA0F077A);
+   wybrany_pierwszy:=nil;
+  End;
+ if (drugi) and (wybrany_drugi<>nil)  then
+  Begin
+   wybrany_drugi.Fill.Color:=TAlphaColor($AA0F077A);
+   wybrany_drugi:=nil;
+  End;
+End;
 
 function TAOknoGl.Czy_juz_jest_tu_punkt_styku(x,y : Single): Boolean;
 Var
@@ -268,6 +311,55 @@ procedure TAOknoGl.RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
 begin
  Czysc_obiekty_i_powiazania;
  RamkaMenuGlowne1.Visible:=False;
+end;
+
+procedure TAOknoGl.RamkaPowiazanie1btn_addClick(Sender: TObject);
+Var
+ od_obiektu, do_obiektu : Integer;
+  i: Integer;
+begin
+ if (RamkaPowiazanie1.img_do.Visible=False) and (RamkaPowiazanie1.img_do.Visible=False) then
+  Begin
+   //Musi byæ jakaœ strza³ka
+  End
+ else
+  Begin
+   for i := 1 to max_obiektow do
+    Begin
+     if obiekty[i].wskaznik=wybrany_pierwszy then od_obiektu:=obiekty[i].id_obiektu;
+     if obiekty[i].wskaznik=wybrany_drugi then do_obiektu:=obiekty[i].id_obiektu;
+    End;
+   Dodaj_powiazanie(od_obiektu, do_obiektu, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
+   Rysuj_powiazania;
+   RamkaPowiazanie1.Visible:=False;
+   Odznacz_wybrane(False,True);
+  End;
+end;
+
+procedure TAOknoGl.RamkaPowiazanie1but_cancelClick(Sender: TObject);
+begin
+ RamkaPowiazanie1.Visible:=False;
+ Odznacz_wybrane(False,True);
+end;
+
+procedure TAOknoGl.RamkaPowiazanie1img_doClick(Sender: TObject);
+begin
+ Ustaw_strzalke_powiazania('do');
+end;
+
+procedure TAOknoGl.RamkaPowiazanie1img_odClick(Sender: TObject);
+begin
+ Ustaw_strzalke_powiazania('od');
+end;
+
+procedure TAOknoGl.RamkaPowiazanie1rec_doClick(Sender: TObject);
+begin
+ Ustaw_strzalke_powiazania('do');
+end;
+
+procedure TAOknoGl.RamkaPowiazanie1rec_odClick(Sender: TObject);
+begin
+ Ustaw_strzalke_powiazania('od');
 end;
 
 procedure TAOknoGl.RysowanieTimer(Sender: TObject);
@@ -550,15 +642,17 @@ begin
     End;
   End;
 
- { TODO : Usun¹æ dodawanie powi¹zania przy zak³adaniu, na rzecz jakiegoœ interfejsu do projektowania powi¹zañ. }
- if index_obiektu>1 then Dodaj_powiazanie(1,index_obiektu,True,True);
-
  Rysuj_powiazania;
 end;
 
 procedure TAOknoGl.btn_hamburgerClick(Sender: TObject);
 begin
  RamkaMenuGlowne1.Visible:=Not(RamkaMenuGlowne1.Visible);
+end;
+
+procedure TAOknoGl.btn_laczenie_procesowClick(Sender: TObject);
+begin
+ Odznacz_wybrane(True,True);
 end;
 
 procedure TAOknoGl.Czysc_obiekty_i_powiazania;
@@ -623,23 +717,59 @@ end;
 
 procedure TAOknoGl.WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 begin
-  wybrany:=TRectangle(Sender);
-  wybrany.BringToFront;
-  X1 := round(X);
-  Y1 := round(Y);
-  wybrany.Fill.Color:=TAlphaColor($AA7A0707);
-  MouseIsDown := True;
-  Rysowanie.Enabled:=True;
+ if btn_laczenie_procesow.IsPressed then
+  Begin
+   if wybrany_pierwszy = nil then
+    Begin
+     wybrany_pierwszy:=TRectangle(Sender);
+     wybrany_pierwszy.BringToFront;
+     wybrany_pierwszy.Fill.Color:=TAlphaColor($AA7A0707);
+    End
+   else
+    Begin
+     //Jeœli pierwszy jest ju¿ wybrany
+     if TRectangle(Sender)=wybrany_pierwszy then
+      Begin
+       //Jeœli nowo klikniêty jest wybranym
+       wybrany_pierwszy.Fill.Color:=TAlphaColor($AA0F077A);
+       wybrany_pierwszy:=Nil;
+      End
+     else
+      Begin
+       //Jeœli pierwszy jest wybrany i teraz wybraliœmy drugi!
+       wybrany_drugi:=TRectangle(Sender);
+       wybrany_drugi.BringToFront;
+       wybrany_drugi.Fill.Color:=TAlphaColor($AA7A0707);
+       RamkaPowiazanie1.Visible:=True;
+       RamkaPowiazanie1.lbl_od_procesu.Text:= TLabel(wybrany_pierwszy.Children[0]).Text;
+       RamkaPowiazanie1.lbl_do_procesu.Text:= TLabel(wybrany_drugi.Children[0]).Text;
+       RamkaPowiazanie1.img_od.Visible:=False;
+       RamkaPowiazanie1.img_do.Visible:=True;
+      End;
+    End;
+  End
+ else
+  Begin
+   wybrany:=TRectangle(Sender);
+   wybrany.BringToFront;
+   X1 := round(X);
+   Y1 := round(Y);
+   wybrany.Fill.Color:=TAlphaColor($AA7A0707);
+   MouseIsDown := True;
+   Rysowanie.Enabled:=True;
+  End;
 end;
 
 procedure TAOknoGl.WzorObiektuMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Single);
 begin
- if MouseIsDown then
-  begin
-    wybrany.Position.X := wybrany.Position.X + round(X) - X1;
-    wybrany.Position.Y := wybrany.Position.Y + round(Y) - Y1;
-    //Rysuj_powiazania;
-  end;
+ if btn_laczenie_procesow.IsPressed = False then
+  Begin
+   if MouseIsDown then
+    begin
+      wybrany.Position.X := wybrany.Position.X + round(X) - X1;
+      wybrany.Position.Y := wybrany.Position.Y + round(Y) - Y1;
+    end;
+  End;
 end;
 
 procedure TAOknoGl.Deaktywuj_obiekt;
@@ -652,19 +782,22 @@ End;
 
 procedure TAOknoGl.WzorObiektuMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
 begin
- Deaktywuj_obiekt;
+ if btn_laczenie_procesow.IsPressed = False then Deaktywuj_obiekt;
 end;
 
 procedure TAOknoGl.Edycja_danych_procesu;
 var
   i: Integer;
 begin
- for i := 0 to wybrany.ChildrenCount-1 do
+ if btn_laczenie_procesow.IsPressed = False then
   Begin
-   if wybrany.Children[i] is TLabel then
+    for i := 0 to wybrany.ChildrenCount - 1 do
     Begin
-     RamkaEdycjaProcesu1.Visible:=True;
-     RamkaEdycjaProcesu1.memo_process_name.Text:=TLabel(wybrany.Children[i]).Text;
+      if wybrany.Children[i] is TLabel then
+      Begin
+        RamkaEdycjaProcesu1.Visible := True;
+        RamkaEdycjaProcesu1.memo_process_name.Text := TLabel(wybrany.Children[i]).Text;
+      End;
     End;
   End;
 end;

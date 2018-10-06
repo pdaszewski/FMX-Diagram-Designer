@@ -21868,10 +21868,13 @@ object AOknoGl: TAOknoGl
       TabOrder = 4
       ColumnCollection = <
         item
-          Value = 28.571428571428570000
+          Value = 22.321428571428570000
         end
         item
-          Value = 71.428571428571430000
+          Value = 55.803571428571430000
+        end
+        item
+          Value = 21.875000000000000000
         end>
       ControlCollection = <
         item
@@ -21882,6 +21885,11 @@ object AOknoGl: TAOknoGl
         item
           Column = 0
           Control = btn_dodaj_nowy_proces
+          Row = 0
+        end
+        item
+          Column = 2
+          Control = btn_laczenie_procesow
           Row = 0
         end>
       RowCollection = <
@@ -21894,11 +21902,11 @@ object AOknoGl: TAOknoGl
       object btn_hamburger: TButton
         Align = Client
         StyledSettings = [Family]
-        Size.Width = 740.714294433593800000
+        Size.Width = 578.683044433593800000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'drawertoolbutton'
-        TabOrder = 1
+        TabOrder = 2
         Text = 'btn_hamburger'
         TextSettings.Font.Size = 20.000000000000000000
         TextSettings.Font.StyleExt = {00070000000000000004000000}
@@ -21908,16 +21916,31 @@ object AOknoGl: TAOknoGl
       object btn_dodaj_nowy_proces: TButton
         Align = Client
         StyledSettings = [Family]
-        Size.Width = 296.285705566406300000
+        Size.Width = 231.473220825195300000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
         StyleLookup = 'additembutton'
-        TabOrder = 0
+        TabOrder = 1
         Text = 'btn_hamburger'
         TextSettings.Font.Size = 20.000000000000000000
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         TextSettings.FontColor = claAliceblue
         OnClick = btn_dodaj_nowy_procesClick
+      end
+      object btn_laczenie_procesow: TButton
+        StaysPressed = True
+        Align = Client
+        StyledSettings = [Family]
+        Size.Width = 226.843750000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'nexttoolbutton'
+        TabOrder = 0
+        Text = 'btn_hamburger'
+        TextSettings.Font.Size = 20.000000000000000000
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        TextSettings.FontColor = claAliceblue
+        OnClick = btn_laczenie_procesowClick
       end
     end
     object ScrollBox: TScrollBox
@@ -21975,11 +21998,11 @@ object AOknoGl: TAOknoGl
             PNG = {
               89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
               0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
-              007049444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
-              5180094A63038C40033981F406520DC50980067901F14F20FE414D437D80F817
-              B50DF5A585A17EC4188A2F52D0012394A61C10EB3AA200D000EA851FB50DA36E
-              72011AE24E4ED6C30BA85A380C57C0C00000E7BA956E20BAB2B8000000004945
-              4E44AE426082}
+              007349444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
+              5180094A63038C40C33881866E20D5509C006890D7DFBF7F7F02F10F6A1AEA03
+              34F017B50DF5A585A17EC4188A2F52D0012394A61C10EB3AA200D000EA851FB5
+              0DA36E72011AE24E4ED6C30BA85A380C57C0C0000013729838AB9AD493000000
+              0049454E44AE426082}
             FileName = 
               'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
               '0.3.0\Projektowanie\arrow.png'
@@ -22044,5 +22067,95 @@ object AOknoGl: TAOknoGl
     OnTimer = RysowanieTimer
     Left = 424
     Top = 456
+  end
+  inline RamkaPowiazanie1: TRamkaPowiazanie
+    Align = Client
+    Size.Width = 1037.000000000000000000
+    Size.Height = 554.000000000000000000
+    Size.PlatformDefault = False
+    Visible = False
+    inherited BackGround: TRectangle
+      Size.Width = 1037.000000000000000000
+      Size.Height = 554.000000000000000000
+    end
+    inherited Menu: TRectangle
+      inherited GridPanelLayout1: TGridPanelLayout
+        ControlCollection = <
+          item
+            Column = 0
+            Control = RamkaPowiazanie1.btn_add
+            Row = 0
+          end
+          item
+            Column = 1
+            Control = RamkaPowiazanie1.but_cancel
+            Row = 0
+          end>
+        RowCollection = <
+          item
+            Value = 100.000000000000000000
+          end
+          item
+            SizeStyle = Auto
+          end>
+        inherited btn_add: TButton
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          OnClick = RamkaPowiazanie1btn_addClick
+        end
+        inherited but_cancel: TButton
+          TextSettings.Font.StyleExt = {00070000000000000004000000}
+          OnClick = RamkaPowiazanie1but_cancelClick
+        end
+      end
+      inherited od_procesu: TRectangle
+        OnMouseDown = nil
+        OnMouseMove = nil
+        OnMouseUp = nil
+      end
+      inherited rec_do: TRectangle
+        OnClick = RamkaPowiazanie1rec_doClick
+        inherited img_do: TImage
+          MultiResBitmap = <
+            item
+              Width = 20
+              Height = 20
+              PNG = {
+                89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
+                0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+                007249444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
+                5180094A63038CBF7EFDE2FCFDFBF706520DC509800679FD84801FD434D40768
+                E02F6A1BEA4B0B43FD8831145FA4A00346284D3920D6754401A001D40B3F6A1B
+                46DDE40234C49D9CAC871750B57018AE8081010062DD9760A014E0EB00000000
+                49454E44AE426082}
+              FileName = 
+                'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
+                '0.3.0\Projektowanie\arrow.png'
+            end>
+          OnClick = RamkaPowiazanie1img_doClick
+        end
+      end
+      inherited rec_od: TRectangle
+        OnClick = RamkaPowiazanie1rec_odClick
+        inherited img_od: TImage
+          MultiResBitmap = <
+            item
+              Width = 20
+              Height = 20
+              PNG = {
+                89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
+                0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+                007549444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
+                5180094A63038C3F7FFEE4FCF5EBD706520DC509800679FDF8F1E32710FFA0A6
+                A13E40F37E51DB505F5A18EA478CA1F822051D304269CA01B1AE230A000DA05E
+                F851DB30EA2617A021EEE4643DBC80AA85C370050C0C00B6B4972AA453D9D200
+                00000049454E44AE426082}
+              FileName = 
+                'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
+                '0.3.0\Projektowanie\arrow.png'
+            end>
+          OnClick = RamkaPowiazanie1img_odClick
+        end
+      end
+    end
   end
 end
