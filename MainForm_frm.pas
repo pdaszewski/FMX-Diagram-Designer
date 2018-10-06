@@ -97,7 +97,7 @@ type
 
 const
  wersja = '0.4.0';
- data_kompilacji = '2018-10-05';
+ data_kompilacji = '2018-10-06';
 
  max_obiektow = 100;
  max_powiazan = 1000;
@@ -309,7 +309,7 @@ begin
    Rysowanie.Enabled:=False;
    Deaktywuj_obiekt;
    wybrany:=nil;
-   //Najpierw kasujê obiekt
+   //Najpierw kasujÃª obiekt
    obiekty[ktory_w_tablicy].id_obiektu:=0;
    {$IFDEF ANDROID}
     obiekty[ktory_w_tablicy].wskaznik.DisposeOf;
@@ -318,7 +318,7 @@ begin
     obiekty[ktory_w_tablicy].wskaznik:=nil;
    {$ENDIF}
 
-   //Teraz kasujê powi¹zania
+   //Teraz kasujÃª powiÂ¹zania
    for i := 1 to max_powiazan do
     Begin
      if (powiazania[i].od_obiektu=id_procesu) OR (powiazania[i].do_obiektu=id_procesu) then
@@ -388,7 +388,7 @@ begin
   Begin
    Rysowanie.Enabled:=False;
    Deaktywuj_obiekt;
-   //Teraz kasujê powi¹zania
+   //Teraz kasujÃª powiÂ¹zania
    for i := 1 to max_powiazan do
     Begin
      if (powiazania[i].od_obiektu=id_procesu) OR (powiazania[i].do_obiektu=id_procesu) then
@@ -442,7 +442,7 @@ Var
 begin
  if (RamkaPowiazanie1.img_do.Visible=False) and (RamkaPowiazanie1.img_do.Visible=False) then
   Begin
-   //Musi byæ jakaœ strza³ka
+   //Musi byÃ¦ jakaÂœ strzaÂ³ka
   End
  else
   Begin
@@ -535,7 +535,7 @@ begin
 
     if (do_rect.Position.Y>poy) and (do_rect.Position.Y<koy) then
      Begin
-      //Jeœli obiekty s¹ na podobnym poziomie;
+      //JeÂœli obiekty sÂ¹ na podobnym poziomie;
       y1:=od_rect.Position.Y+(od_rect.Height/2);
       y2:=do_rect.Position.Y+(do_rect.Height/2);
 
@@ -559,7 +559,7 @@ begin
      Begin
       if do_rect.Position.Y>od_rect.Position.Y then
        Begin
-        //Jeœli obiekt docelowy jest ni¿ej ni¿ obiekt Ÿród³owy
+        //JeÂœli obiekt docelowy jest niÂ¿ej niÂ¿ obiekt ÂŸrÃ³dÂ³owy
         y1:=od_rect.Position.Y+od_rect.Height;
         y2:=do_rect.Position.Y;
         kier:='D';
@@ -852,16 +852,16 @@ begin
     End
    else
     Begin
-     //Jeœli pierwszy jest ju¿ wybrany
+     //JeÂœli pierwszy jest juÂ¿ wybrany
      if TRectangle(Sender)=wybrany_pierwszy then
       Begin
-       //Jeœli nowo klikniêty jest wybranym
+       //JeÂœli nowo klikniÃªty jest wybranym
        wybrany_pierwszy.Fill.Color:=TAlphaColor($AA0F077A);
        wybrany_pierwszy:=Nil;
       End
      else
       Begin
-       //Jeœli pierwszy jest wybrany i teraz wybraliœmy drugi!
+       //JeÂœli pierwszy jest wybrany i teraz wybraliÂœmy drugi!
        wybrany_drugi:=TRectangle(Sender);
        wybrany_drugi.BringToFront;
        wybrany_drugi.Fill.Color:=TAlphaColor($AA7A0707);
