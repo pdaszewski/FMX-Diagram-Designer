@@ -87,6 +87,8 @@ type
     procedure RamkaPowiazanie1rec_odClick(Sender: TObject);
     procedure RamkaPowiazanie1img_odClick(Sender: TObject);
     procedure RamkaPowiazanie1btn_addClick(Sender: TObject);
+    procedure RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
+    procedure RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -287,6 +289,71 @@ procedure TAOknoGl.DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     if (L.Width < 0.01) then L.Width := 0.1;
   end;
 
+procedure TAOknoGl.RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
+Var
+ i, id_procesu, ktory_w_tablicy : Integer;
+begin
+ ktory_w_tablicy:=0;
+ id_procesu:=0;
+ for i:= 1 to max_obiektow do
+  Begin
+   if obiekty[i].wskaznik=wybrany then
+    Begin
+     id_procesu:=obiekty[i].id_obiektu;
+     ktory_w_tablicy:=i;
+    End;
+  End;
+
+ if ktory_w_tablicy>0 then
+  Begin
+   Rysowanie.Enabled:=False;
+   Deaktywuj_obiekt;
+   wybrany:=nil;
+   //Najpierw kasujê obiekt
+   obiekty[ktory_w_tablicy].id_obiektu:=0;
+   {$IFDEF ANDROID}
+    obiekty[ktory_w_tablicy].wskaznik.DisposeOf;
+   {$ELSE}
+    obiekty[ktory_w_tablicy].wskaznik.Free;
+    obiekty[ktory_w_tablicy].wskaznik:=nil;
+   {$ENDIF}
+
+   //Teraz kasujê powi¹zania
+   for i := 1 to max_powiazan do
+    Begin
+     if (powiazania[i].od_obiektu=id_procesu) OR (powiazania[i].do_obiektu=id_procesu) then
+      Begin
+       powiazania[i].od_obiektu := 0;
+       powiazania[i].do_obiektu := 0;
+       powiazania[i].od_strzalka := False;
+       powiazania[i].do_strzalka := False;
+       {$IFDEF ANDROID}
+       powiazania[i].linia.DisposeOf;
+       powiazania[i].linia2.DisposeOf;
+       powiazania[i].linia3.DisposeOf;
+       powiazania[i].strzalka_od.DisposeOf;
+       powiazania[i].strzalka_do.DisposeOf;
+       {$ELSE}
+       powiazania[i].linia.Free;
+       powiazania[i].linia:=nil;
+       powiazania[i].linia2.Free;
+       powiazania[i].linia2:=nil;
+       powiazania[i].linia3.Free;
+       powiazania[i].linia3:=nil;
+       powiazania[i].strzalka_od.Free;
+       powiazania[i].strzalka_od:=nil;
+       powiazania[i].strzalka_do.Free;
+       powiazania[i].strzalka_do:=nil;
+       {$ENDIF}
+      End;
+    End;
+
+   RamkaEdycjaProcesu1.Visible:=False;
+   Rysuj_powiazania;
+   Rysowanie.Enabled:=True;
+  End;
+end;
+
 procedure TAOknoGl.RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject);
 var
   i: Integer;
@@ -300,6 +367,61 @@ begin
   End;
  RamkaEdycjaProcesu1.Visible:=False;
  Deaktywuj_obiekt;
+end;
+
+procedure TAOknoGl.RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
+Var
+ i, id_procesu, ktory_w_tablicy : Integer;
+begin
+ ktory_w_tablicy:=0;
+ id_procesu:=0;
+ for i:= 1 to max_obiektow do
+  Begin
+   if obiekty[i].wskaznik=wybrany then
+    Begin
+     id_procesu:=obiekty[i].id_obiektu;
+     ktory_w_tablicy:=i;
+    End;
+  End;
+
+ if ktory_w_tablicy>0 then
+  Begin
+   Rysowanie.Enabled:=False;
+   Deaktywuj_obiekt;
+   //Teraz kasujê powi¹zania
+   for i := 1 to max_powiazan do
+    Begin
+     if (powiazania[i].od_obiektu=id_procesu) OR (powiazania[i].do_obiektu=id_procesu) then
+      Begin
+       powiazania[i].od_obiektu := 0;
+       powiazania[i].do_obiektu := 0;
+       powiazania[i].od_strzalka := False;
+       powiazania[i].do_strzalka := False;
+       {$IFDEF ANDROID}
+       powiazania[i].linia.DisposeOf;
+       powiazania[i].linia2.DisposeOf;
+       powiazania[i].linia3.DisposeOf;
+       powiazania[i].strzalka_od.DisposeOf;
+       powiazania[i].strzalka_do.DisposeOf;
+       {$ELSE}
+       powiazania[i].linia.Free;
+       powiazania[i].linia:=nil;
+       powiazania[i].linia2.Free;
+       powiazania[i].linia2:=nil;
+       powiazania[i].linia3.Free;
+       powiazania[i].linia3:=nil;
+       powiazania[i].strzalka_od.Free;
+       powiazania[i].strzalka_od:=nil;
+       powiazania[i].strzalka_do.Free;
+       powiazania[i].strzalka_do:=nil;
+       {$ENDIF}
+      End;
+    End;
+
+   RamkaEdycjaProcesu1.Visible:=False;
+   Rysuj_powiazania;
+   Rysowanie.Enabled:=True;
+  End;
 end;
 
 procedure TAOknoGl.RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
@@ -620,6 +742,9 @@ Var
  i : Integer;
   index_obiektu: Integer;
 begin
+ Odznacz_wybrane(True,True);
+ btn_laczenie_procesow.IsPressed:=False;
+
  tmp := TRectangle(WzorObiektu.Clone(self));
  tmp.Parent := ScrollBox;
  tmp.Visible:=True;

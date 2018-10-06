@@ -15,6 +15,8 @@ type
     memo_process_name: TMemo;
     BackGround: TRectangle;
     BlurEffect1: TBlurEffect;
+    btn_delete_process: TButton;
+    btn_delete_links: TButton;
   private
     { Private declarations }
   public
