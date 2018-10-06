@@ -58,6 +58,7 @@ type
     procedure Rysuj_powiazania;
     procedure Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean; linia, linia2, linia3: TLine; strzalka_od, strzalka_do: TImage);
     procedure Dodaj_powiazanie(od_obiektu_index, do_obiektu_index: Integer; od_strzalka, do_strzalka: Boolean);
+    procedure Usun_powiazanie(od_obiektu_index, do_obiektu_index: Integer);
     procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     procedure Edycja_danych_procesu;
 
@@ -135,6 +136,11 @@ begin
    if RamkaPowiazanie1.img_od.Visible then RamkaPowiazanie1.img_od.Visible:=False
    else RamkaPowiazanie1.img_od.Visible:=True;
   End;
+
+ if (RamkaPowiazanie1.img_od.Visible=False) and (RamkaPowiazanie1.img_do.Visible=False) then
+  RamkaPowiazanie1.btn_add.Text:='usuñ powi¹zanie'
+ else
+  RamkaPowiazanie1.btn_add.Text:='dodaj powi¹zanie';
 end;
 
 procedure TAOknoGl.Odznacz_wybrane(pierwszy, drugi : Boolean);
@@ -194,40 +200,103 @@ Begin
   End;
 End;
 
+procedure TAOknoGl.Usun_powiazanie(od_obiektu_index, do_obiektu_index: Integer);
+var
+  i: Integer;
+  czy_istnieje: Boolean;
+  istniejacy: Integer;
+Begin
+ istniejacy:=0;
+ czy_istnieje:=False;
+ for i := 1 to max_powiazan do
+  Begin
+   if (powiazania[i].od_obiektu=od_obiektu_index) and (powiazania[i].do_obiektu=do_obiektu_index) then
+    Begin
+     istniejacy:=i;
+     czy_istnieje:=True;
+    End;
+   if (powiazania[i].od_obiektu=do_obiektu_index) and (powiazania[i].do_obiektu=od_obiektu_index) then
+    Begin
+     istniejacy:=i;
+     czy_istnieje:=True;
+    End;
+  End;
+
+ if czy_istnieje=True then
+  Begin
+   Powiazania[istniejacy].od_obiektu := 0;
+   Powiazania[istniejacy].do_obiektu := 0;
+   Powiazania[istniejacy].od_strzalka := False;
+   Powiazania[istniejacy].do_strzalka := False;
+   {$IFDEF ANDROID}
+    Powiazania[istniejacy].linia.DisposeOf;
+    Powiazania[istniejacy].linia2.DisposeOf;
+    Powiazania[istniejacy].linia3.DisposeOf;
+    Powiazania[istniejacy].strzalka_od.DisposeOf;
+    Powiazania[istniejacy].strzalka_do.DisposeOf;
+   {$ELSE}
+    Powiazania[istniejacy].linia.Free;
+    Powiazania[istniejacy].linia:=nil;
+    Powiazania[istniejacy].linia2.Free;
+    Powiazania[istniejacy].linia2:=nil;
+    Powiazania[istniejacy].linia3.Free;
+    Powiazania[istniejacy].linia3:=nil;
+    Powiazania[istniejacy].strzalka_od.Free;
+    Powiazania[istniejacy].strzalka_od:=nil;
+    Powiazania[istniejacy].strzalka_do.Free;
+    Powiazania[istniejacy].strzalka_do:=nil;
+   {$ENDIF}
+  End;
+End;
+
 procedure TAOknoGl.Dodaj_powiazanie(od_obiektu_index, do_obiektu_index: Integer; od_strzalka, do_strzalka: Boolean);
 var
   i: Integer;
   nowy: Integer;
   tmpl, tmpl2, tmpl3: TLine;
   img1, img2: TImage;
+  czy_istnieje: Boolean;
+  istniejacy: Integer;
 Begin
  nowy:=0;
+ istniejacy:=0;
+ czy_istnieje:=False;
  for i := 1 to max_powiazan do
   Begin
-   if (Powiazania[i].od_obiektu=0) and (nowy=0) then nowy:=i;
+   if (powiazania[i].od_obiektu=0) and (nowy=0) then nowy:=i;
+   if (powiazania[i].od_obiektu=od_obiektu_index) and (powiazania[i].do_obiektu=do_obiektu_index) then
+    Begin
+     istniejacy:=i;
+     czy_istnieje:=True;
+    End;
+   if (powiazania[i].od_obiektu=do_obiektu_index) and (powiazania[i].do_obiektu=od_obiektu_index) then
+    Begin
+     istniejacy:=i;
+     czy_istnieje:=True;
+    End;
   End;
 
- if nowy>0 then
+ if (nowy>0) and (czy_istnieje=False) then
   Begin
-   Powiazania[nowy].od_obiektu:=od_obiektu_index;
-   Powiazania[nowy].do_obiektu:=do_obiektu_index;
-   Powiazania[nowy].od_strzalka:=od_strzalka;
-   Powiazania[nowy].do_strzalka:=do_strzalka;
+   powiazania[nowy].od_obiektu:=od_obiektu_index;
+   powiazania[nowy].do_obiektu:=do_obiektu_index;
+   powiazania[nowy].od_strzalka:=od_strzalka;
+   powiazania[nowy].do_strzalka:=do_strzalka;
 
    tmpl := TLine(WzorLinii.Clone(self));
    tmpl.Parent := ScrollBox;
    tmpl.Visible:=True;
-   Powiazania[nowy].linia:=tmpl;
+   powiazania[nowy].linia:=tmpl;
 
    tmpl2 := TLine(WzorLinii.Clone(self));
    tmpl2.Parent := ScrollBox;
    tmpl2.Visible:=True;
-   Powiazania[nowy].linia2:=tmpl2;
+   powiazania[nowy].linia2:=tmpl2;
 
    tmpl3 := TLine(WzorLinii.Clone(self));
    tmpl3.Parent := ScrollBox;
    tmpl3.Visible:=True;
-   Powiazania[nowy].linia3:=tmpl3;
+   powiazania[nowy].linia3:=tmpl3;
 
    img1 := TImage(WzorStrzalki.Clone(Self));
    img1.Parent := ScrollBox;
@@ -240,6 +309,14 @@ Begin
    powiazania[nowy].strzalka_do:=img2;
 
    Rysuj_powiazania;
+  End;
+
+ if czy_istnieje=True then
+  Begin
+   powiazania[istniejacy].od_obiektu:=od_obiektu_index;
+   powiazania[istniejacy].do_obiektu:=do_obiektu_index;
+   powiazania[istniejacy].od_strzalka:=od_strzalka;
+   powiazania[istniejacy].do_strzalka:=do_strzalka;
   End;
 End;
 
@@ -309,7 +386,7 @@ begin
    Rysowanie.Enabled:=False;
    Deaktywuj_obiekt;
    wybrany:=nil;
-   //Najpierw kasujÃª obiekt
+   //Najpierw kasujê obiekt
    obiekty[ktory_w_tablicy].id_obiektu:=0;
    {$IFDEF ANDROID}
     obiekty[ktory_w_tablicy].wskaznik.DisposeOf;
@@ -318,7 +395,7 @@ begin
     obiekty[ktory_w_tablicy].wskaznik:=nil;
    {$ENDIF}
 
-   //Teraz kasujÃª powiÂ¹zania
+   //Teraz kasujê powi¹zania
    for i := 1 to max_powiazan do
     Begin
      if (powiazania[i].od_obiektu=id_procesu) OR (powiazania[i].do_obiektu=id_procesu) then
@@ -388,7 +465,7 @@ begin
   Begin
    Rysowanie.Enabled:=False;
    Deaktywuj_obiekt;
-   //Teraz kasujÃª powiÂ¹zania
+   //Teraz kasujê powi¹zania
    for i := 1 to max_powiazan do
     Begin
      if (powiazania[i].od_obiektu=id_procesu) OR (powiazania[i].do_obiektu=id_procesu) then
@@ -440,22 +517,21 @@ Var
  od_obiektu, do_obiektu : Integer;
   i: Integer;
 begin
- if (RamkaPowiazanie1.img_do.Visible=False) and (RamkaPowiazanie1.img_do.Visible=False) then
+ for i := 1 to max_obiektow do
   Begin
-   //Musi byÃ¦ jakaÂœ strzaÂ³ka
-  End
- else
-  Begin
-   for i := 1 to max_obiektow do
-    Begin
-     if obiekty[i].wskaznik=wybrany_pierwszy then od_obiektu:=obiekty[i].id_obiektu;
-     if obiekty[i].wskaznik=wybrany_drugi then do_obiektu:=obiekty[i].id_obiektu;
-    End;
-   Dodaj_powiazanie(od_obiektu, do_obiektu, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
-   Rysuj_powiazania;
-   RamkaPowiazanie1.Visible:=False;
-   Odznacz_wybrane(False,True);
+   if obiekty[i].wskaznik=wybrany_pierwszy then od_obiektu:=obiekty[i].id_obiektu;
+   if obiekty[i].wskaznik=wybrany_drugi then do_obiektu:=obiekty[i].id_obiektu;
   End;
+
+ //Jeœli nie ma strza³ek to usuwane jest powi¹zanie!
+ if (RamkaPowiazanie1.img_od.Visible=False) and (RamkaPowiazanie1.img_do.Visible=False) then
+   Usun_powiazanie(od_obiektu, do_obiektu)
+ else
+  Dodaj_powiazanie(od_obiektu, do_obiektu, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
+
+ Rysuj_powiazania;
+ RamkaPowiazanie1.Visible:=False;
+ Odznacz_wybrane(False,True);
 end;
 
 procedure TAOknoGl.RamkaPowiazanie1but_cancelClick(Sender: TObject);
@@ -535,7 +611,7 @@ begin
 
     if (do_rect.Position.Y>poy) and (do_rect.Position.Y<koy) then
      Begin
-      //JeÂœli obiekty sÂ¹ na podobnym poziomie;
+      //Jeœli obiekty s¹ na podobnym poziomie;
       y1:=od_rect.Position.Y+(od_rect.Height/2);
       y2:=do_rect.Position.Y+(do_rect.Height/2);
 
@@ -559,7 +635,7 @@ begin
      Begin
       if do_rect.Position.Y>od_rect.Position.Y then
        Begin
-        //JeÂœli obiekt docelowy jest niÂ¿ej niÂ¿ obiekt ÂŸrÃ³dÂ³owy
+        //Jeœli obiekt docelowy jest ni¿ej ni¿ obiekt Ÿród³owy
         y1:=od_rect.Position.Y+od_rect.Height;
         y2:=do_rect.Position.Y;
         kier:='D';
@@ -852,20 +928,21 @@ begin
     End
    else
     Begin
-     //JeÂœli pierwszy jest juÂ¿ wybrany
+     //Jeœli pierwszy jest ju¿ wybrany
      if TRectangle(Sender)=wybrany_pierwszy then
       Begin
-       //JeÂœli nowo klikniÃªty jest wybranym
+       //Jeœli nowo klikniêty jest wybranym
        wybrany_pierwszy.Fill.Color:=TAlphaColor($AA0F077A);
        wybrany_pierwszy:=Nil;
       End
      else
       Begin
-       //JeÂœli pierwszy jest wybrany i teraz wybraliÂœmy drugi!
+       //Jeœli pierwszy jest wybrany i teraz wybraliœmy drugi!
        wybrany_drugi:=TRectangle(Sender);
        wybrany_drugi.BringToFront;
        wybrany_drugi.Fill.Color:=TAlphaColor($AA7A0707);
        RamkaPowiazanie1.Visible:=True;
+       RamkaPowiazanie1.btn_add.Text:='dodaj powi¹zanie';
        RamkaPowiazanie1.lbl_od_procesu.Text:= TLabel(wybrany_pierwszy.Children[0]).Text;
        RamkaPowiazanie1.lbl_do_procesu.Text:= TLabel(wybrany_drugi.Children[0]).Text;
        RamkaPowiazanie1.img_od.Visible:=False;
