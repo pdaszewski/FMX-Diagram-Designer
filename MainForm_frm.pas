@@ -61,6 +61,7 @@ type
     procedure Usun_powiazanie(od_obiektu_index, do_obiektu_index: Integer);
     procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     procedure Edycja_danych_procesu;
+    function Ktore_powiazanie(od_obiektu, do_obiektu : TRectangle): Integer;
 
     procedure Czysc_punkty_styku;
     procedure Dodaj_punkt_styku(x,y : Single);
@@ -97,8 +98,8 @@ type
   end;
 
 const
- wersja = '0.4.0';
- data_kompilacji = '2018-10-06';
+ wersja = '0.5.0';
+ data_kompilacji = '2018-10-07';
 
  max_obiektow = 100;
  max_powiazan = 1000;
@@ -122,6 +123,28 @@ var
 implementation
 
 {$R *.fmx}
+
+function TAOknoGl.Ktore_powiazanie(od_obiektu, do_obiektu : TRectangle): Integer;
+Var
+  wynik : Integer;
+  od_obiektu_index, do_obiektu_index : Integer;
+  i: Integer;
+Begin
+ wynik:=0;
+ for i := 1 to max_obiektow do
+  Begin
+   if obiekty[i].wskaznik=od_obiektu then od_obiektu_index:=obiekty[i].id_obiektu;
+   if obiekty[i].wskaznik=do_obiektu then do_obiektu_index:=obiekty[i].id_obiektu;
+  End;
+
+ for i := 1 to max_powiazan do
+  Begin
+   if (powiazania[i].od_obiektu=od_obiektu_index) and (powiazania[i].do_obiektu=do_obiektu_index) then wynik:=i;
+   if (powiazania[i].od_obiektu=do_obiektu_index) and (powiazania[i].do_obiektu=od_obiektu_index) then wynik:=i;
+  End;
+
+ Ktore_powiazanie:=wynik;
+End;
 
 procedure TAOknoGl.Ustaw_strzalke_powiazania(strzalka: string);
 begin
@@ -917,6 +940,8 @@ begin
 end;
 
 procedure TAOknoGl.WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Single);
+var
+  powiazanie_aktywne: Integer;
 begin
  if btn_laczenie_procesow.IsPressed then
   Begin
@@ -942,11 +967,22 @@ begin
        wybrany_drugi.BringToFront;
        wybrany_drugi.Fill.Color:=TAlphaColor($AA7A0707);
        RamkaPowiazanie1.Visible:=True;
-       RamkaPowiazanie1.btn_add.Text:='dodaj powi¹zanie';
        RamkaPowiazanie1.lbl_od_procesu.Text:= TLabel(wybrany_pierwszy.Children[0]).Text;
        RamkaPowiazanie1.lbl_do_procesu.Text:= TLabel(wybrany_drugi.Children[0]).Text;
-       RamkaPowiazanie1.img_od.Visible:=False;
-       RamkaPowiazanie1.img_do.Visible:=True;
+
+       powiazanie_aktywne:=Ktore_powiazanie(wybrany_pierwszy,wybrany_drugi);
+       if powiazanie_aktywne=0 then
+        Begin
+         RamkaPowiazanie1.img_od.Visible:=False;
+         RamkaPowiazanie1.img_do.Visible:=True;
+         RamkaPowiazanie1.btn_add.Text:='dodaj powi¹zanie';
+        End
+       else
+        Begin
+         RamkaPowiazanie1.img_od.Visible:=powiazania[powiazanie_aktywne].od_strzalka;
+         RamkaPowiazanie1.img_do.Visible:=powiazania[powiazanie_aktywne].do_strzalka;
+         RamkaPowiazanie1.btn_add.Text:='zmieñ powi¹zanie';
+        End;
       End;
     End;
   End
