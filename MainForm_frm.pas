@@ -62,6 +62,7 @@ type
     procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     procedure Edycja_danych_procesu;
     function Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
+    function Ktory_obiekt(obiekt: TRectangle): Integer;
 
     procedure Czysc_punkty_styku;
     procedure Dodaj_punkt_styku(x, y: Single);
@@ -91,6 +92,7 @@ type
     procedure RamkaPowiazanie1btn_addClick(Sender: TObject);
     procedure RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
     procedure RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
+    procedure WzorObiektuMouseLeave(Sender: TObject);
   private
     { Private declarations }
   public
@@ -98,8 +100,8 @@ type
   end;
 
 const
-  wersja = '0.5.0';
-  data_kompilacji = '2018-10-08';
+  wersja = '0.6.0';
+  data_kompilacji = '2018-10-11';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -123,6 +125,18 @@ var
 implementation
 
 {$R *.fmx}
+
+function TAOknoGl.Ktory_obiekt(obiekt: TRectangle): Integer;
+Var
+ wynik, i : Integer;
+Begin
+ wynik:=0;
+ for i := 1 to max_obiektow do
+  Begin
+    if obiekty[i].wskaznik = obiekt then wynik:=i;
+  End;
+ Ktory_obiekt:=wynik;
+End;
 
 function TAOknoGl.Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
 Var
@@ -895,6 +909,7 @@ begin
   tmp.OnMouseMove := WzorObiektuMouseMove;
   tmp.OnMouseUp := WzorObiektuMouseUp;
   tmp.OnDblClick := Wzor_labelDblClick;
+  tmp.OnMouseLeave := WzorObiektuMouseLeave;
   tmp.OnTap := Wzor_labelTap;
 
   { TODO :
@@ -1013,7 +1028,7 @@ begin
         wybrany_drugi.BringToFront;
         wybrany_drugi.Fill.Color := TAlphaColor($AA7A0707);
         RamkaPowiazanie1.Visible := True;
-        { TODO : Do poprawy - jeœli kolejnoœæ jest inna ni¿ by³a to wyœwietli siê nieprawid³owo. }
+
         RamkaPowiazanie1.lbl_od_procesu.Text := TLabel(wybrany_pierwszy.Children[0]).Text;
         RamkaPowiazanie1.lbl_do_procesu.Text := TLabel(wybrany_drugi.Children[0]).Text;
 
@@ -1026,8 +1041,18 @@ begin
         End
         else
         Begin
-          RamkaPowiazanie1.img_od.Visible := powiazania[powiazanie_aktywne].od_strzalka;
-          RamkaPowiazanie1.img_do.Visible := powiazania[powiazanie_aktywne].do_strzalka;
+          RamkaPowiazanie1.img_od.Visible := False;
+          RamkaPowiazanie1.img_do.Visible := False;
+          if (powiazania[powiazanie_aktywne].od_strzalka=True)
+          and (Ktory_obiekt(wybrany_pierwszy)=powiazania[powiazanie_aktywne].od_obiektu ) then RamkaPowiazanie1.img_od.Visible := True;
+          if (powiazania[powiazanie_aktywne].od_strzalka=True)
+          and (Ktory_obiekt(wybrany_drugi)=powiazania[powiazanie_aktywne].od_obiektu ) then RamkaPowiazanie1.img_do.Visible := True;
+
+          if (powiazania[powiazanie_aktywne].do_strzalka=True)
+          and (Ktory_obiekt(wybrany_drugi)=powiazania[powiazanie_aktywne].do_obiektu ) then RamkaPowiazanie1.img_do.Visible := True;
+          if (powiazania[powiazanie_aktywne].do_strzalka=True)
+          and (Ktory_obiekt(wybrany_pierwszy)=powiazania[powiazanie_aktywne].do_obiektu ) then RamkaPowiazanie1.img_od.Visible := True;
+
           RamkaPowiazanie1.btn_add.Text := 'zmieñ powi¹zanie';
         End;
       End;
@@ -1043,6 +1068,12 @@ begin
     MouseIsDown := True;
     Rysowanie.Enabled := True;
   End;
+end;
+
+procedure TAOknoGl.WzorObiektuMouseLeave(Sender: TObject);
+begin
+ if btn_laczenie_procesow.IsPressed = False then
+    Deaktywuj_obiekt;
 end;
 
 procedure TAOknoGl.WzorObiektuMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
