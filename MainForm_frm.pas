@@ -94,6 +94,8 @@ type
     procedure RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
     procedure WzorObiektuMouseLeave(Sender: TObject);
     procedure RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
+    procedure RamkaMenuGlowne1btn_openClick(Sender: TObject);
+    procedure RamkaMenuGlowne1btn_saveClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -575,6 +577,16 @@ begin
   RamkaMenuGlowne1.Visible := False;
 end;
 
+procedure TAOknoGl.RamkaMenuGlowne1btn_openClick(Sender: TObject);
+begin
+ { TODO : Dopisaæ wczytywanie projektu z pliku }
+end;
+
+procedure TAOknoGl.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
+begin
+ { TODO : Dopisaæ zapisywanie projektu do pliku }
+end;
+
 procedure TAOknoGl.RamkaPowiazanie1btn_addClick(Sender: TObject);
 Var
   od_obiektu, do_obiektu: Integer;
@@ -922,10 +934,6 @@ begin
   tmp.OnMouseLeave := WzorObiektuMouseLeave;
   tmp.OnTap := Wzor_labelTap;
 
-  { TODO :
-    Prawdopodobnie dodawanie indeksu nie dzia³a prawid³owo.
-    Po usuniêciu obiektu, indeks mo¿e zostaæ nadany ponownie - to b³¹d.
-    Problemu by nie by³o, gdyby indeksy by³y wczytywane z np. bazy. }
   index_obiektu := Ostatni_obiekt + 1;
   Dodaj_wskaznik(tmp, index_obiektu);
 

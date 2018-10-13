@@ -19,7 +19,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     Align = Center
     Fill.Color = xAA0B064F
     Size.Width = 400.000000000000000000
-    Size.Height = 333.000000000000000000
+    Size.Height = 283.000000000000000000
     Size.PlatformDefault = False
     Stroke.Color = claAliceblue
     XRadius = 3.000000000000000000
@@ -52,7 +52,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     object btn_close_menu: TButton
       Align = Bottom
       StyledSettings = [Family]
-      Position.Y = 283.000000000000000000
+      Position.Y = 233.000000000000000000
       Size.Width = 400.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
