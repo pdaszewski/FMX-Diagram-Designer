@@ -100,8 +100,8 @@ type
   end;
 
 const
-  wersja = '0.6.0';
-  data_kompilacji = '2018-10-11';
+  wersja = '0.7.0';
+  data_kompilacji = '2018-10-13';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -885,8 +885,11 @@ Begin
   wynik := 0;
   for i := 1 to max_obiektow do
   Begin
-    if obiekty[i].id_obiektu > 0 then
-      wynik := obiekty[i].id_obiektu;
+    if obiekty[i].id_obiektu = 0 then
+     Begin
+      wynik := i-1;
+      Break;
+     End;
   End;
   Ostatni_obiekt := wynik;
 End;
@@ -1091,7 +1094,7 @@ end;
 procedure TAOknoGl.Deaktywuj_obiekt;
 Begin
   MouseIsDown := False;
-  wybrany.Fill.Color := TAlphaColor($AA0F077A);
+  if Assigned(wybrany) then wybrany.Fill.Color := TAlphaColor($AA0F077A);
   Rysowanie.Enabled := False;
   Rysuj_powiazania;
 End;
