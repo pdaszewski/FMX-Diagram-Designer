@@ -15,6 +15,9 @@ type
     btn_close_menu: TButton;
     BlurEffect1: TBlurEffect;
     BackGround: TRectangle;
+    btn_full_screen_mode: TButton;
+    btn_open: TButton;
+    btn_save: TButton;
   private
     { Private declarations }
   public

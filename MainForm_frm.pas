@@ -93,6 +93,7 @@ type
     procedure RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
     procedure RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
     procedure WzorObiektuMouseLeave(Sender: TObject);
+    procedure RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -560,6 +561,12 @@ end;
 procedure TAOknoGl.RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
 begin
   RamkaMenuGlowne1.Visible := False;
+end;
+
+procedure TAOknoGl.RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
+begin
+ if AOknoGl.FullScreen then AOknoGl.FullScreen:=False
+ else AOknoGl.FullScreen:=True;
 end;
 
 procedure TAOknoGl.RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);

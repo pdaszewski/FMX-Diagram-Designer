@@ -22068,6 +22068,10 @@ object AOknoGl: TAOknoGl
         TextSettings.Font.StyleExt = {00070000000000000004000000}
         OnClick = RamkaMenuGlowne1btn_close_menuClick
       end
+      inherited btn_full_screen_mode: TButton
+        TextSettings.Font.StyleExt = {00070000000000000004000000}
+        OnClick = RamkaMenuGlowne1btn_full_screen_modeClick
+      end
     end
   end
   object Rysowanie: TTimer

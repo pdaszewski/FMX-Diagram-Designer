@@ -19,7 +19,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     Align = Center
     Fill.Color = xAA0B064F
     Size.Width = 400.000000000000000000
-    Size.Height = 213.000000000000000000
+    Size.Height = 333.000000000000000000
     Size.PlatformDefault = False
     Stroke.Color = claAliceblue
     XRadius = 3.000000000000000000
@@ -52,13 +52,57 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     object btn_close_menu: TButton
       Align = Bottom
       StyledSettings = [Family]
-      Position.Y = 163.000000000000000000
+      Position.Y = 283.000000000000000000
       Size.Width = 400.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 2
       Text = 'zamknij menu'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object btn_full_screen_mode: TButton
+      Align = Top
+      StyledSettings = [Family]
+      Position.Y = 67.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 3
+      Text = 'pe'#322'ny ekran'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object btn_open: TButton
+      Align = Top
+      Enabled = False
+      StyledSettings = [Family]
+      Position.Y = 117.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 4
+      Text = 'wczytaj projekt'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object btn_save: TButton
+      Align = Top
+      Enabled = False
+      StyledSettings = [Family]
+      Position.Y = 167.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 5
+      Text = 'zapisz projekt'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
