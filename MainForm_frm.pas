@@ -63,6 +63,7 @@ type
     procedure Edycja_danych_procesu;
     function Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
     function Ktory_obiekt(obiekt: TRectangle): Integer;
+    procedure Zmien_styl_linii(nowy_styl : TStrokeDash);
 
     procedure Czysc_punkty_styku;
     procedure Dodaj_punkt_styku(x, y: Single);
@@ -103,8 +104,8 @@ type
   end;
 
 const
-  wersja = '0.7.0';
-  data_kompilacji = '2018-10-13';
+  wersja = '0.8.0';
+  data_kompilacji = '2018-10-14';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -128,6 +129,23 @@ var
 implementation
 
 {$R *.fmx}
+
+procedure TAOknoGl.Zmien_styl_linii(nowy_styl : TStrokeDash);
+var
+  i: Integer;
+Begin
+ WzorLinii.Stroke.Dash:=nowy_styl;
+ RamkaPowiazanie1.WzorLinii.Stroke.Dash:=nowy_styl;
+ for i := 1 to max_powiazan do
+  Begin
+   if powiazania[i].od_obiektu>0 then
+    Begin
+     powiazania[i].linia.Stroke.Dash:=nowy_styl;
+     powiazania[i].linia2.Stroke.Dash:=nowy_styl;
+     powiazania[i].linia3.Stroke.Dash:=nowy_styl;
+    End;
+  End;
+End;
 
 function TAOknoGl.Ktory_obiekt(obiekt: TRectangle): Integer;
 Var

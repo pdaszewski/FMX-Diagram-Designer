@@ -29,7 +29,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       StyledSettings = [Family]
       Position.Y = 17.000000000000000000
       Size.Width = 400.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 0
@@ -52,9 +52,9 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     object btn_close_menu: TButton
       Align = Bottom
       StyledSettings = [Family]
-      Position.Y = 233.000000000000000000
+      Position.Y = 243.000000000000000000
       Size.Width = 400.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 2
@@ -66,9 +66,9 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     object btn_full_screen_mode: TButton
       Align = Top
       StyledSettings = [Family]
-      Position.Y = 67.000000000000000000
+      Position.Y = 57.000000000000000000
       Size.Width = 400.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 3
@@ -81,9 +81,9 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Align = Top
       Enabled = False
       StyledSettings = [Family]
-      Position.Y = 117.000000000000000000
+      Position.Y = 97.000000000000000000
       Size.Width = 400.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 4
@@ -96,9 +96,9 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Align = Top
       Enabled = False
       StyledSettings = [Family]
-      Position.Y = 167.000000000000000000
+      Position.Y = 137.000000000000000000
       Size.Width = 400.000000000000000000
-      Size.Height = 50.000000000000000000
+      Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 5
@@ -106,6 +106,106 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
+    end
+    object sett_line_Solid: TLine
+      LineType = Diagonal
+      Position.X = 80.000000000000000000
+      Position.Y = 186.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claAliceblue
+      Stroke.Thickness = 2.000000000000000000
+    end
+    object sett_line_Dash: TLine
+      LineType = Diagonal
+      Position.X = 128.000000000000000000
+      Position.Y = 186.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claAliceblue
+      Stroke.Thickness = 2.000000000000000000
+      Stroke.Dash = Dash
+    end
+    object sett_line_DashDot: TLine
+      LineType = Diagonal
+      Position.X = 176.000000000000000000
+      Position.Y = 186.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claAliceblue
+      Stroke.Thickness = 2.000000000000000000
+      Stroke.Dash = DashDot
+    end
+    object sett_line_DashDotDot: TLine
+      LineType = Diagonal
+      Position.X = 224.000000000000000000
+      Position.Y = 186.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claAliceblue
+      Stroke.Thickness = 2.000000000000000000
+      Stroke.Dash = DashDotDot
+    end
+    object sett_line_Dot: TLine
+      LineType = Diagonal
+      Position.X = 272.000000000000000000
+      Position.Y = 186.000000000000000000
+      Size.Width = 33.000000000000000000
+      Size.Height = 41.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Color = claAliceblue
+      Stroke.Thickness = 2.000000000000000000
+      Stroke.Dash = Dot
+    end
+    object rbtn_Solid: TRadioButton
+      Position.X = 104.000000000000000000
+      Position.Y = 184.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 11
+      OnChange = rbtn_SolidChange
+    end
+    object rbtn_Dash: TRadioButton
+      IsChecked = True
+      Position.X = 152.000000000000000000
+      Position.Y = 184.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 12
+      OnChange = rbtn_SolidChange
+    end
+    object rbtn_DashDot: TRadioButton
+      Position.X = 200.000000000000000000
+      Position.Y = 184.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 13
+      OnChange = rbtn_SolidChange
+    end
+    object rbtn_DashDotDot: TRadioButton
+      Position.X = 248.000000000000000000
+      Position.Y = 184.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 14
+      OnChange = rbtn_SolidChange
+    end
+    object rbtn_Dot: TRadioButton
+      Position.X = 296.000000000000000000
+      Position.Y = 184.000000000000000000
+      Size.Width = 17.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 15
+      OnChange = rbtn_SolidChange
     end
   end
 end
