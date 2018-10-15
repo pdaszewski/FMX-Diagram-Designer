@@ -50,6 +50,8 @@ type
     WzorStrzalki: TImage;
     btn_laczenie_procesow: TButton;
     RamkaPowiazanie1: TRamkaPowiazanie;
+    lbl_bottom_info: TLabel;
+    SaveProjectDialog: TSaveDialog;
 
     procedure Deaktywuj_obiekt;
     procedure Czysc_obiekty_i_powiazania;
@@ -601,8 +603,44 @@ begin
 end;
 
 procedure TAOknoGl.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
+Var
+ plik : TStringList;
+  i: Integer;
 begin
- { TODO : Dopisaæ zapisywanie projektu do pliku }
+ plik := TStringList.Create;
+  for i := 1 to max_obiektow do
+   Begin
+    if obiekty[i].id_obiektu>0 then
+     Begin
+      plik.Add('<object>');
+      plik.Add('<object_id>'+IntToStr(obiekty[i].id_obiektu)+'</object_id>');
+      plik.Add('<object_caption>'+TLabel(obiekty[i].wskaznik.Children[0]).Text+'</object_caption>');
+      plik.Add('<object_x>'+FloatToStr(obiekty[i].wskaznik.Position.X)+'</object_x>');
+      plik.Add('<object_y>'+FloatToStr(obiekty[i].wskaznik.Position.Y)+'</object_y>');
+      plik.Add('</object>');
+     End;
+   End;
+
+  for i := 1 to max_powiazan do
+   Begin
+    if powiazania[i].od_obiektu>0 then
+     Begin
+      plik.Add('<link>');
+      plik.Add('<link_from>'+IntToStr(powiazania[i].od_obiektu)+'</link_from>');
+      plik.Add('<link_to>'+IntToStr(powiazania[i].do_obiektu)+'</link_to>');
+      plik.Add('<arrow_from>'+BoolToStr(powiazania[i].od_strzalka)+'</arrow_from>');
+      plik.Add('<arrow_to>'+BoolToStr(powiazania[i].do_strzalka)+'</arrow_to>');
+      plik.Add('</link>');
+     End;
+   End;
+
+{$IFDEF ANDROID}
+ { TODO : Dopisaæ zapisywanie projektu do pliku dla androida }
+{$ELSE}
+  if SaveProjectDialog.Execute then plik.SaveToFile(SaveProjectDialog.FileName);
+{$ENDIF}
+
+ plik.Free;
 end;
 
 procedure TAOknoGl.RamkaPowiazanie1btn_addClick(Sender: TObject);
@@ -1022,6 +1060,7 @@ End;
 procedure TAOknoGl.FormCreate(Sender: TObject);
 begin
   Caption := 'FMX Obiekty Designer - wersja: ' + wersja;
+  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Obiekty Designer - wersja: ' + wersja;
   MouseIsDown := False;
   WzorObiektu.Visible := False;
   WzorLinii.Visible := False;

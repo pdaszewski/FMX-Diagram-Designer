@@ -21848,6 +21848,11 @@ object AOknoGl: TAOknoGl
         Column = 0
         Control = ScrollBox
         Row = 1
+      end
+      item
+        Column = 0
+        Control = lbl_bottom_info
+        Row = 2
       end>
     RowCollection = <
       item
@@ -21856,6 +21861,9 @@ object AOknoGl: TAOknoGl
       end
       item
         Value = 100.000000000000000000
+      end
+      item
+        SizeStyle = Auto
       end
       item
         SizeStyle = Auto
@@ -21946,15 +21954,15 @@ object AOknoGl: TAOknoGl
     object ScrollBox: TScrollBox
       Align = Client
       Size.Width = 1037.000000000000000000
-      Size.Height = 514.000000000000000000
+      Size.Height = 499.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
       Viewport.Width = 1037.000000000000000000
-      Viewport.Height = 514.000000000000000000
+      Viewport.Height = 499.000000000000000000
       object WzorLinii: TLine
         LineType = Left
         Position.X = 880.000000000000000000
-        Position.Y = 448.000000000000000000
+        Position.Y = 416.000000000000000000
         Size.Width = 50.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
@@ -21965,7 +21973,7 @@ object AOknoGl: TAOknoGl
       object WzorObiektu: TRectangle
         Fill.Color = xAA0F077A
         Position.X = 680.000000000000000000
-        Position.Y = 464.000000000000000000
+        Position.Y = 400.000000000000000000
         Size.Width = 169.000000000000000000
         Size.Height = 41.000000000000000000
         Size.PlatformDefault = False
@@ -22000,9 +22008,9 @@ object AOknoGl: TAOknoGl
               89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
               0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
               007549444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
-              5180094A63038C5FBF7EE5FCF6EDDB06520DC5098006797DF9F2E52710FFA0A6
+              5180094A63038C5FBE7CE1FCFAF5EB06520DC5098006797DFEFCF92710FFA0A6
               A13E40037F51DB505F5A18EA478CA1F822051D304269CA01B1AE230A000DA05E
-              F851DB30EA2617A021EEE4643DBC80AA85C370050C0C00062E96522E9D7FA500
+              F851DB30EA2617A021EEE4643DBC80AA85C370050C0C005A05961C1F3022E400
               00000049454E44AE426082}
             FileName = 
               'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
@@ -22015,6 +22023,18 @@ object AOknoGl: TAOknoGl
         Size.PlatformDefault = False
         Visible = False
       end
+    end
+    object lbl_bottom_info: TLabel
+      Align = Bottom
+      StyledSettings = [Family, Style]
+      Position.Y = 539.000000000000000000
+      Size.Width = 1037.000000000000000000
+      Size.Height = 15.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 10.000000000000000000
+      TextSettings.FontColor = claAliceblue
+      Text = 'FX Systems Piotr Daszewski Wersja: 1.0.0'
+      TabOrder = 5
     end
   end
   inline RamkaEdycjaProcesu1: TRamkaEdycjaProcesu
@@ -22139,9 +22159,9 @@ object AOknoGl: TAOknoGl
                 89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
                 0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
                 007549444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
-                5180094A63038C1F3F7EE4FCF4E9D306520DC5098006797DF8F0E12710FFA0A6
+                5180094A63038C1F3E7CE0FCF8F1E306520DC509800679BD7FFFFE2710FFA0A6
                 A13E40037F51DB505F5A18EA478CA1F822051D304269CA01B1AE230A000DA05E
-                F851DB30EA2617A021EEE4643DBC80AA85C370050C0C005599957A3FB9A8B700
+                F851DB30EA2617A021EEE4643DBC80AA85C370050C0C00A97095443E4B5D0000
                 00000049454E44AE426082}
               FileName = 
                 'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
@@ -22161,9 +22181,9 @@ object AOknoGl: TAOknoGl
                 89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
                 0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
                 007549444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
-                5180094A63038C1F3E7CE0FCF8F1E306520DC509800679BD7FFFFE2710FFA0A6
+                5180094A63038CEFDFBFE7FCF0E1C306520DC509800679BD7BF7EE2710FFA0A6
                 A13E40037F51DB505F5A18EA478CA1F822051D304269CA01B1AE230A000DA05E
-                F851DB30EA2617A021EEE4643DBC80AA85C370050C0C00A97095443E4B5D0000
+                F851DB30EA2617A021EEE4643DBC80AA85C370050C0C00FD47950E679B177800
                 00000049454E44AE426082}
               FileName = 
                 'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
@@ -22173,5 +22193,12 @@ object AOknoGl: TAOknoGl
         end
       end
     end
+  end
+  object SaveProjectDialog: TSaveDialog
+    DefaultExt = '.xml'
+    Filter = 'Pliki XML|*.xml'
+    Title = 'Zapisz projekt do pliku'
+    Left = 568
+    Top = 376
   end
 end
