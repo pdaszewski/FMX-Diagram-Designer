@@ -79,7 +79,6 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
     end
     object btn_open: TButton
       Align = Top
-      Enabled = False
       StyledSettings = [Family]
       Position.Y = 97.000000000000000000
       Size.Width = 400.000000000000000000

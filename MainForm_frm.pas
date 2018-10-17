@@ -52,6 +52,7 @@ type
     RamkaPowiazanie1: TRamkaPowiazanie;
     lbl_bottom_info: TLabel;
     SaveProjectDialog: TSaveDialog;
+    OpenProjectDialog: TOpenDialog;
 
     procedure Deaktywuj_obiekt;
     procedure Czysc_obiekty_i_powiazania;
@@ -73,6 +74,7 @@ type
 
     procedure Odznacz_wybrane(pierwszy, drugi: Boolean);
     procedure Ustaw_strzalke_powiazania(strzalka: String);
+    function Wartosc_XML(rekord: string): String;
 
     procedure FormCreate(Sender: TObject);
     procedure WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
@@ -107,7 +109,7 @@ type
 
 const
   wersja = '0.8.0';
-  data_kompilacji = '2018-10-14';
+  data_kompilacji = '2018-10-17';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -597,9 +599,98 @@ begin
   RamkaMenuGlowne1.Visible := False;
 end;
 
+function TAOknoGl.Wartosc_XML(rekord: string): String;
+Var
+ wynik : String;
+  poz: Integer;
+Begin
+ poz:=Pos('>',rekord); wynik:=Copy(rekord,poz+1,Length(rekord));
+ poz:=Pos('</',wynik); wynik:=Copy(wynik,1,poz-1);
+ wynik:=Trim(wynik);
+ Wartosc_XML:=wynik;
+End;
+
 procedure TAOknoGl.RamkaMenuGlowne1btn_openClick(Sender: TObject);
+Var
+  tmp: TRectangle;
+  plik : TStringList;
+  linia : String;
+  o,i: Integer;
+  czy_wczytano: Boolean;
+  id_obiektu: string;
+  wpis: string;
+  x_obiektu: string;
+  y_obiektu: string;
+  from_obiekt: string;
+  to_obiekt: string;
+  from_arrow: string;
+  to_arrow: string;
 begin
- { TODO : Dopisaæ wczytywanie projektu z pliku }
+ Czysc_obiekty_i_powiazania;
+ plik := TStringList.Create;
+ czy_wczytano:=False;
+
+{$IFDEF ANDROID}
+ { TODO : Dopisaæ wczytywanie projektu z pliku dla androida }
+{$ELSE}
+  if OpenProjectDialog.Execute then
+   Begin
+    plik.LoadFromFile(OpenProjectDialog.FileName);
+    czy_wczytano:=True;
+   End;
+{$ENDIF}
+
+ if czy_wczytano=True then
+  Begin
+   RamkaMenuGlowne1.Visible := False;
+   for i := 0 to plik.Count-1 do
+    Begin
+     linia:=Trim(plik.Strings[i]);
+
+     if Pos('<object>',linia)>0 then
+      Begin
+       //teraz mam dostêp do danych obiektów
+       id_obiektu :=Wartosc_XML(plik.Strings[i+1]);
+       wpis       :=Wartosc_XML(plik.Strings[i+2]);
+       x_obiektu  :=Wartosc_XML(plik.Strings[i+3]);
+       y_obiektu  :=Wartosc_XML(plik.Strings[i+4]);
+
+        tmp := TRectangle(WzorObiektu.Clone(self));
+        tmp.Parent := ScrollBox;
+        tmp.Visible := True;
+        tmp.Position.x := StrToFloat(x_obiektu);
+        tmp.Position.y := StrToFloat(y_obiektu);
+        tmp.OnMouseDown := WzorObiektuMouseDown;
+        tmp.OnMouseMove := WzorObiektuMouseMove;
+        tmp.OnMouseUp := WzorObiektuMouseUp;
+        tmp.OnDblClick := Wzor_labelDblClick;
+        tmp.OnMouseLeave := WzorObiektuMouseLeave;
+        tmp.OnTap := Wzor_labelTap;
+
+        Dodaj_wskaznik(tmp, StrToInt(id_obiektu));
+
+        for o := 0 to tmp.ChildrenCount - 1 do
+         Begin
+          if tmp.Children[o] is TLabel then
+           Begin
+            TLabel(tmp.Children[o]).Text := wpis;
+           End;
+         End;
+      End;
+
+     if Pos('<link>',linia)>0 then
+      Begin
+       from_obiekt :=Wartosc_XML(plik.Strings[i+1]);
+       to_obiekt   :=Wartosc_XML(plik.Strings[i+2]);
+       from_arrow  :=Wartosc_XML(plik.Strings[i+3]);
+       to_arrow    :=Wartosc_XML(plik.Strings[i+4]);
+       Dodaj_powiazanie(StrToInt(from_obiekt),StrToInt(to_obiekt),StrToBool(from_arrow),StrToBool(to_arrow));
+      end;
+
+    End;
+  End;
+
+ plik.Free;
 end;
 
 procedure TAOknoGl.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
