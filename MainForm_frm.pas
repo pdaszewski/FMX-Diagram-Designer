@@ -108,8 +108,8 @@ type
   end;
 
 const
-  wersja = '0.8.0';
-  data_kompilacji = '2018-10-17';
+  wersja = '0.9.0';
+  data_kompilacji = '2018-10-20';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -1150,8 +1150,8 @@ End;
 
 procedure TAOknoGl.FormCreate(Sender: TObject);
 begin
-  Caption := 'FMX Obiekty Designer - wersja: ' + wersja;
-  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Obiekty Designer - wersja: ' + wersja;
+  Caption := 'FMX Diagram Designer - wersja: ' + wersja;
+  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - wersja: ' + wersja;
   MouseIsDown := False;
   WzorObiektu.Visible := False;
   WzorLinii.Visible := False;
