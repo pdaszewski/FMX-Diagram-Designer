@@ -652,6 +652,7 @@ begin
        //teraz mam dostêp do danych obiektów
        id_obiektu :=Wartosc_XML(plik.Strings[i+1]);
        wpis       :=Wartosc_XML(plik.Strings[i+2]);
+       { TODO : Jeœli wpis by³ wielolinijkowy to wygeneruje b³¹d - nale¿y poprawiæ }
        x_obiektu  :=Wartosc_XML(plik.Strings[i+3]);
        y_obiektu  :=Wartosc_XML(plik.Strings[i+4]);
 
@@ -698,6 +699,7 @@ Var
  plik : TStringList;
   i: Integer;
 begin
+ { TODO : Dodaæ standardowe nag³ówki XML i zapisywaæ w UTF-8 }
  plik := TStringList.Create;
   for i := 1 to max_obiektow do
    Begin
