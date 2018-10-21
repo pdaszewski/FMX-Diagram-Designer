@@ -696,41 +696,51 @@ end;
 
 procedure TAOknoGl.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
 Var
- plik : TStringList;
+  plik : TStringList;
+  tekst_obiektu : String;
   i: Integer;
 begin
- { TODO : Dodaæ standardowe nag³ówki XML i zapisywaæ w UTF-8 }
  plik := TStringList.Create;
+ plik.Add('<?xml version="1.0" encoding="utf-8"?>');
+ plik.Add('<diagram date="'+DateToStr(Date)+'">');
+
+ plik.Add('<objects>');
   for i := 1 to max_obiektow do
    Begin
     if obiekty[i].id_obiektu>0 then
      Begin
-      plik.Add('<object>');
-      plik.Add('<object_id>'+IntToStr(obiekty[i].id_obiektu)+'</object_id>');
-      plik.Add('<object_caption>'+TLabel(obiekty[i].wskaznik.Children[0]).Text+'</object_caption>');
-      plik.Add('<object_x>'+FloatToStr(obiekty[i].wskaznik.Position.X)+'</object_x>');
-      plik.Add('<object_y>'+FloatToStr(obiekty[i].wskaznik.Position.Y)+'</object_y>');
-      plik.Add('</object>');
+      tekst_obiektu:=TLabel(obiekty[i].wskaznik.Children[0]).Text;
+      { TODO : Dodaæ konwersjê dla wpisów wielolinijkowych }
+      plik.Add(' <object>');
+      plik.Add('  <object_id>'+IntToStr(obiekty[i].id_obiektu)+'</object_id>');
+      plik.Add('  <object_caption>'+tekst_obiektu+'</object_caption>');
+      plik.Add('  <object_x>'+FloatToStr(obiekty[i].wskaznik.Position.X)+'</object_x>');
+      plik.Add('  <object_y>'+FloatToStr(obiekty[i].wskaznik.Position.Y)+'</object_y>');
+      plik.Add(' </object>');
      End;
    End;
+  plik.Add('</objects>');
 
+  plik.Add('<links>');
   for i := 1 to max_powiazan do
    Begin
     if powiazania[i].od_obiektu>0 then
      Begin
-      plik.Add('<link>');
-      plik.Add('<link_from>'+IntToStr(powiazania[i].od_obiektu)+'</link_from>');
-      plik.Add('<link_to>'+IntToStr(powiazania[i].do_obiektu)+'</link_to>');
-      plik.Add('<arrow_from>'+BoolToStr(powiazania[i].od_strzalka)+'</arrow_from>');
-      plik.Add('<arrow_to>'+BoolToStr(powiazania[i].do_strzalka)+'</arrow_to>');
-      plik.Add('</link>');
+      plik.Add(' <link>');
+      plik.Add('  <link_from>'+IntToStr(powiazania[i].od_obiektu)+'</link_from>');
+      plik.Add('  <link_to>'+IntToStr(powiazania[i].do_obiektu)+'</link_to>');
+      plik.Add('  <arrow_from>'+BoolToStr(powiazania[i].od_strzalka)+'</arrow_from>');
+      plik.Add('  <arrow_to>'+BoolToStr(powiazania[i].do_strzalka)+'</arrow_to>');
+      plik.Add(' </link>');
      End;
    End;
+  plik.Add('</links>');
+  plik.Add('</diagram>');
 
 {$IFDEF ANDROID}
  { TODO : Dopisaæ zapisywanie projektu do pliku dla androida }
 {$ELSE}
-  if SaveProjectDialog.Execute then plik.SaveToFile(SaveProjectDialog.FileName);
+  if SaveProjectDialog.Execute then plik.SaveToFile(SaveProjectDialog.FileName, TEncoding.UTF8);
 {$ENDIF}
 
  plik.Free;
