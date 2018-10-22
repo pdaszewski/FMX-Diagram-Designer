@@ -109,7 +109,7 @@ type
 
 const
   wersja = '0.9.0';
-  data_kompilacji = '2018-10-20';
+  data_kompilacji = '2018-10-22';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -652,7 +652,7 @@ begin
        //teraz mam dostêp do danych obiektów
        id_obiektu :=Wartosc_XML(plik.Strings[i+1]);
        wpis       :=Wartosc_XML(plik.Strings[i+2]);
-       { TODO : Jeœli wpis by³ wielolinijkowy to wygeneruje b³¹d - nale¿y poprawiæ }
+       wpis       :=StringReplace(wpis,'#13',#13,[rfReplaceAll]);
        x_obiektu  :=Wartosc_XML(plik.Strings[i+3]);
        y_obiektu  :=Wartosc_XML(plik.Strings[i+4]);
 
@@ -698,8 +698,10 @@ procedure TAOknoGl.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
 Var
   plik : TStringList;
   tekst_obiektu : String;
-  i: Integer;
+  linie_tekstowe_obiektu : TStringList;
+  t, i: Integer;
 begin
+ linie_tekstowe_obiektu := TStringList.Create;
  plik := TStringList.Create;
  plik.Add('<?xml version="1.0" encoding="utf-8"?>');
  plik.Add('<diagram date="'+DateToStr(Date)+'">');
@@ -709,8 +711,14 @@ begin
    Begin
     if obiekty[i].id_obiektu>0 then
      Begin
-      tekst_obiektu:=TLabel(obiekty[i].wskaznik.Children[0]).Text;
-      { TODO : Dodaæ konwersjê dla wpisów wielolinijkowych }
+      linie_tekstowe_obiektu.Text:=TLabel(obiekty[i].wskaznik.Children[0]).Text;
+      tekst_obiektu:='';
+      for t := 0 to linie_tekstowe_obiektu.Count-1 do
+       Begin
+        if t=0 then tekst_obiektu:=linie_tekstowe_obiektu.Strings[t]
+        else tekst_obiektu:=tekst_obiektu+'#13'+linie_tekstowe_obiektu.Strings[t];
+       End;
+
       plik.Add(' <object>');
       plik.Add('  <object_id>'+IntToStr(obiekty[i].id_obiektu)+'</object_id>');
       plik.Add('  <object_caption>'+tekst_obiektu+'</object_caption>');
@@ -744,6 +752,7 @@ begin
 {$ENDIF}
 
  plik.Free;
+ linie_tekstowe_obiektu.Free;
 end;
 
 procedure TAOknoGl.RamkaPowiazanie1btn_addClick(Sender: TObject);
