@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<diagram date="2018-10-21">
+<diagram date="2018-10-22">
 <objects>
  <object>
   <object_id>1</object_id>
@@ -33,7 +33,7 @@
  </object>
  <object>
   <object_id>6</object_id>
-  <object_caption>Odblokowanie</object_caption>
+  <object_caption>Odblokowanie#13(ponowna aktywacja)</object_caption>
   <object_x>608</object_x>
   <object_y>101</object_y>
  </object>
