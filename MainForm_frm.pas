@@ -630,8 +630,9 @@ begin
  plik := TStringList.Create;
  czy_wczytano:=False;
 
-{$IFDEF ANDROID}
  { TODO : Dopisaæ wczytywanie projektu z pliku dla androida }
+{$IFDEF ANDROID}
+
 {$ELSE}
   if OpenProjectDialog.Execute then
    Begin
@@ -701,6 +702,7 @@ Var
   linie_tekstowe_obiektu : TStringList;
   t, i: Integer;
 begin
+ { TODO : Zamieniæ "sk³adanie" XML rêcznie na jego obs³ugê z wykorzystaniem klas XML }
  linie_tekstowe_obiektu := TStringList.Create;
  plik := TStringList.Create;
  plik.Add('<?xml version="1.0" encoding="utf-8"?>');
@@ -745,8 +747,9 @@ begin
   plik.Add('</links>');
   plik.Add('</diagram>');
 
+{ TODO : Dopisaæ zapisywanie projektu do pliku dla androida }
 {$IFDEF ANDROID}
- { TODO : Dopisaæ zapisywanie projektu do pliku dla androida }
+
 {$ELSE}
   if SaveProjectDialog.Execute then plik.SaveToFile(SaveProjectDialog.FileName, TEncoding.UTF8);
 {$ENDIF}
