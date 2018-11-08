@@ -109,7 +109,7 @@ type
 
 const
   wersja = '0.9.0';
-  data_kompilacji = '2018-10-22';
+  data_kompilacji = '2018-11-08';
 
   max_obiektow = 100;
   max_powiazan = 1000;
@@ -630,7 +630,7 @@ begin
  plik := TStringList.Create;
  czy_wczytano:=False;
 
- { TODO : Dopisaæ wczytywanie projektu z pliku dla androida }
+ { TODO : Dopisaæ wczytywanie projektu z pliku dla androida i ewentualnie iOS }
 {$IFDEF ANDROID}
 
 {$ELSE}
@@ -747,7 +747,7 @@ begin
   plik.Add('</links>');
   plik.Add('</diagram>');
 
-{ TODO : Dopisaæ zapisywanie projektu do pliku dla androida }
+{ TODO : Dopisaæ zapisywanie projektu do pliku dla androida i iOS }
 {$IFDEF ANDROID}
 
 {$ELSE}
