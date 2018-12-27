@@ -15,6 +15,8 @@ Overview:
 History:
 
 2018-10-13 Added fixes for version 0.7.0 including full screen mode.
+
 2018-10-17 Added version with function to save and open diagrams projects in windows operating systems.
 Still must TO DO write function to save and open in android.
+
 2018-10-22 Added veriosn with fixing save and open functions for objects with multiline captions
