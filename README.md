@@ -19,4 +19,4 @@ History:
 2018-10-17 Added version with function to save and open diagrams projects in windows operating systems.
 Still must TO DO write function to save and open in android.
 
-2018-10-22 Added veriosn with fixing save and open functions for objects with multiline captions
+2018-10-22 Added version with fixing save and open functions for objects with multiline captions
