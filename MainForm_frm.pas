@@ -9,9 +9,9 @@ uses
   RamkaMenuGlowne_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList, RamkaPowiazanie_frm;
 
 type
-  obiekt = record
-    id_obiektu: Integer;
-    wskaznik: TRectangle;
+  diagram_object = record
+    id_object: Integer;
+    indicator: TRectangle;
   end;
 
 type
@@ -108,10 +108,10 @@ type
   end;
 
 const
-  wersja = '0.9.0';
-  data_kompilacji = '2018-11-08';
+  version = '1.0.1.0';
+  build_date = '2020-02-15';
 
-  max_obiektow = 100;
+  max_objects = 100;
   max_powiazan = 1000;
   max_punktow_styku = 10000;
 
@@ -126,7 +126,7 @@ var
   wybrany_drugi: TRectangle;
   label_wybranego: Integer;
 
-  obiekty: array [1 .. max_obiektow] of obiekt;
+  objects_array: array [1 .. max_objects] of diagram_object;
   powiazania: array [1 .. max_powiazan] of powiazanie;
   punkty_styku: array [1 .. max_punktow_styku] of punkt_styku;
 
@@ -156,9 +156,9 @@ Var
  wynik, i : Integer;
 Begin
  wynik:=0;
- for i := 1 to max_obiektow do
+ for i := 1 to max_objects do
   Begin
-    if obiekty[i].wskaznik = obiekt then wynik:=i;
+    if objects_array[i].indicator = obiekt then wynik:=i;
   End;
  Ktory_obiekt:=wynik;
 End;
@@ -170,12 +170,12 @@ Var
   i: Integer;
 Begin
   wynik := 0;
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    if obiekty[i].wskaznik = od_obiektu then
-      od_obiektu_index := obiekty[i].id_obiektu;
-    if obiekty[i].wskaznik = do_obiektu then
-      do_obiektu_index := obiekty[i].id_obiektu;
+    if objects_array[i].indicator = od_obiektu then
+      od_obiektu_index := objects_array[i].id_object;
+    if objects_array[i].indicator = do_obiektu then
+      do_obiektu_index := objects_array[i].id_object;
   End;
 
   for i := 1 to max_powiazan do
@@ -454,11 +454,11 @@ Var
 begin
   ktory_w_tablicy := 0;
   id_procesu := 0;
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    if obiekty[i].wskaznik = wybrany then
+    if objects_array[i].indicator = wybrany then
     Begin
-      id_procesu := obiekty[i].id_obiektu;
+      id_procesu := objects_array[i].id_object;
       ktory_w_tablicy := i;
     End;
   End;
@@ -469,12 +469,12 @@ begin
     Deaktywuj_obiekt;
     wybrany := nil;
     // Najpierw kasujê obiekt
-    obiekty[ktory_w_tablicy].id_obiektu := 0;
+    objects_array[ktory_w_tablicy].id_object := 0;
 {$IFDEF ANDROID}
     obiekty[ktory_w_tablicy].wskaznik.DisposeOf;
 {$ELSE}
-    obiekty[ktory_w_tablicy].wskaznik.Free;
-    obiekty[ktory_w_tablicy].wskaznik := nil;
+    objects_array[ktory_w_tablicy].indicator.Free;
+    objects_array[ktory_w_tablicy].indicator := nil;
 {$ENDIF}
     // Teraz kasujê powi¹zania
     for i := 1 to max_powiazan do
@@ -533,11 +533,11 @@ Var
 begin
   ktory_w_tablicy := 0;
   id_procesu := 0;
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    if obiekty[i].wskaznik = wybrany then
+    if objects_array[i].indicator = wybrany then
     Begin
-      id_procesu := obiekty[i].id_obiektu;
+      id_procesu := objects_array[i].id_object;
       ktory_w_tablicy := i;
     End;
   End;
@@ -709,11 +709,11 @@ begin
  plik.Add('<diagram date="'+DateToStr(Date)+'">');
 
  plik.Add('<objects>');
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
    Begin
-    if obiekty[i].id_obiektu>0 then
+    if objects_array[i].id_object>0 then
      Begin
-      linie_tekstowe_obiektu.Text:=TLabel(obiekty[i].wskaznik.Children[0]).Text;
+      linie_tekstowe_obiektu.Text:=TLabel(objects_array[i].indicator.Children[0]).Text;
       tekst_obiektu:='';
       for t := 0 to linie_tekstowe_obiektu.Count-1 do
        Begin
@@ -722,10 +722,10 @@ begin
        End;
 
       plik.Add(' <object>');
-      plik.Add('  <object_id>'+IntToStr(obiekty[i].id_obiektu)+'</object_id>');
+      plik.Add('  <object_id>'+IntToStr(objects_array[i].id_object)+'</object_id>');
       plik.Add('  <object_caption>'+tekst_obiektu+'</object_caption>');
-      plik.Add('  <object_x>'+FloatToStr(obiekty[i].wskaznik.Position.X)+'</object_x>');
-      plik.Add('  <object_y>'+FloatToStr(obiekty[i].wskaznik.Position.Y)+'</object_y>');
+      plik.Add('  <object_x>'+FloatToStr(objects_array[i].indicator.Position.X)+'</object_x>');
+      plik.Add('  <object_y>'+FloatToStr(objects_array[i].indicator.Position.Y)+'</object_y>');
       plik.Add(' </object>');
      End;
    End;
@@ -763,12 +763,12 @@ Var
   od_obiektu, do_obiektu: Integer;
   i: Integer;
 begin
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    if obiekty[i].wskaznik = wybrany_pierwszy then
-      od_obiektu := obiekty[i].id_obiektu;
-    if obiekty[i].wskaznik = wybrany_drugi then
-      do_obiektu := obiekty[i].id_obiektu;
+    if objects_array[i].indicator = wybrany_pierwszy then
+      od_obiektu := objects_array[i].id_object;
+    if objects_array[i].indicator = wybrany_drugi then
+      do_obiektu := objects_array[i].id_object;
   End;
 
   // Jeœli nie ma strza³ek to usuwane jest powi¹zanie!
@@ -824,14 +824,14 @@ Begin
   Begin
     if powiazania[i].od_obiektu > 0 then
     Begin
-      for o := 1 to max_obiektow do
+      for o := 1 to max_objects do
       Begin
-        if obiekty[o].id_obiektu = powiazania[i].od_obiektu then
+        if objects_array[o].id_object = powiazania[i].od_obiektu then
           obiekt_index_od := o;
       End;
-      for o := 1 to max_obiektow do
+      for o := 1 to max_objects do
       Begin
-        if obiekty[o].id_obiektu = powiazania[i].do_obiektu then
+        if objects_array[o].id_object = powiazania[i].do_obiektu then
           obiekt_index_do := o;
       End;
       Rysuj_powiazanie(obiekt_index_od, obiekt_index_do, powiazania[i].od_strzalka, powiazania[i].do_strzalka,
@@ -856,8 +856,8 @@ begin
 
   if (od_strzalka) or (do_strzalka) then
   Begin
-    od_rect := obiekty[od_obiektu].wskaznik;
-    do_rect := obiekty[do_obiektu].wskaznik;
+    od_rect := objects_array[od_obiektu].indicator;
+    do_rect := objects_array[do_obiektu].indicator;
 
     poy := od_rect.Position.y - od_rect.Height - (od_rect.Height / 2);
     koy := od_rect.Position.y + od_rect.Height + (od_rect.Height / 2);
@@ -1057,14 +1057,14 @@ var
   nowy: Integer;
 Begin
   nowy := 0;
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    if (obiekty[i].id_obiektu = 0) and (nowy = 0) then
+    if (objects_array[i].id_object = 0) and (nowy = 0) then
       nowy := i;
   End;
 
-  obiekty[nowy].id_obiektu := index_procesu;
-  obiekty[nowy].wskaznik := proces;
+  objects_array[nowy].id_object := index_procesu;
+  objects_array[nowy].indicator := proces;
 End;
 
 function TAOknoGl.Ostatni_obiekt: Integer;
@@ -1073,9 +1073,9 @@ Var
   i: Integer;
 Begin
   wynik := 0;
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    if obiekty[i].id_obiektu = 0 then
+    if objects_array[i].id_object = 0 then
      Begin
       wynik := i-1;
       Break;
@@ -1133,14 +1133,14 @@ procedure TAOknoGl.Czysc_obiekty_i_powiazania;
 var
   i: Integer;
 Begin
-  for i := 1 to max_obiektow do
+  for i := 1 to max_objects do
   Begin
-    obiekty[i].id_obiektu := 0;
+    objects_array[i].id_object := 0;
 {$IFDEF ANDROID}
     obiekty[i].wskaznik.DisposeOf;
 {$ELSE}
-    obiekty[i].wskaznik.Free;
-    obiekty[i].wskaznik := nil;
+    objects_array[i].indicator.Free;
+    objects_array[i].indicator := nil;
 {$ENDIF}
   End;
 
@@ -1174,8 +1174,8 @@ End;
 
 procedure TAOknoGl.FormCreate(Sender: TObject);
 begin
-  Caption := 'FMX Diagram Designer - wersja: ' + wersja;
-  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - wersja: ' + wersja;
+  Caption := 'FMX Diagram Designer - version: ' + version;
+  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - version: ' + version;
   MouseIsDown := False;
   WzorObiektu.Visible := False;
   WzorLinii.Visible := False;
