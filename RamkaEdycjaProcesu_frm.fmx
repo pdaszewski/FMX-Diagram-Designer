@@ -32,7 +32,7 @@ object RamkaEdycjaProcesu: TRamkaEdycjaProcesu
       Size.PlatformDefault = False
       TextSettings.FontColor = claAliceblue
       TextSettings.HorzAlign = Center
-      Text = 'Nazwa procesu:'
+      Text = 'Process Name:'
       TabOrder = 0
     end
     object btn_save_process_data: TButton
@@ -44,7 +44,7 @@ object RamkaEdycjaProcesu: TRamkaEdycjaProcesu
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 1
-      Text = 'zapisz dane procesu'
+      Text = 'save process data'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
@@ -73,7 +73,7 @@ object RamkaEdycjaProcesu: TRamkaEdycjaProcesu
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 3
-      Text = 'usu'#324' proces'
+      Text = 'delete process'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
@@ -87,7 +87,7 @@ object RamkaEdycjaProcesu: TRamkaEdycjaProcesu
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 4
-      Text = 'usu'#324' powi'#261'zania'
+      Text = 'remove associations'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue

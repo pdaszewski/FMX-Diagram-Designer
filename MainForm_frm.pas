@@ -15,16 +15,16 @@ type
   end;
 
 type
-  powiazanie = record
-    od_obiektu: Integer;
-    do_obiektu: Integer;
-    od_strzalka: Boolean;
-    do_strzalka: Boolean;
-    strzalka_od: TImage;
-    strzalka_do: TImage;
-    linia: TLine;
-    linia2: TLine;
-    linia3: TLine;
+  object_link = record
+    from_object: Integer;
+    to_object: Integer;
+    from_arrow: Boolean;
+    to_arrow: Boolean;
+    arrow_image_from: TImage;
+    arrow_image_to: TImage;
+    text_line_1: TLine;
+    text_line_2: TLine;
+    text_line_3: TLine;
   end;
 
 type
@@ -108,11 +108,11 @@ type
   end;
 
 const
-  version = '1.0.1.0';
+  version = '1.0.1.2';
   build_date = '2020-02-15';
 
   max_objects = 100;
-  max_powiazan = 1000;
+  max_objects_links = 1000;
   max_punktow_styku = 10000;
 
   odstep_miedzy_liniami = 10;
@@ -127,7 +127,7 @@ var
   label_wybranego: Integer;
 
   objects_array: array [1 .. max_objects] of diagram_object;
-  powiazania: array [1 .. max_powiazan] of powiazanie;
+  objects_links_array: array [1 .. max_objects_links] of object_link;
   punkty_styku: array [1 .. max_punktow_styku] of punkt_styku;
 
 implementation
@@ -140,13 +140,13 @@ var
 Begin
  WzorLinii.Stroke.Dash:=nowy_styl;
  RamkaPowiazanie1.WzorLinii.Stroke.Dash:=nowy_styl;
- for i := 1 to max_powiazan do
+ for i := 1 to max_objects_links do
   Begin
-   if powiazania[i].od_obiektu>0 then
+   if objects_links_array[i].from_object>0 then
     Begin
-     powiazania[i].linia.Stroke.Dash:=nowy_styl;
-     powiazania[i].linia2.Stroke.Dash:=nowy_styl;
-     powiazania[i].linia3.Stroke.Dash:=nowy_styl;
+     objects_links_array[i].text_line_1.Stroke.Dash:=nowy_styl;
+     objects_links_array[i].text_line_2.Stroke.Dash:=nowy_styl;
+     objects_links_array[i].text_line_3.Stroke.Dash:=nowy_styl;
     End;
   End;
 End;
@@ -178,11 +178,11 @@ Begin
       do_obiektu_index := objects_array[i].id_object;
   End;
 
-  for i := 1 to max_powiazan do
+  for i := 1 to max_objects_links do
   Begin
-    if (powiazania[i].od_obiektu = od_obiektu_index) and (powiazania[i].do_obiektu = do_obiektu_index) then
+    if (objects_links_array[i].from_object = od_obiektu_index) and (objects_links_array[i].to_object = do_obiektu_index) then
       wynik := i;
-    if (powiazania[i].od_obiektu = do_obiektu_index) and (powiazania[i].do_obiektu = od_obiektu_index) then
+    if (objects_links_array[i].from_object = do_obiektu_index) and (objects_links_array[i].to_object = od_obiektu_index) then
       wynik := i;
   End;
 
@@ -208,9 +208,9 @@ begin
   End;
 
   if (RamkaPowiazanie1.img_od.Visible = False) and (RamkaPowiazanie1.img_do.Visible = False) then
-    RamkaPowiazanie1.btn_add.Text := 'usuñ powi¹zanie'
+    RamkaPowiazanie1.btn_add.Text := 'remove association'
   else
-    RamkaPowiazanie1.btn_add.Text := 'dodaj powi¹zanie';
+    RamkaPowiazanie1.btn_add.Text := 'add association';
 end;
 
 procedure TAOknoGl.Odznacz_wybrane(pierwszy, drugi: Boolean);
@@ -278,14 +278,14 @@ var
 Begin
   istniejacy := 0;
   czy_istnieje := False;
-  for i := 1 to max_powiazan do
+  for i := 1 to max_objects_links do
   Begin
-    if (powiazania[i].od_obiektu = od_obiektu_index) and (powiazania[i].do_obiektu = do_obiektu_index) then
+    if (objects_links_array[i].from_object = od_obiektu_index) and (objects_links_array[i].to_object = do_obiektu_index) then
     Begin
       istniejacy := i;
       czy_istnieje := True;
     End;
-    if (powiazania[i].od_obiektu = do_obiektu_index) and (powiazania[i].do_obiektu = od_obiektu_index) then
+    if (objects_links_array[i].from_object = do_obiektu_index) and (objects_links_array[i].to_object = od_obiektu_index) then
     Begin
       istniejacy := i;
       czy_istnieje := True;
@@ -294,27 +294,27 @@ Begin
 
   if czy_istnieje = True then
   Begin
-    powiazania[istniejacy].od_obiektu := 0;
-    powiazania[istniejacy].do_obiektu := 0;
-    powiazania[istniejacy].od_strzalka := False;
-    powiazania[istniejacy].do_strzalka := False;
+    objects_links_array[istniejacy].from_object := 0;
+    objects_links_array[istniejacy].to_object := 0;
+    objects_links_array[istniejacy].from_arrow := False;
+    objects_links_array[istniejacy].to_arrow := False;
 {$IFDEF ANDROID}
-    powiazania[istniejacy].linia.DisposeOf;
-    powiazania[istniejacy].linia2.DisposeOf;
-    powiazania[istniejacy].linia3.DisposeOf;
-    powiazania[istniejacy].strzalka_od.DisposeOf;
-    powiazania[istniejacy].strzalka_do.DisposeOf;
+    objects_links_array[istniejacy].linia.DisposeOf;
+    objects_links_array[istniejacy].linia2.DisposeOf;
+    objects_links_array[istniejacy].linia3.DisposeOf;
+    objects_links_array[istniejacy].strzalka_od.DisposeOf;
+    objects_links_array[istniejacy].strzalka_do.DisposeOf;
 {$ELSE}
-    powiazania[istniejacy].linia.Free;
-    powiazania[istniejacy].linia := nil;
-    powiazania[istniejacy].linia2.Free;
-    powiazania[istniejacy].linia2 := nil;
-    powiazania[istniejacy].linia3.Free;
-    powiazania[istniejacy].linia3 := nil;
-    powiazania[istniejacy].strzalka_od.Free;
-    powiazania[istniejacy].strzalka_od := nil;
-    powiazania[istniejacy].strzalka_do.Free;
-    powiazania[istniejacy].strzalka_do := nil;
+    objects_links_array[istniejacy].text_line_1.Free;
+    objects_links_array[istniejacy].text_line_1 := nil;
+    objects_links_array[istniejacy].text_line_2.Free;
+    objects_links_array[istniejacy].text_line_2 := nil;
+    objects_links_array[istniejacy].text_line_3.Free;
+    objects_links_array[istniejacy].text_line_3 := nil;
+    objects_links_array[istniejacy].arrow_image_from.Free;
+    objects_links_array[istniejacy].arrow_image_from := nil;
+    objects_links_array[istniejacy].arrow_image_to.Free;
+    objects_links_array[istniejacy].arrow_image_to := nil;
 {$ENDIF}
   End;
 End;
@@ -331,16 +331,16 @@ Begin
   nowy := 0;
   istniejacy := 0;
   czy_istnieje := False;
-  for i := 1 to max_powiazan do
+  for i := 1 to max_objects_links do
   Begin
-    if (powiazania[i].od_obiektu = 0) and (nowy = 0) then
+    if (objects_links_array[i].from_object = 0) and (nowy = 0) then
       nowy := i;
-    if (powiazania[i].od_obiektu = od_obiektu_index) and (powiazania[i].do_obiektu = do_obiektu_index) then
+    if (objects_links_array[i].from_object = od_obiektu_index) and (objects_links_array[i].to_object = do_obiektu_index) then
     Begin
       istniejacy := i;
       czy_istnieje := True;
     End;
-    if (powiazania[i].od_obiektu = do_obiektu_index) and (powiazania[i].do_obiektu = od_obiektu_index) then
+    if (objects_links_array[i].from_object = do_obiektu_index) and (objects_links_array[i].to_object = od_obiektu_index) then
     Begin
       istniejacy := i;
       czy_istnieje := True;
@@ -349,45 +349,45 @@ Begin
 
   if (nowy > 0) and (czy_istnieje = False) then
   Begin
-    powiazania[nowy].od_obiektu := od_obiektu_index;
-    powiazania[nowy].do_obiektu := do_obiektu_index;
-    powiazania[nowy].od_strzalka := od_strzalka;
-    powiazania[nowy].do_strzalka := do_strzalka;
+    objects_links_array[nowy].from_object := od_obiektu_index;
+    objects_links_array[nowy].to_object := do_obiektu_index;
+    objects_links_array[nowy].from_arrow := od_strzalka;
+    objects_links_array[nowy].to_arrow := do_strzalka;
 
     tmpl := TLine(WzorLinii.Clone(self));
     tmpl.Parent := ScrollBox;
     tmpl.Visible := True;
-    powiazania[nowy].linia := tmpl;
+    objects_links_array[nowy].text_line_1 := tmpl;
 
     tmpl2 := TLine(WzorLinii.Clone(self));
     tmpl2.Parent := ScrollBox;
     tmpl2.Visible := True;
-    powiazania[nowy].linia2 := tmpl2;
+    objects_links_array[nowy].text_line_2 := tmpl2;
 
     tmpl3 := TLine(WzorLinii.Clone(self));
     tmpl3.Parent := ScrollBox;
     tmpl3.Visible := True;
-    powiazania[nowy].linia3 := tmpl3;
+    objects_links_array[nowy].text_line_3 := tmpl3;
 
     img1 := TImage(WzorStrzalki.Clone(self));
     img1.Parent := ScrollBox;
     img1.Visible := True;
-    powiazania[nowy].strzalka_od := img1;
+    objects_links_array[nowy].arrow_image_from := img1;
 
     img2 := TImage(WzorStrzalki.Clone(self));
     img2.Parent := ScrollBox;
     img2.Visible := True;
-    powiazania[nowy].strzalka_do := img2;
+    objects_links_array[nowy].arrow_image_to := img2;
 
     Rysuj_powiazania;
   End;
 
   if czy_istnieje = True then
   Begin
-    powiazania[istniejacy].od_obiektu := od_obiektu_index;
-    powiazania[istniejacy].do_obiektu := do_obiektu_index;
-    powiazania[istniejacy].od_strzalka := od_strzalka;
-    powiazania[istniejacy].do_strzalka := do_strzalka;
+    objects_links_array[istniejacy].from_object := od_obiektu_index;
+    objects_links_array[istniejacy].to_object := do_obiektu_index;
+    objects_links_array[istniejacy].from_arrow := od_strzalka;
+    objects_links_array[istniejacy].to_arrow := do_strzalka;
   End;
 End;
 
@@ -477,31 +477,31 @@ begin
     objects_array[ktory_w_tablicy].indicator := nil;
 {$ENDIF}
     // Teraz kasujê powi¹zania
-    for i := 1 to max_powiazan do
+    for i := 1 to max_objects_links do
     Begin
-      if (powiazania[i].od_obiektu = id_procesu) OR (powiazania[i].do_obiektu = id_procesu) then
+      if (objects_links_array[i].from_object = id_procesu) OR (objects_links_array[i].to_object = id_procesu) then
       Begin
-        powiazania[i].od_obiektu := 0;
-        powiazania[i].do_obiektu := 0;
-        powiazania[i].od_strzalka := False;
-        powiazania[i].do_strzalka := False;
+        objects_links_array[i].from_object := 0;
+        objects_links_array[i].to_object := 0;
+        objects_links_array[i].from_arrow := False;
+        objects_links_array[i].to_arrow := False;
 {$IFDEF ANDROID}
-        powiazania[i].linia.DisposeOf;
-        powiazania[i].linia2.DisposeOf;
-        powiazania[i].linia3.DisposeOf;
-        powiazania[i].strzalka_od.DisposeOf;
-        powiazania[i].strzalka_do.DisposeOf;
+        objects_links_array[i].linia.DisposeOf;
+        objects_links_array[i].linia2.DisposeOf;
+        objects_links_array[i].linia3.DisposeOf;
+        objects_links_array[i].strzalka_od.DisposeOf;
+        objects_links_array[i].strzalka_do.DisposeOf;
 {$ELSE}
-        powiazania[i].linia.Free;
-        powiazania[i].linia := nil;
-        powiazania[i].linia2.Free;
-        powiazania[i].linia2 := nil;
-        powiazania[i].linia3.Free;
-        powiazania[i].linia3 := nil;
-        powiazania[i].strzalka_od.Free;
-        powiazania[i].strzalka_od := nil;
-        powiazania[i].strzalka_do.Free;
-        powiazania[i].strzalka_do := nil;
+        objects_links_array[i].text_line_1.Free;
+        objects_links_array[i].text_line_1 := nil;
+        objects_links_array[i].text_line_2.Free;
+        objects_links_array[i].text_line_2 := nil;
+        objects_links_array[i].text_line_3.Free;
+        objects_links_array[i].text_line_3 := nil;
+        objects_links_array[i].arrow_image_from.Free;
+        objects_links_array[i].arrow_image_from := nil;
+        objects_links_array[i].arrow_image_to.Free;
+        objects_links_array[i].arrow_image_to := nil;
 {$ENDIF}
       End;
     End;
@@ -547,31 +547,31 @@ begin
     Rysowanie.Enabled := False;
     Deaktywuj_obiekt;
     // Teraz kasujê powi¹zania
-    for i := 1 to max_powiazan do
+    for i := 1 to max_objects_links do
     Begin
-      if (powiazania[i].od_obiektu = id_procesu) OR (powiazania[i].do_obiektu = id_procesu) then
+      if (objects_links_array[i].from_object = id_procesu) OR (objects_links_array[i].to_object = id_procesu) then
       Begin
-        powiazania[i].od_obiektu := 0;
-        powiazania[i].do_obiektu := 0;
-        powiazania[i].od_strzalka := False;
-        powiazania[i].do_strzalka := False;
+        objects_links_array[i].from_object := 0;
+        objects_links_array[i].to_object := 0;
+        objects_links_array[i].from_arrow := False;
+        objects_links_array[i].to_arrow := False;
 {$IFDEF ANDROID}
-        powiazania[i].linia.DisposeOf;
-        powiazania[i].linia2.DisposeOf;
-        powiazania[i].linia3.DisposeOf;
-        powiazania[i].strzalka_od.DisposeOf;
-        powiazania[i].strzalka_do.DisposeOf;
+        objects_links_array[i].linia.DisposeOf;
+        objects_links_array[i].linia2.DisposeOf;
+        objects_links_array[i].linia3.DisposeOf;
+        objects_links_array[i].strzalka_od.DisposeOf;
+        objects_links_array[i].strzalka_do.DisposeOf;
 {$ELSE}
-        powiazania[i].linia.Free;
-        powiazania[i].linia := nil;
-        powiazania[i].linia2.Free;
-        powiazania[i].linia2 := nil;
-        powiazania[i].linia3.Free;
-        powiazania[i].linia3 := nil;
-        powiazania[i].strzalka_od.Free;
-        powiazania[i].strzalka_od := nil;
-        powiazania[i].strzalka_do.Free;
-        powiazania[i].strzalka_do := nil;
+        objects_links_array[i].text_line_1.Free;
+        objects_links_array[i].text_line_1 := nil;
+        objects_links_array[i].text_line_2.Free;
+        objects_links_array[i].text_line_2 := nil;
+        objects_links_array[i].text_line_3.Free;
+        objects_links_array[i].text_line_3 := nil;
+        objects_links_array[i].arrow_image_from.Free;
+        objects_links_array[i].arrow_image_from := nil;
+        objects_links_array[i].arrow_image_to.Free;
+        objects_links_array[i].arrow_image_to := nil;
 {$ENDIF}
       End;
     End;
@@ -732,15 +732,15 @@ begin
   plik.Add('</objects>');
 
   plik.Add('<links>');
-  for i := 1 to max_powiazan do
+  for i := 1 to max_objects_links do
    Begin
-    if powiazania[i].od_obiektu>0 then
+    if objects_links_array[i].from_object>0 then
      Begin
       plik.Add(' <link>');
-      plik.Add('  <link_from>'+IntToStr(powiazania[i].od_obiektu)+'</link_from>');
-      plik.Add('  <link_to>'+IntToStr(powiazania[i].do_obiektu)+'</link_to>');
-      plik.Add('  <arrow_from>'+BoolToStr(powiazania[i].od_strzalka)+'</arrow_from>');
-      plik.Add('  <arrow_to>'+BoolToStr(powiazania[i].do_strzalka)+'</arrow_to>');
+      plik.Add('  <link_from>'+IntToStr(objects_links_array[i].from_object)+'</link_from>');
+      plik.Add('  <link_to>'+IntToStr(objects_links_array[i].to_object)+'</link_to>');
+      plik.Add('  <arrow_from>'+BoolToStr(objects_links_array[i].from_arrow)+'</arrow_from>');
+      plik.Add('  <arrow_to>'+BoolToStr(objects_links_array[i].to_arrow)+'</arrow_to>');
       plik.Add(' </link>');
      End;
    End;
@@ -820,23 +820,23 @@ var
   obiekt_index_do: Integer;
 Begin
   Czysc_punkty_styku;
-  for i := 1 to max_powiazan do
+  for i := 1 to max_objects_links do
   Begin
-    if powiazania[i].od_obiektu > 0 then
+    if objects_links_array[i].from_object > 0 then
     Begin
       for o := 1 to max_objects do
       Begin
-        if objects_array[o].id_object = powiazania[i].od_obiektu then
+        if objects_array[o].id_object = objects_links_array[i].from_object then
           obiekt_index_od := o;
       End;
       for o := 1 to max_objects do
       Begin
-        if objects_array[o].id_object = powiazania[i].do_obiektu then
+        if objects_array[o].id_object = objects_links_array[i].to_object then
           obiekt_index_do := o;
       End;
-      Rysuj_powiazanie(obiekt_index_od, obiekt_index_do, powiazania[i].od_strzalka, powiazania[i].do_strzalka,
-        powiazania[i].linia, powiazania[i].linia2, powiazania[i].linia3, powiazania[i].strzalka_od,
-        powiazania[i].strzalka_do);
+      Rysuj_powiazanie(obiekt_index_od, obiekt_index_do, objects_links_array[i].from_arrow, objects_links_array[i].to_arrow,
+        objects_links_array[i].text_line_1, objects_links_array[i].text_line_2, objects_links_array[i].text_line_3,
+        objects_links_array[i].arrow_image_from, objects_links_array[i].arrow_image_to);
     End;
   End;
 End;
@@ -1112,7 +1112,7 @@ begin
   Begin
     if tmp.Children[i] is TLabel then
     Begin
-      TLabel(tmp.Children[i]).Text := 'Nowy proces' + #13 + '(' + IntToStr(index_obiektu) + ')';
+      TLabel(tmp.Children[i]).Text := 'New process' + #13 + '(' + IntToStr(index_obiektu) + ')';
     End;
   End;
 
@@ -1144,29 +1144,29 @@ Begin
 {$ENDIF}
   End;
 
-  for i := 1 to max_powiazan do
+  for i := 1 to max_objects_links do
   Begin
-    powiazania[i].od_obiektu := 0;
-    powiazania[i].do_obiektu := 0;
-    powiazania[i].od_strzalka := False;
-    powiazania[i].do_strzalka := False;
+    objects_links_array[i].from_object := 0;
+    objects_links_array[i].to_object := 0;
+    objects_links_array[i].from_arrow := False;
+    objects_links_array[i].to_arrow := False;
 {$IFDEF ANDROID}
-    powiazania[i].linia.DisposeOf;
-    powiazania[i].linia2.DisposeOf;
-    powiazania[i].linia3.DisposeOf;
-    powiazania[i].strzalka_od.DisposeOf;
-    powiazania[i].strzalka_do.DisposeOf;
+    objects_links_array[i].linia.DisposeOf;
+    objects_links_array[i].linia2.DisposeOf;
+    objects_links_array[i].linia3.DisposeOf;
+    objects_links_array[i].strzalka_od.DisposeOf;
+    objects_links_array[i].strzalka_do.DisposeOf;
 {$ELSE}
-    powiazania[i].linia.Free;
-    powiazania[i].linia := nil;
-    powiazania[i].linia2.Free;
-    powiazania[i].linia2 := nil;
-    powiazania[i].linia3.Free;
-    powiazania[i].linia3 := nil;
-    powiazania[i].strzalka_od.Free;
-    powiazania[i].strzalka_od := nil;
-    powiazania[i].strzalka_do.Free;
-    powiazania[i].strzalka_do := nil;
+    objects_links_array[i].text_line_1.Free;
+    objects_links_array[i].text_line_1 := nil;
+    objects_links_array[i].text_line_2.Free;
+    objects_links_array[i].text_line_2 := nil;
+    objects_links_array[i].text_line_3.Free;
+    objects_links_array[i].text_line_3 := nil;
+    objects_links_array[i].arrow_image_from.Free;
+    objects_links_array[i].arrow_image_from := nil;
+    objects_links_array[i].arrow_image_to.Free;
+    objects_links_array[i].arrow_image_to := nil;
 {$ENDIF}
   End;
   Rysuj_powiazania;
@@ -1227,23 +1227,23 @@ begin
         Begin
           RamkaPowiazanie1.img_od.Visible := False;
           RamkaPowiazanie1.img_do.Visible := True;
-          RamkaPowiazanie1.btn_add.Text := 'dodaj powi¹zanie';
+          RamkaPowiazanie1.btn_add.Text := 'add association';
         End
         else
         Begin
           RamkaPowiazanie1.img_od.Visible := False;
           RamkaPowiazanie1.img_do.Visible := False;
-          if (powiazania[powiazanie_aktywne].od_strzalka=True)
-          and (Ktory_obiekt(wybrany_pierwszy)=powiazania[powiazanie_aktywne].od_obiektu ) then RamkaPowiazanie1.img_od.Visible := True;
-          if (powiazania[powiazanie_aktywne].od_strzalka=True)
-          and (Ktory_obiekt(wybrany_drugi)=powiazania[powiazanie_aktywne].od_obiektu ) then RamkaPowiazanie1.img_do.Visible := True;
+          if (objects_links_array[powiazanie_aktywne].from_arrow=True)
+          and (Ktory_obiekt(wybrany_pierwszy)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          if (objects_links_array[powiazanie_aktywne].from_arrow=True)
+          and (Ktory_obiekt(wybrany_drugi)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_do.Visible := True;
 
-          if (powiazania[powiazanie_aktywne].do_strzalka=True)
-          and (Ktory_obiekt(wybrany_drugi)=powiazania[powiazanie_aktywne].do_obiektu ) then RamkaPowiazanie1.img_do.Visible := True;
-          if (powiazania[powiazanie_aktywne].do_strzalka=True)
-          and (Ktory_obiekt(wybrany_pierwszy)=powiazania[powiazanie_aktywne].do_obiektu ) then RamkaPowiazanie1.img_od.Visible := True;
+          if (objects_links_array[powiazanie_aktywne].to_arrow=True)
+          and (Ktory_obiekt(wybrany_drugi)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          if (objects_links_array[powiazanie_aktywne].to_arrow=True)
+          and (Ktory_obiekt(wybrany_pierwszy)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_od.Visible := True;
 
-          RamkaPowiazanie1.btn_add.Text := 'zmieñ powi¹zanie';
+          RamkaPowiazanie1.btn_add.Text := 'change the association';
         End;
       End;
     End;

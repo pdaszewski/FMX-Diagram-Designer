@@ -33,7 +33,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 0
-      Text = 'nowy diagram'
+      Text = 'new diagram'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
@@ -46,7 +46,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Size.PlatformDefault = False
       TextSettings.FontColor = claAliceblue
       TextSettings.HorzAlign = Center
-      Text = 'Menu aplikacji'
+      Text = 'Application menu'
       TabOrder = 1
     end
     object btn_close_menu: TButton
@@ -58,7 +58,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 2
-      Text = 'zamknij menu'
+      Text = 'close the menu'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
@@ -72,7 +72,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 3
-      Text = 'pe'#322'ny ekran'
+      Text = 'full screen'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
@@ -86,7 +86,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 4
-      Text = 'wczytaj projekt'
+      Text = 'load project'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
@@ -100,7 +100,7 @@ object RamkaMenuGlowne: TRamkaMenuGlowne
       Size.PlatformDefault = False
       StyleLookup = 'speedbuttonstyle'
       TabOrder = 5
-      Text = 'zapisz projekt'
+      Text = 'save project'
       TextSettings.Font.Size = 20.000000000000000000
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
