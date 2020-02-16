@@ -28,7 +28,7 @@ type
   end;
 
 type
-  punkt_styku = record
+  point_of_contact = record
     x: Single;
     y: Single;
   end;
@@ -41,13 +41,13 @@ type
     btn_hamburger: TButton;
     btn_dodaj_nowy_proces: TButton;
     ScrollBox: TScrollBox;
-    WzorLinii: TLine;
-    WzorObiektu: TRectangle;
-    Wzor_label: TLabel;
+    LinePattern: TLine;
+    ObjectPattern: TRectangle;
+    LabelPattern: TLabel;
     RamkaEdycjaProcesu1: TRamkaEdycjaProcesu;
-    Rysowanie: TTimer;
+    DrawingTimer: TTimer;
     RamkaMenuGlowne1: TRamkaMenuGlowne;
-    WzorStrzalki: TImage;
+    ArrowsPattern: TImage;
     btn_laczenie_procesow: TButton;
     RamkaPowiazanie1: TRamkaPowiazanie;
     lbl_bottom_info: TLabel;
@@ -77,15 +77,15 @@ type
     function Wartosc_XML(rekord: string): String;
 
     procedure FormCreate(Sender: TObject);
-    procedure WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
-    procedure WzorObiektuMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
-    procedure WzorObiektuMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
-    procedure Wzor_labelDblClick(Sender: TObject);
-    procedure Wzor_labelTap(Sender: TObject; const Point: TPointF);
+    procedure ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
+    procedure ObjectPatternMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
+    procedure ObjectPatternMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
+    procedure LabelPatternDblClick(Sender: TObject);
+    procedure LabelPatternTap(Sender: TObject; const Point: TPointF);
     procedure btn_dodaj_nowy_procesClick(Sender: TObject);
     procedure btn_hamburgerClick(Sender: TObject);
     procedure RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject);
-    procedure RysowanieTimer(Sender: TObject);
+    procedure DrawingTimerTimer(Sender: TObject);
     procedure RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
     procedure RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
     procedure RamkaPowiazanie1but_cancelClick(Sender: TObject);
@@ -97,7 +97,7 @@ type
     procedure RamkaPowiazanie1btn_addClick(Sender: TObject);
     procedure RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
     procedure RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
-    procedure WzorObiektuMouseLeave(Sender: TObject);
+    procedure ObjectPatternMouseLeave(Sender: TObject);
     procedure RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
     procedure RamkaMenuGlowne1btn_openClick(Sender: TObject);
     procedure RamkaMenuGlowne1btn_saveClick(Sender: TObject);
@@ -108,14 +108,14 @@ type
   end;
 
 const
-  version = '1.0.1.2';
-  build_date = '2020-02-15';
+  version = '1.0.1.4';
+  build_date = '2020-02-16';
 
   max_objects = 100;
   max_objects_links = 1000;
-  max_punktow_styku = 10000;
+  max_poinst_of_contact = 10000;
 
-  odstep_miedzy_liniami = 10;
+  line_spacing = 10;
 
 var
   AOknoGl: TAOknoGl;
@@ -128,7 +128,7 @@ var
 
   objects_array: array [1 .. max_objects] of diagram_object;
   objects_links_array: array [1 .. max_objects_links] of object_link;
-  punkty_styku: array [1 .. max_punktow_styku] of punkt_styku;
+  point_of_contact_array: array [1 .. max_poinst_of_contact] of point_of_contact;
 
 implementation
 
@@ -138,7 +138,7 @@ procedure TAOknoGl.Zmien_styl_linii(nowy_styl : TStrokeDash);
 var
   i: Integer;
 Begin
- WzorLinii.Stroke.Dash:=nowy_styl;
+ LinePattern.Stroke.Dash:=nowy_styl;
  RamkaPowiazanie1.WzorLinii.Stroke.Dash:=nowy_styl;
  for i := 1 to max_objects_links do
   Begin
@@ -233,9 +233,9 @@ Var
   i: Integer;
 Begin
   wynik := False;
-  for i := 1 to max_punktow_styku do
+  for i := 1 to max_poinst_of_contact do
   Begin
-    if (punkty_styku[i].x = x) and (punkty_styku[i].y = y) then
+    if (point_of_contact_array[i].x = x) and (point_of_contact_array[i].y = y) then
     Begin
       wynik := True;
       Break;
@@ -248,10 +248,10 @@ procedure TAOknoGl.Czysc_punkty_styku;
 var
   i: Integer;
 Begin
-  for i := 1 to max_punktow_styku do
+  for i := 1 to max_poinst_of_contact do
   Begin
-    punkty_styku[i].x := 0;
-    punkty_styku[i].y := 0;
+    point_of_contact_array[i].x := 0;
+    point_of_contact_array[i].y := 0;
   End;
 End;
 
@@ -259,12 +259,12 @@ procedure TAOknoGl.Dodaj_punkt_styku(x, y: Single);
 Var
   i: Integer;
 Begin
-  for i := 1 to max_punktow_styku do
+  for i := 1 to max_poinst_of_contact do
   Begin
-    if (punkty_styku[i].x = 0) and (punkty_styku[i].y = 0) then
+    if (point_of_contact_array[i].x = 0) and (point_of_contact_array[i].y = 0) then
     Begin
-      punkty_styku[i].x := x;
-      punkty_styku[i].y := y;
+      point_of_contact_array[i].x := x;
+      point_of_contact_array[i].y := y;
       Break;
     End;
   End;
@@ -354,27 +354,27 @@ Begin
     objects_links_array[nowy].from_arrow := od_strzalka;
     objects_links_array[nowy].to_arrow := do_strzalka;
 
-    tmpl := TLine(WzorLinii.Clone(self));
+    tmpl := TLine(LinePattern.Clone(self));
     tmpl.Parent := ScrollBox;
     tmpl.Visible := True;
     objects_links_array[nowy].text_line_1 := tmpl;
 
-    tmpl2 := TLine(WzorLinii.Clone(self));
+    tmpl2 := TLine(LinePattern.Clone(self));
     tmpl2.Parent := ScrollBox;
     tmpl2.Visible := True;
     objects_links_array[nowy].text_line_2 := tmpl2;
 
-    tmpl3 := TLine(WzorLinii.Clone(self));
+    tmpl3 := TLine(LinePattern.Clone(self));
     tmpl3.Parent := ScrollBox;
     tmpl3.Visible := True;
     objects_links_array[nowy].text_line_3 := tmpl3;
 
-    img1 := TImage(WzorStrzalki.Clone(self));
+    img1 := TImage(ArrowsPattern.Clone(self));
     img1.Parent := ScrollBox;
     img1.Visible := True;
     objects_links_array[nowy].arrow_image_from := img1;
 
-    img2 := TImage(WzorStrzalki.Clone(self));
+    img2 := TImage(ArrowsPattern.Clone(self));
     img2.Parent := ScrollBox;
     img2.Visible := True;
     objects_links_array[nowy].arrow_image_to := img2;
@@ -465,7 +465,7 @@ begin
 
   if ktory_w_tablicy > 0 then
   Begin
-    Rysowanie.Enabled := False;
+    DrawingTimer.Enabled := False;
     Deaktywuj_obiekt;
     wybrany := nil;
     // Najpierw kasujê obiekt
@@ -508,7 +508,7 @@ begin
 
     RamkaEdycjaProcesu1.Visible := False;
     Rysuj_powiazania;
-    Rysowanie.Enabled := True;
+    DrawingTimer.Enabled := True;
   End;
 end;
 
@@ -544,7 +544,7 @@ begin
 
   if ktory_w_tablicy > 0 then
   Begin
-    Rysowanie.Enabled := False;
+    DrawingTimer.Enabled := False;
     Deaktywuj_obiekt;
     // Teraz kasujê powi¹zania
     for i := 1 to max_objects_links do
@@ -578,7 +578,7 @@ begin
 
     RamkaEdycjaProcesu1.Visible := False;
     Rysuj_powiazania;
-    Rysowanie.Enabled := True;
+    DrawingTimer.Enabled := True;
   End;
 end;
 
@@ -657,17 +657,17 @@ begin
        x_obiektu  :=Wartosc_XML(plik.Strings[i+3]);
        y_obiektu  :=Wartosc_XML(plik.Strings[i+4]);
 
-        tmp := TRectangle(WzorObiektu.Clone(self));
+        tmp := TRectangle(ObjectPattern.Clone(self));
         tmp.Parent := ScrollBox;
         tmp.Visible := True;
         tmp.Position.x := StrToFloat(x_obiektu);
         tmp.Position.y := StrToFloat(y_obiektu);
-        tmp.OnMouseDown := WzorObiektuMouseDown;
-        tmp.OnMouseMove := WzorObiektuMouseMove;
-        tmp.OnMouseUp := WzorObiektuMouseUp;
-        tmp.OnDblClick := Wzor_labelDblClick;
-        tmp.OnMouseLeave := WzorObiektuMouseLeave;
-        tmp.OnTap := Wzor_labelTap;
+        tmp.OnMouseDown := ObjectPatternMouseDown;
+        tmp.OnMouseMove := ObjectPatternMouseMove;
+        tmp.OnMouseUp := ObjectPatternMouseUp;
+        tmp.OnDblClick := LabelPatternDblClick;
+        tmp.OnMouseLeave := ObjectPatternMouseLeave;
+        tmp.OnTap := LabelPatternTap;
 
         Dodaj_wskaznik(tmp, StrToInt(id_obiektu));
 
@@ -808,7 +808,7 @@ begin
   Ustaw_strzalke_powiazania('od');
 end;
 
-procedure TAOknoGl.RysowanieTimer(Sender: TObject);
+procedure TAOknoGl.DrawingTimerTimer(Sender: TObject);
 begin
   Rysuj_powiazania;
 end;
@@ -906,7 +906,7 @@ begin
 
     if Czy_juz_jest_tu_punkt_styku(X1, Y1) = True then
     Begin
-      pozycja_test := odstep_miedzy_liniami;
+      pozycja_test := line_spacing;
       licznik_obrotow := 1;
       Repeat
         if kier IN ['L', 'P'] then
@@ -918,14 +918,14 @@ begin
         else
           licznik_obrotow := licznik_obrotow + 1;
         licznik_obrotow := licznik_obrotow * -1;
-        pozycja_test := odstep_miedzy_liniami * licznik_obrotow;
+        pozycja_test := line_spacing * licznik_obrotow;
       Until Czy_juz_jest_tu_punkt_styku(X1, Y1) = False;
     End;
     Dodaj_punkt_styku(X1, Y1);
 
     if Czy_juz_jest_tu_punkt_styku(x2, y2) = True then
     Begin
-      pozycja_test := odstep_miedzy_liniami;
+      pozycja_test := line_spacing;
       licznik_obrotow := 1;
       Repeat
         if kier IN ['L', 'P'] then
@@ -937,7 +937,7 @@ begin
         else
           licznik_obrotow := licznik_obrotow + 1;
         licznik_obrotow := licznik_obrotow * -1;
-        pozycja_test := odstep_miedzy_liniami * -licznik_obrotow;
+        pozycja_test := line_spacing * -licznik_obrotow;
       Until Czy_juz_jest_tu_punkt_styku(x2, y2) = False;
     End;
     Dodaj_punkt_styku(x2, y2);
@@ -951,8 +951,8 @@ begin
       if do_strzalka = True then
       Begin
         strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - (WzorStrzalki.Width / 2);
-        strzalka_do.Position.y := y2 - WzorStrzalki.Height + 7;
+        strzalka_do.Position.x := x2 - (ArrowsPattern.Width / 2);
+        strzalka_do.Position.y := y2 - ArrowsPattern.Height + 7;
         strzalka_do.RotationAngle := 90;
       End
       else
@@ -960,7 +960,7 @@ begin
       if od_strzalka = True then
       Begin
         strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - (WzorStrzalki.Width / 2);
+        strzalka_od.Position.x := X1 - (ArrowsPattern.Width / 2);
         strzalka_od.Position.y := Y1 - 7;
         strzalka_od.RotationAngle := 270;
       End
@@ -976,7 +976,7 @@ begin
       if do_strzalka = True then
       Begin
         strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - (WzorStrzalki.Width / 2);
+        strzalka_do.Position.x := x2 - (ArrowsPattern.Width / 2);
         strzalka_do.Position.y := y2 - 7;
         strzalka_do.RotationAngle := 270;
       End
@@ -985,8 +985,8 @@ begin
       if od_strzalka = True then
       Begin
         strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - (WzorStrzalki.Width / 2);
-        strzalka_od.Position.y := Y1 - WzorStrzalki.Height + 7;
+        strzalka_od.Position.x := X1 - (ArrowsPattern.Width / 2);
+        strzalka_od.Position.y := Y1 - ArrowsPattern.Height + 7;
         strzalka_od.RotationAngle := 90;
       End
       else
@@ -1002,8 +1002,8 @@ begin
       if do_strzalka = True then
       Begin
         strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - (WzorStrzalki.Width) + 7;
-        strzalka_do.Position.y := y2 - (WzorStrzalki.Height / 2);
+        strzalka_do.Position.x := x2 - (ArrowsPattern.Width) + 7;
+        strzalka_do.Position.y := y2 - (ArrowsPattern.Height / 2);
         strzalka_do.RotationAngle := 0;
       End
       else
@@ -1012,7 +1012,7 @@ begin
       Begin
         strzalka_od.Visible := True;
         strzalka_od.Position.x := X1 - 7;
-        strzalka_od.Position.y := Y1 - (WzorStrzalki.Height / 2);
+        strzalka_od.Position.y := Y1 - (ArrowsPattern.Height / 2);
         strzalka_od.RotationAngle := 180;
       End
       else
@@ -1028,7 +1028,7 @@ begin
       Begin
         strzalka_do.Visible := True;
         strzalka_do.Position.x := x2 - 7;
-        strzalka_do.Position.y := y2 - (WzorStrzalki.Height / 2);
+        strzalka_do.Position.y := y2 - (ArrowsPattern.Height / 2);
         strzalka_do.RotationAngle := 180;
       End
       else
@@ -1036,8 +1036,8 @@ begin
       if od_strzalka = True then
       Begin
         strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - (WzorStrzalki.Width) + 7;
-        strzalka_od.Position.y := Y1 - (WzorStrzalki.Height / 2);
+        strzalka_od.Position.x := X1 - (ArrowsPattern.Width) + 7;
+        strzalka_od.Position.y := Y1 - (ArrowsPattern.Height / 2);
         strzalka_od.RotationAngle := 0;
       End
       else
@@ -1093,17 +1093,17 @@ begin
   Odznacz_wybrane(True, True);
   btn_laczenie_procesow.IsPressed := False;
 
-  tmp := TRectangle(WzorObiektu.Clone(self));
+  tmp := TRectangle(ObjectPattern.Clone(self));
   tmp.Parent := ScrollBox;
   tmp.Visible := True;
   tmp.Position.x := +10;
   tmp.Position.y := GridMenuGornego.Position.y + GridMenuGornego.Height + 10;
-  tmp.OnMouseDown := WzorObiektuMouseDown;
-  tmp.OnMouseMove := WzorObiektuMouseMove;
-  tmp.OnMouseUp := WzorObiektuMouseUp;
-  tmp.OnDblClick := Wzor_labelDblClick;
-  tmp.OnMouseLeave := WzorObiektuMouseLeave;
-  tmp.OnTap := Wzor_labelTap;
+  tmp.OnMouseDown := ObjectPatternMouseDown;
+  tmp.OnMouseMove := ObjectPatternMouseMove;
+  tmp.OnMouseUp := ObjectPatternMouseUp;
+  tmp.OnDblClick := LabelPatternDblClick;
+  tmp.OnMouseLeave := ObjectPatternMouseLeave;
+  tmp.OnTap := LabelPatternTap;
 
   index_obiektu := Ostatni_obiekt + 1;
   Dodaj_wskaznik(tmp, index_obiektu);
@@ -1177,8 +1177,8 @@ begin
   Caption := 'FMX Diagram Designer - version: ' + version;
   lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - version: ' + version;
   MouseIsDown := False;
-  WzorObiektu.Visible := False;
-  WzorLinii.Visible := False;
+  ObjectPattern.Visible := False;
+  LinePattern.Visible := False;
   Czysc_obiekty_i_powiazania;
   RamkaMenuGlowne1.Visible := False;
   RamkaEdycjaProcesu1.Visible := False;
@@ -1186,11 +1186,11 @@ begin
 {$IFDEF ANDROID}
   Wzor_label.TextSettings.Font.Size := 10;
 {$ELSE}
-  Wzor_label.TextSettings.Font.Size := 12;
+  LabelPattern.TextSettings.Font.Size := 12;
 {$ENDIF}
 end;
 
-procedure TAOknoGl.WzorObiektuMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
+procedure TAOknoGl.ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
 var
   powiazanie_aktywne: Integer;
 begin
@@ -1256,17 +1256,17 @@ begin
     Y1 := round(y);
     wybrany.Fill.Color := TAlphaColor($AA7A0707);
     MouseIsDown := True;
-    Rysowanie.Enabled := True;
+    DrawingTimer.Enabled := True;
   End;
 end;
 
-procedure TAOknoGl.WzorObiektuMouseLeave(Sender: TObject);
+procedure TAOknoGl.ObjectPatternMouseLeave(Sender: TObject);
 begin
  if btn_laczenie_procesow.IsPressed = False then
     Deaktywuj_obiekt;
 end;
 
-procedure TAOknoGl.WzorObiektuMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
+procedure TAOknoGl.ObjectPatternMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
 begin
   if btn_laczenie_procesow.IsPressed = False then
   Begin
@@ -1282,11 +1282,11 @@ procedure TAOknoGl.Deaktywuj_obiekt;
 Begin
   MouseIsDown := False;
   if Assigned(wybrany) then wybrany.Fill.Color := TAlphaColor($AA0F077A);
-  Rysowanie.Enabled := False;
+  DrawingTimer.Enabled := False;
   Rysuj_powiazania;
 End;
 
-procedure TAOknoGl.WzorObiektuMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
+procedure TAOknoGl.ObjectPatternMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
 begin
   if btn_laczenie_procesow.IsPressed = False then
     Deaktywuj_obiekt;
@@ -1309,12 +1309,12 @@ begin
   End;
 end;
 
-procedure TAOknoGl.Wzor_labelDblClick(Sender: TObject);
+procedure TAOknoGl.LabelPatternDblClick(Sender: TObject);
 begin
   Edycja_danych_procesu;
 end;
 
-procedure TAOknoGl.Wzor_labelTap(Sender: TObject; const Point: TPointF);
+procedure TAOknoGl.LabelPatternTap(Sender: TObject; const Point: TPointF);
 begin
   Edycja_danych_procesu;
 end;

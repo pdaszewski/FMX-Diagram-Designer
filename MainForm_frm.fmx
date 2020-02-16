@@ -21959,7 +21959,7 @@ object AOknoGl: TAOknoGl
       TabOrder = 1
       Viewport.Width = 1037.000000000000000000
       Viewport.Height = 499.000000000000000000
-      object WzorLinii: TLine
+      object LinePattern: TLine
         LineType = Left
         Position.X = 880.000000000000000000
         Position.Y = 416.000000000000000000
@@ -21970,7 +21970,7 @@ object AOknoGl: TAOknoGl
         Stroke.Thickness = 2.000000000000000000
         Stroke.Dash = Dash
       end
-      object WzorObiektu: TRectangle
+      object ObjectPattern: TRectangle
         Fill.Color = xAA0F077A
         Position.X = 680.000000000000000000
         Position.Y = 400.000000000000000000
@@ -21980,12 +21980,12 @@ object AOknoGl: TAOknoGl
         Stroke.Color = claAzure
         XRadius = 3.000000000000000000
         YRadius = 3.000000000000000000
-        OnMouseDown = WzorObiektuMouseDown
-        OnMouseMove = WzorObiektuMouseMove
-        OnMouseUp = WzorObiektuMouseUp
-        OnMouseLeave = WzorObiektuMouseLeave
-        object Wzor_label: TLabel
-          OnTap = Wzor_labelTap
+        OnMouseDown = ObjectPatternMouseDown
+        OnMouseMove = ObjectPatternMouseMove
+        OnMouseUp = ObjectPatternMouseUp
+        OnMouseLeave = ObjectPatternMouseLeave
+        object LabelPattern: TLabel
+          OnTap = LabelPatternTap
           Align = Client
           StyledSettings = [Family, Style]
           Size.Width = 169.000000000000000000
@@ -21996,10 +21996,10 @@ object AOknoGl: TAOknoGl
           TextSettings.HorzAlign = Center
           Text = 'process label'
           TabOrder = 0
-          OnDblClick = Wzor_labelDblClick
+          OnDblClick = LabelPatternDblClick
         end
       end
-      object WzorStrzalki: TImage
+      object ArrowsPattern: TImage
         MultiResBitmap = <
           item
             Width = 20
@@ -22007,11 +22007,11 @@ object AOknoGl: TAOknoGl
             PNG = {
               89504E470D0A1A0A0000000D49484452000000140000001408060000008D891D
               0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
-              007749444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
-              5180094A63038CAF5FBFE67CF7EEDD06520DC509800679BD7AF5EAE79B376F7E
-              50D3501FA0A1BFA86DA82F2D0CF523C6507C91820E18A134E58058D711058006
-              502FFCA86D1875930BD0107772B21E5E40D5C261B802060600F86F946CB62593
-              C10000000049454E44AE426082}
+              007849444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
+              5180094A63038CAF5EBDE27CF7EEDD06520DC509800679BD7CF9F2E79B376F7E
+              50D3509F172F5EFCA2B6A1BEB430D48F1843F1450A3A6084D29403625D471400
+              1A40BDF0A3B661D44D2E4043DCC9C97A7801550B87E10A18180066B0943C7F35
+              42330000000049454E44AE426082}
             FileName = 
               'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
               '0.3.0\Projektowanie\arrow.png'
@@ -22102,10 +22102,10 @@ object AOknoGl: TAOknoGl
       end
     end
   end
-  object Rysowanie: TTimer
+  object DrawingTimer: TTimer
     Enabled = False
     Interval = 150
-    OnTimer = RysowanieTimer
+    OnTimer = DrawingTimerTimer
     Left = 424
     Top = 456
   end
@@ -22160,9 +22160,9 @@ object AOknoGl: TAOknoGl
                 0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
                 007849444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
                 5180094A63038CAF5EBDE27CF7EEDD06520DC509800679BD7CF9F2E79B376F7E
-                50D3509F67CF9EFDA2B6A1BEB430D48F1843F1450A3A6084D29403625D471400
-                1A40BDF0A3B661D44D2E4043DCC9C97A7801550B87E10A181800EFA9941258DD
-                E5210000000049454E44AE426082}
+                50D3509FA74F9FFEA2B6A1BEB430D48F1843F1450A3A6084D29403625D471400
+                1A40BDF0A3B661D44D2E4043DCC9C97A7801550B87E10A181800B42D93FD4F85
+                A6770000000049454E44AE426082}
               FileName = 
                 'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
                 '0.3.0\Projektowanie\arrow.png'
