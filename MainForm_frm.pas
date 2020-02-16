@@ -108,7 +108,7 @@ type
   end;
 
 const
-  version = '1.0.1.4';
+  version = '1.0.1.6';
   build_date = '2020-02-16';
 
   max_objects = 100;
@@ -121,10 +121,9 @@ var
   AOknoGl: TAOknoGl;
   MouseIsDown: Boolean;
   X1, Y1: Integer;
-  wybrany: TRectangle;
-  wybrany_pierwszy: TRectangle;
-  wybrany_drugi: TRectangle;
-  label_wybranego: Integer;
+  selected: TRectangle;
+  selected_first: TRectangle;
+  selected_second: TRectangle;
 
   objects_array: array [1 .. max_objects] of diagram_object;
   objects_links_array: array [1 .. max_objects_links] of object_link;
@@ -215,15 +214,15 @@ end;
 
 procedure TAOknoGl.Odznacz_wybrane(pierwszy, drugi: Boolean);
 Begin
-  if (pierwszy) and (wybrany_pierwszy <> nil) then
+  if (pierwszy) and (selected_first <> nil) then
   Begin
-    wybrany_pierwszy.Fill.Color := TAlphaColor($AA0F077A);
-    wybrany_pierwszy := nil;
+    selected_first.Fill.Color := TAlphaColor($AA0F077A);
+    selected_first := nil;
   End;
-  if (drugi) and (wybrany_drugi <> nil) then
+  if (drugi) and (selected_second <> nil) then
   Begin
-    wybrany_drugi.Fill.Color := TAlphaColor($AA0F077A);
-    wybrany_drugi := nil;
+    selected_second.Fill.Color := TAlphaColor($AA0F077A);
+    selected_second := nil;
   End;
 End;
 
@@ -456,7 +455,7 @@ begin
   id_procesu := 0;
   for i := 1 to max_objects do
   Begin
-    if objects_array[i].indicator = wybrany then
+    if objects_array[i].indicator = selected then
     Begin
       id_procesu := objects_array[i].id_object;
       ktory_w_tablicy := i;
@@ -467,7 +466,7 @@ begin
   Begin
     DrawingTimer.Enabled := False;
     Deaktywuj_obiekt;
-    wybrany := nil;
+    selected := nil;
     // Najpierw kasujê obiekt
     objects_array[ktory_w_tablicy].id_object := 0;
 {$IFDEF ANDROID}
@@ -516,11 +515,11 @@ procedure TAOknoGl.RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject
 var
   i: Integer;
 begin
-  for i := 0 to wybrany.ChildrenCount - 1 do
+  for i := 0 to selected.ChildrenCount - 1 do
   Begin
-    if wybrany.Children[i] is TLabel then
+    if selected.Children[i] is TLabel then
     Begin
-      TLabel(wybrany.Children[i]).Text := RamkaEdycjaProcesu1.memo_process_name.Text;
+      TLabel(selected.Children[i]).Text := RamkaEdycjaProcesu1.memo_process_name.Text;
     End;
   End;
   RamkaEdycjaProcesu1.Visible := False;
@@ -535,7 +534,7 @@ begin
   id_procesu := 0;
   for i := 1 to max_objects do
   Begin
-    if objects_array[i].indicator = wybrany then
+    if objects_array[i].indicator = selected then
     Begin
       id_procesu := objects_array[i].id_object;
       ktory_w_tablicy := i;
@@ -765,9 +764,9 @@ Var
 begin
   for i := 1 to max_objects do
   Begin
-    if objects_array[i].indicator = wybrany_pierwszy then
+    if objects_array[i].indicator = selected_first then
       od_obiektu := objects_array[i].id_object;
-    if objects_array[i].indicator = wybrany_drugi then
+    if objects_array[i].indicator = selected_second then
       do_obiektu := objects_array[i].id_object;
   End;
 
@@ -1196,33 +1195,33 @@ var
 begin
   if btn_laczenie_procesow.IsPressed then
   Begin
-    if wybrany_pierwszy = nil then
+    if selected_first = nil then
     Begin
-      wybrany_pierwszy := TRectangle(Sender);
-      wybrany_pierwszy.BringToFront;
-      wybrany_pierwszy.Fill.Color := TAlphaColor($AA7A0707);
+      selected_first := TRectangle(Sender);
+      selected_first.BringToFront;
+      selected_first.Fill.Color := TAlphaColor($AA7A0707);
     End
     else
     Begin
       // Jeœli pierwszy jest ju¿ wybrany
-      if TRectangle(Sender) = wybrany_pierwszy then
+      if TRectangle(Sender) = selected_first then
       Begin
         // Jeœli nowo klikniêty jest wybranym
-        wybrany_pierwszy.Fill.Color := TAlphaColor($AA0F077A);
-        wybrany_pierwszy := Nil;
+        selected_first.Fill.Color := TAlphaColor($AA0F077A);
+        selected_first := Nil;
       End
       else
       Begin
         // Jeœli pierwszy jest wybrany i teraz wybraliœmy drugi!
-        wybrany_drugi := TRectangle(Sender);
-        wybrany_drugi.BringToFront;
-        wybrany_drugi.Fill.Color := TAlphaColor($AA7A0707);
+        selected_second := TRectangle(Sender);
+        selected_second.BringToFront;
+        selected_second.Fill.Color := TAlphaColor($AA7A0707);
         RamkaPowiazanie1.Visible := True;
 
-        RamkaPowiazanie1.lbl_od_procesu.Text := TLabel(wybrany_pierwszy.Children[0]).Text;
-        RamkaPowiazanie1.lbl_do_procesu.Text := TLabel(wybrany_drugi.Children[0]).Text;
+        RamkaPowiazanie1.lbl_od_procesu.Text := TLabel(selected_first.Children[0]).Text;
+        RamkaPowiazanie1.lbl_do_procesu.Text := TLabel(selected_second.Children[0]).Text;
 
-        powiazanie_aktywne := Ktore_powiazanie(wybrany_pierwszy, wybrany_drugi);
+        powiazanie_aktywne := Ktore_powiazanie(selected_first, selected_second);
         if powiazanie_aktywne = 0 then
         Begin
           RamkaPowiazanie1.img_od.Visible := False;
@@ -1234,14 +1233,14 @@ begin
           RamkaPowiazanie1.img_od.Visible := False;
           RamkaPowiazanie1.img_do.Visible := False;
           if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Ktory_obiekt(wybrany_pierwszy)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          and (Ktory_obiekt(selected_first)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_od.Visible := True;
           if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Ktory_obiekt(wybrany_drugi)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          and (Ktory_obiekt(selected_second)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_do.Visible := True;
 
           if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Ktory_obiekt(wybrany_drugi)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          and (Ktory_obiekt(selected_second)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_do.Visible := True;
           if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Ktory_obiekt(wybrany_pierwszy)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          and (Ktory_obiekt(selected_first)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_od.Visible := True;
 
           RamkaPowiazanie1.btn_add.Text := 'change the association';
         End;
@@ -1250,11 +1249,11 @@ begin
   End
   else
   Begin
-    wybrany := TRectangle(Sender);
-    wybrany.BringToFront;
+    selected := TRectangle(Sender);
+    selected.BringToFront;
     X1 := round(x);
     Y1 := round(y);
-    wybrany.Fill.Color := TAlphaColor($AA7A0707);
+    selected.Fill.Color := TAlphaColor($AA7A0707);
     MouseIsDown := True;
     DrawingTimer.Enabled := True;
   End;
@@ -1272,8 +1271,8 @@ begin
   Begin
     if MouseIsDown then
     begin
-      wybrany.Position.x := wybrany.Position.x + round(x) - X1;
-      wybrany.Position.y := wybrany.Position.y + round(y) - Y1;
+      selected.Position.x := selected.Position.x + round(x) - X1;
+      selected.Position.y := selected.Position.y + round(y) - Y1;
     end;
   End;
 end;
@@ -1281,7 +1280,7 @@ end;
 procedure TAOknoGl.Deaktywuj_obiekt;
 Begin
   MouseIsDown := False;
-  if Assigned(wybrany) then wybrany.Fill.Color := TAlphaColor($AA0F077A);
+  if Assigned(selected) then selected.Fill.Color := TAlphaColor($AA0F077A);
   DrawingTimer.Enabled := False;
   Rysuj_powiazania;
 End;
@@ -1298,12 +1297,12 @@ var
 begin
   if btn_laczenie_procesow.IsPressed = False then
   Begin
-    for i := 0 to wybrany.ChildrenCount - 1 do
+    for i := 0 to selected.ChildrenCount - 1 do
     Begin
-      if wybrany.Children[i] is TLabel then
+      if selected.Children[i] is TLabel then
       Begin
         RamkaEdycjaProcesu1.Visible := True;
-        RamkaEdycjaProcesu1.memo_process_name.Text := TLabel(wybrany.Children[i]).Text;
+        RamkaEdycjaProcesu1.memo_process_name.Text := TLabel(selected.Children[i]).Text;
       End;
     End;
   End;
