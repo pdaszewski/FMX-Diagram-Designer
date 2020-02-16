@@ -20,3 +20,7 @@ History:
 Still must TO DO write function to save and open in android.
 
 2018-10-22 Added version with fixing save and open functions for objects with multiline captions
+
+2020-02-15 More code translations to english.
+
+2020-02-16 More translations to english, and windows icons added.
