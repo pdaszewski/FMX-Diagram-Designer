@@ -22009,9 +22009,9 @@ object AOknoGl: TAOknoGl
               0D000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
               007849444154384F63180528E0FFFFFF025026E5E0DFBF7F1E40033F8068A810
               5180094A63038CAF5EBDE27CF7EEDD06520DC509800679BD7CF9F2E79B376F7E
-              50D3509FE7CF9FFFA2B6A1BEB430D48F1843F1450A3A6084D29403625D471400
-              1A40BDF0A3B661D44D2E4043DCC9C97A7801550B87E10A1818002B349427574D
-              6F350000000049454E44AE426082}
+              50D3509FA74F9FFEA2B6A1BEB430D48F1843F1450A3A6084D29403625D471400
+              1A40BDF0A3B661D44D2E4043DCC9C97A7801550B87E10A181800B42D93FD4F85
+              A6770000000049454E44AE426082}
             FileName = 
               'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
               '0.3.0\Projektowanie\arrow.png'
@@ -22037,7 +22037,7 @@ object AOknoGl: TAOknoGl
       TabOrder = 5
     end
   end
-  inline RamkaEdycjaProcesu1: TRamkaEdycjaProcesu
+  inline RamkaEdycjaProcesu1: TProcessEditingFrame
     Align = Client
     Size.Width = 1037.000000000000000000
     Size.Height = 554.000000000000000000
@@ -22069,7 +22069,7 @@ object AOknoGl: TAOknoGl
       end
     end
   end
-  inline RamkaMenuGlowne1: TRamkaMenuGlowne
+  inline RamkaMenuGlowne1: TMainMenuFrame
     Align = Client
     Size.Width = 1021.000000000000000000
     Size.Height = 514.000000000000000000
@@ -22109,7 +22109,7 @@ object AOknoGl: TAOknoGl
     Left = 424
     Top = 456
   end
-  inline RamkaPowiazanie1: TRamkaPowiazanie
+  inline RamkaPowiazanie1: TLinkageFrame
     Align = Client
     Size.Width = 1037.000000000000000000
     Size.Height = 554.000000000000000000
@@ -22196,15 +22196,15 @@ object AOknoGl: TAOknoGl
   end
   object SaveProjectDialog: TSaveDialog
     DefaultExt = '.xml'
-    Filter = 'Pliki XML|*.xml'
-    Title = 'Zapisz projekt do pliku'
+    Filter = 'XML files|*.xml'
+    Title = 'Save the project to a file'
     Left = 424
     Top = 384
   end
   object OpenProjectDialog: TOpenDialog
     DefaultExt = '.xml'
-    Filter = 'Pliki XML|*.xml'
-    Title = 'Wczytaj projekt z pliku'
+    Filter = 'XML files|*.xml'
+    Title = 'Load the project from a file'
     Left = 424
     Top = 328
   end

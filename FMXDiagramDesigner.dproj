@@ -276,8 +276,8 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Release>1</VerInfo_Release>
-        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.1.6;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>6</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.1.8;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>8</VerInfo_Build>
         <Icon_MainIcon>FMXDiagramDesigner_Icon.ico</Icon_MainIcon>
         <Icns_MainIcns>FMXDiagramDesigner_Icns.icns</Icns_MainIcns>
     </PropertyGroup>
@@ -293,18 +293,18 @@
             <Form>AOknoGl</Form>
             <FormType>fmx</FormType>
         </DCCReference>
-        <DCCReference Include="RamkaEdycjaProcesu_frm.pas">
-            <Form>RamkaEdycjaProcesu</Form>
+        <DCCReference Include="ProcessEditingFrame_frm.pas">
+            <Form>ProcessEditingFrame</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="RamkaMenuGlowne_frm.pas">
-            <Form>RamkaMenuGlowne</Form>
+        <DCCReference Include="MainMenuFrame_frm.pas">
+            <Form>MainMenuFrame</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="RamkaPowiazanie_frm.pas">
-            <Form>RamkaPowiazanie</Form>
+        <DCCReference Include="LinkageFrame_frm.pas">
+            <Form>LinkageFrame</Form>
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -337,13 +337,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Configuration="Release" Class="Android_LauncherIcon36">
+                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Configuration="Release" Class="Android_LauncherIcon144">
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_144x144.png" Configuration="Release" Class="Android_LauncherIcon144">
+                <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_LauncherIcon_36x36.png" Configuration="Release" Class="Android_LauncherIcon36">
                     <Platform Name="Android">
                         <RemoteName>ic_launcher.png</RemoteName>
                         <Overwrite>true</Overwrite>

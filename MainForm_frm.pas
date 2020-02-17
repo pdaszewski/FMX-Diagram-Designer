@@ -5,8 +5,8 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ExtCtrls, FMX.Objects, FMX.Effects,
-  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListBox, RamkaEdycjaProcesu_frm, FMX.ScrollBox, FMX.Memo,
-  RamkaMenuGlowne_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList, RamkaPowiazanie_frm;
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListBox, ProcessEditingFrame_frm, FMX.ScrollBox, FMX.Memo,
+  MainMenuFrame_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList, LinkageFrame_frm;
 
 type
   diagram_object = record
@@ -44,12 +44,12 @@ type
     LinePattern: TLine;
     ObjectPattern: TRectangle;
     LabelPattern: TLabel;
-    RamkaEdycjaProcesu1: TRamkaEdycjaProcesu;
+    RamkaEdycjaProcesu1: TProcessEditingFrame;
     DrawingTimer: TTimer;
-    RamkaMenuGlowne1: TRamkaMenuGlowne;
+    RamkaMenuGlowne1: TMainMenuFrame;
     ArrowsPattern: TImage;
     btn_laczenie_procesow: TButton;
-    RamkaPowiazanie1: TRamkaPowiazanie;
+    RamkaPowiazanie1: TLinkageFrame;
     lbl_bottom_info: TLabel;
     SaveProjectDialog: TSaveDialog;
     OpenProjectDialog: TOpenDialog;
@@ -108,8 +108,8 @@ type
   end;
 
 const
-  version = '1.0.1.6';
-  build_date = '2020-02-16';
+  version = '1.0.1.8';
+  build_date = '2020-02-17';
 
   max_objects = 100;
   max_objects_links = 1000;

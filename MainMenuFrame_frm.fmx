@@ -1,0 +1,221 @@
+object RamkaMenuGlowne: TMainMenuFrame
+  Size.Width = 937.000000000000000000
+  Size.Height = 456.000000000000000000
+  Size.PlatformDefault = False
+  object BackGround: TRectangle
+    Align = Client
+    Fill.Color = xAA191919
+    Size.Width = 937.000000000000000000
+    Size.Height = 456.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    XRadius = 3.000000000000000000
+    YRadius = 3.000000000000000000
+    object BlurEffect1: TBlurEffect
+      Softness = 0.300000011920929000
+    end
+  end
+  object Menu: TRectangle
+    Align = Center
+    Fill.Color = xAA0B064F
+    Size.Width = 400.000000000000000000
+    Size.Height = 300.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Color = claAliceblue
+    XRadius = 3.000000000000000000
+    YRadius = 3.000000000000000000
+    object btn_new_diagram: TButton
+      Align = Top
+      StyledSettings = [Family]
+      Position.Y = 17.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 0
+      Text = 'new diagram'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object lbl_menu_name: TLabel
+      Align = Top
+      StyledSettings = [Family, Style]
+      Size.Width = 400.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claAliceblue
+      TextSettings.HorzAlign = Center
+      Text = 'Application menu'
+      TabOrder = 1
+    end
+    object btn_close_menu: TButton
+      Align = Bottom
+      StyledSettings = [Family]
+      Position.Y = 270.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 2
+      Text = 'close the menu'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object btn_full_screen_mode: TButton
+      Align = Top
+      StyledSettings = [Family]
+      Position.Y = 47.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 3
+      Text = 'full screen'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object btn_open: TButton
+      Align = Top
+      StyledSettings = [Family]
+      Position.Y = 77.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 4
+      Text = 'load project'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object btn_save: TButton
+      Align = Top
+      StyledSettings = [Family]
+      Position.Y = 107.000000000000000000
+      Size.Width = 400.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'speedbuttonstyle'
+      TabOrder = 5
+      Text = 'save project'
+      TextSettings.Font.Size = 20.000000000000000000
+      TextSettings.Font.StyleExt = {00070000000000000004000000}
+      TextSettings.FontColor = claAliceblue
+    end
+    object rect_rodzaje_linii: TRectangle
+      Align = Top
+      Fill.Color = x000B064F
+      Margins.Left = 70.000000000000000000
+      Margins.Top = 10.000000000000000000
+      Margins.Right = 70.000000000000000000
+      Position.X = 70.000000000000000000
+      Position.Y = 147.000000000000000000
+      Size.Width = 260.000000000000000000
+      Size.Height = 30.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object rbtn_Dash: TRadioButton
+        Align = Left
+        IsChecked = True
+        Position.X = 83.000000000000000000
+        Size.Width = 17.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        OnChange = rbtn_SolidChange
+      end
+      object rbtn_DashDot: TRadioButton
+        Align = Left
+        Position.X = 133.000000000000000000
+        Size.Width = 17.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnChange = rbtn_SolidChange
+      end
+      object rbtn_DashDotDot: TRadioButton
+        Align = Left
+        Position.X = 184.000000000000000000
+        Size.Width = 17.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        OnChange = rbtn_SolidChange
+      end
+      object rbtn_Dot: TRadioButton
+        Align = Left
+        Position.X = 234.000000000000000000
+        Size.Width = 17.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        OnChange = rbtn_SolidChange
+      end
+      object rbtn_Solid: TRadioButton
+        Align = Left
+        Position.X = 33.000000000000000000
+        Size.Width = 17.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        OnChange = rbtn_SolidChange
+      end
+      object sett_line_Dash: TLine
+        Align = Left
+        LineType = Diagonal
+        Position.X = 50.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claAliceblue
+        Stroke.Thickness = 2.000000000000000000
+        Stroke.Dash = Dash
+      end
+      object sett_line_DashDot: TLine
+        Align = Left
+        LineType = Diagonal
+        Position.X = 100.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claAliceblue
+        Stroke.Thickness = 2.000000000000000000
+        Stroke.Dash = DashDot
+      end
+      object sett_line_DashDotDot: TLine
+        Align = Left
+        LineType = Diagonal
+        Position.X = 150.000000000000000000
+        Size.Width = 34.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claAliceblue
+        Stroke.Thickness = 2.000000000000000000
+        Stroke.Dash = DashDotDot
+      end
+      object sett_line_Dot: TLine
+        Align = Left
+        LineType = Diagonal
+        Position.X = 201.000000000000000000
+        Size.Width = 33.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claAliceblue
+        Stroke.Thickness = 2.000000000000000000
+        Stroke.Dash = Dot
+      end
+      object sett_line_Solid: TLine
+        Align = Left
+        LineType = Diagonal
+        Size.Width = 33.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = claAliceblue
+        Stroke.Thickness = 2.000000000000000000
+      end
+    end
+  end
+end
