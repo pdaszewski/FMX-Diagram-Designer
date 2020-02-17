@@ -35,9 +35,9 @@ type
 
 type
   TAOknoGl = class(TForm)
-    Tlo: TImage;
-    GridGlowny: TGridPanelLayout;
-    GridMenuGornego: TGridPanelLayout;
+    BackgroundImage: TImage;
+    MainGrid: TGridPanelLayout;
+    TopMenuGrid: TGridPanelLayout;
     btn_hamburger: TButton;
     btn_dodaj_nowy_proces: TButton;
     ScrollBox: TScrollBox;
@@ -54,15 +54,15 @@ type
     SaveProjectDialog: TSaveDialog;
     OpenProjectDialog: TOpenDialog;
 
-    procedure Deaktywuj_obiekt;
-    procedure Czysc_obiekty_i_powiazania;
-    function Ostatni_obiekt: Integer;
-    procedure Dodaj_wskaznik(proces: TRectangle; index_procesu: Integer);
-    procedure Rysuj_powiazania;
-    procedure Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean; linia, linia2, linia3: TLine; strzalka_od, strzalka_do: TImage);
+    procedure Deactivate_Object;
+    procedure Clear_Objects_And_Links;
+    function Last_Object: Integer;
+    procedure Add_pointer(process: TRectangle; process_index: Integer);
+    procedure Draw_links;
+    procedure Draw_link(from_object, to_object: Integer; from_arrow, to_arrow: Boolean; text_line_1, text_line_2, text_line_3: TLine; from_arrow_image, to_arrow_image: TImage);
+    procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     procedure Dodaj_powiazanie(od_obiektu_index, do_obiektu_index: Integer; od_strzalka, do_strzalka: Boolean);
     procedure Usun_powiazanie(od_obiektu_index, do_obiektu_index: Integer);
-    procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
     procedure Edycja_danych_procesu;
     function Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
     function Ktory_obiekt(obiekt: TRectangle): Integer;
@@ -378,7 +378,7 @@ Begin
     img2.Visible := True;
     objects_links_array[nowy].arrow_image_to := img2;
 
-    Rysuj_powiazania;
+    Draw_links;
   End;
 
   if czy_istnieje = True then
@@ -465,9 +465,9 @@ begin
   if ktory_w_tablicy > 0 then
   Begin
     DrawingTimer.Enabled := False;
-    Deaktywuj_obiekt;
+    Deactivate_Object;
     selected := nil;
-    // Najpierw kasujê obiekt
+    // Delete the object first
     objects_array[ktory_w_tablicy].id_object := 0;
 {$IFDEF ANDROID}
     obiekty[ktory_w_tablicy].wskaznik.DisposeOf;
@@ -475,7 +475,7 @@ begin
     objects_array[ktory_w_tablicy].indicator.Free;
     objects_array[ktory_w_tablicy].indicator := nil;
 {$ENDIF}
-    // Teraz kasujê powi¹zania
+    // Now deleting the connections
     for i := 1 to max_objects_links do
     Begin
       if (objects_links_array[i].from_object = id_procesu) OR (objects_links_array[i].to_object = id_procesu) then
@@ -506,7 +506,7 @@ begin
     End;
 
     RamkaEdycjaProcesu1.Visible := False;
-    Rysuj_powiazania;
+    Draw_links;
     DrawingTimer.Enabled := True;
   End;
 end;
@@ -523,7 +523,7 @@ begin
     End;
   End;
   RamkaEdycjaProcesu1.Visible := False;
-  Deaktywuj_obiekt;
+  Deactivate_Object;
 end;
 
 procedure TAOknoGl.RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
@@ -544,8 +544,8 @@ begin
   if ktory_w_tablicy > 0 then
   Begin
     DrawingTimer.Enabled := False;
-    Deaktywuj_obiekt;
-    // Teraz kasujê powi¹zania
+    Deactivate_Object;
+    // Now deleting the connections
     for i := 1 to max_objects_links do
     Begin
       if (objects_links_array[i].from_object = id_procesu) OR (objects_links_array[i].to_object = id_procesu) then
@@ -576,7 +576,7 @@ begin
     End;
 
     RamkaEdycjaProcesu1.Visible := False;
-    Rysuj_powiazania;
+    Draw_links;
     DrawingTimer.Enabled := True;
   End;
 end;
@@ -594,7 +594,7 @@ end;
 
 procedure TAOknoGl.RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
 begin
-  Czysc_obiekty_i_powiazania;
+  Clear_Objects_And_Links;
   RamkaMenuGlowne1.Visible := False;
 end;
 
@@ -625,11 +625,11 @@ Var
   from_arrow: string;
   to_arrow: string;
 begin
- Czysc_obiekty_i_powiazania;
+ Clear_Objects_And_Links;
  plik := TStringList.Create;
  czy_wczytano:=False;
 
- { TODO : Dopisaæ wczytywanie projektu z pliku dla androida i ewentualnie iOS }
+ { TODO : Add the project load from the file for Android and possibly iOS}
 {$IFDEF ANDROID}
 
 {$ELSE}
@@ -649,7 +649,7 @@ begin
 
      if Pos('<object>',linia)>0 then
       Begin
-       //teraz mam dostêp do danych obiektów
+       //now I have access to the given objects
        id_obiektu :=Wartosc_XML(plik.Strings[i+1]);
        wpis       :=Wartosc_XML(plik.Strings[i+2]);
        wpis       :=StringReplace(wpis,'#13',#13,[rfReplaceAll]);
@@ -668,7 +668,7 @@ begin
         tmp.OnMouseLeave := ObjectPatternMouseLeave;
         tmp.OnTap := LabelPatternTap;
 
-        Dodaj_wskaznik(tmp, StrToInt(id_obiektu));
+        Add_pointer(tmp, StrToInt(id_obiektu));
 
         for o := 0 to tmp.ChildrenCount - 1 do
          Begin
@@ -701,7 +701,7 @@ Var
   linie_tekstowe_obiektu : TStringList;
   t, i: Integer;
 begin
- { TODO : Zamieniæ "sk³adanie" XML rêcznie na jego obs³ugê z wykorzystaniem klas XML }
+ { TODO : Replace XML "assembly" manually with XML classes }
  linie_tekstowe_obiektu := TStringList.Create;
  plik := TStringList.Create;
  plik.Add('<?xml version="1.0" encoding="utf-8"?>');
@@ -746,7 +746,7 @@ begin
   plik.Add('</links>');
   plik.Add('</diagram>');
 
-{ TODO : Dopisaæ zapisywanie projektu do pliku dla androida i iOS }
+{ TODO : Add project save to file for android and iOS}
 {$IFDEF ANDROID}
 
 {$ELSE}
@@ -770,13 +770,13 @@ begin
       do_obiektu := objects_array[i].id_object;
   End;
 
-  // Jeœli nie ma strza³ek to usuwane jest powi¹zanie!
+  // If there are no arrows, the association is deleted!
   if (RamkaPowiazanie1.img_od.Visible = False) and (RamkaPowiazanie1.img_do.Visible = False) then
     Usun_powiazanie(od_obiektu, do_obiektu)
   else
     Dodaj_powiazanie(od_obiektu, do_obiektu, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
 
-  Rysuj_powiazania;
+  Draw_links;
   RamkaPowiazanie1.Visible := False;
   Odznacz_wybrane(False, True);
 end;
@@ -809,10 +809,10 @@ end;
 
 procedure TAOknoGl.DrawingTimerTimer(Sender: TObject);
 begin
-  Rysuj_powiazania;
+  Draw_links;
 end;
 
-procedure TAOknoGl.Rysuj_powiazania;
+procedure TAOknoGl.Draw_links;
 var
   i, o: Integer;
   obiekt_index_od: Integer;
@@ -833,15 +833,14 @@ Begin
         if objects_array[o].id_object = objects_links_array[i].to_object then
           obiekt_index_do := o;
       End;
-      Rysuj_powiazanie(obiekt_index_od, obiekt_index_do, objects_links_array[i].from_arrow, objects_links_array[i].to_arrow,
+      Draw_link(obiekt_index_od, obiekt_index_do, objects_links_array[i].from_arrow, objects_links_array[i].to_arrow,
         objects_links_array[i].text_line_1, objects_links_array[i].text_line_2, objects_links_array[i].text_line_3,
         objects_links_array[i].arrow_image_from, objects_links_array[i].arrow_image_to);
     End;
   End;
 End;
 
-procedure TAOknoGl.Rysuj_powiazanie(od_obiektu, do_obiektu: Integer; od_strzalka, do_strzalka: Boolean;
-  linia, linia2, linia3: TLine; strzalka_od, strzalka_do: TImage);
+procedure TAOknoGl.Draw_link(from_object, to_object: Integer; from_arrow, to_arrow: Boolean; text_line_1, text_line_2, text_line_3: TLine; from_arrow_image, to_arrow_image: TImage);
 var
   od_rect, do_rect: TRectangle;
   poy, koy: Single;
@@ -852,18 +851,17 @@ var
   pozycja_test: Integer;
   licznik_obrotow: Integer;
 begin
-
-  if (od_strzalka) or (do_strzalka) then
+if (from_arrow) or (to_arrow) then
   Begin
-    od_rect := objects_array[od_obiektu].indicator;
-    do_rect := objects_array[do_obiektu].indicator;
+    od_rect := objects_array[from_object].indicator;
+    do_rect := objects_array[to_object].indicator;
 
     poy := od_rect.Position.y - od_rect.Height - (od_rect.Height / 2);
     koy := od_rect.Position.y + od_rect.Height + (od_rect.Height / 2);
 
     if (do_rect.Position.y > poy) and (do_rect.Position.y < koy) then
     Begin
-      // Jeœli obiekty s¹ na podobnym poziomie;
+      // Je?li obiekty s? na podobnym poziomie;
       Y1 := od_rect.Position.y + (od_rect.Height / 2);
       y2 := do_rect.Position.y + (do_rect.Height / 2);
 
@@ -887,7 +885,7 @@ begin
     Begin
       if do_rect.Position.y > od_rect.Position.y then
       Begin
-        // Jeœli obiekt docelowy jest ni¿ej ni¿ obiekt Ÿród³owy
+        // Je?li obiekt docelowy jest ni?ej ni? obiekt ?ród?owy
         Y1 := od_rect.Position.y + od_rect.Height;
         y2 := do_rect.Position.y;
         kier := 'D';
@@ -944,103 +942,103 @@ begin
     if kier = 'D' then
     Begin
       oy := Y1 + ((y2 - Y1) / 2);
-      DrawLineBetweenPoints(linia, PointF(X1, Y1), PointF(X1, oy));
-      DrawLineBetweenPoints(linia2, PointF(X1, oy), PointF(x2, oy));
-      DrawLineBetweenPoints(linia3, PointF(x2, oy), PointF(x2, y2));
-      if do_strzalka = True then
+      DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(X1, oy));
+      DrawLineBetweenPoints(text_line_2, PointF(X1, oy), PointF(x2, oy));
+      DrawLineBetweenPoints(text_line_3, PointF(x2, oy), PointF(x2, y2));
+      if to_arrow = True then
       Begin
-        strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - (ArrowsPattern.Width / 2);
-        strzalka_do.Position.y := y2 - ArrowsPattern.Height + 7;
-        strzalka_do.RotationAngle := 90;
+        to_arrow_image.Visible := True;
+        to_arrow_image.Position.x := x2 - (ArrowsPattern.Width / 2);
+        to_arrow_image.Position.y := y2 - ArrowsPattern.Height + 7;
+        to_arrow_image.RotationAngle := 90;
       End
       else
-        strzalka_do.Visible := False;
-      if od_strzalka = True then
+        to_arrow_image.Visible := False;
+      if from_arrow = True then
       Begin
-        strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - (ArrowsPattern.Width / 2);
-        strzalka_od.Position.y := Y1 - 7;
-        strzalka_od.RotationAngle := 270;
+        from_arrow_image.Visible := True;
+        from_arrow_image.Position.x := X1 - (ArrowsPattern.Width / 2);
+        from_arrow_image.Position.y := Y1 - 7;
+        from_arrow_image.RotationAngle := 270;
       End
       else
-        strzalka_od.Visible := False;
+        from_arrow_image.Visible := False;
     End;
     if kier = 'G' then
     Begin
       oy := y2 + ((Y1 - y2) / 2);
-      DrawLineBetweenPoints(linia, PointF(X1, Y1), PointF(X1, oy));
-      DrawLineBetweenPoints(linia2, PointF(X1, oy), PointF(x2, oy));
-      DrawLineBetweenPoints(linia3, PointF(x2, oy), PointF(x2, y2));
-      if do_strzalka = True then
+      DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(X1, oy));
+      DrawLineBetweenPoints(text_line_2, PointF(X1, oy), PointF(x2, oy));
+      DrawLineBetweenPoints(text_line_3, PointF(x2, oy), PointF(x2, y2));
+      if to_arrow = True then
       Begin
-        strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - (ArrowsPattern.Width / 2);
-        strzalka_do.Position.y := y2 - 7;
-        strzalka_do.RotationAngle := 270;
+        to_arrow_image.Visible := True;
+        to_arrow_image.Position.x := x2 - (ArrowsPattern.Width / 2);
+        to_arrow_image.Position.y := y2 - 7;
+        to_arrow_image.RotationAngle := 270;
       End
       else
-        strzalka_do.Visible := False;
-      if od_strzalka = True then
+        to_arrow_image.Visible := False;
+      if from_arrow = True then
       Begin
-        strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - (ArrowsPattern.Width / 2);
-        strzalka_od.Position.y := Y1 - ArrowsPattern.Height + 7;
-        strzalka_od.RotationAngle := 90;
+        from_arrow_image.Visible := True;
+        from_arrow_image.Position.x := X1 - (ArrowsPattern.Width / 2);
+        from_arrow_image.Position.y := Y1 - ArrowsPattern.Height + 7;
+        from_arrow_image.RotationAngle := 90;
       End
       else
-        strzalka_od.Visible := False;
+        from_arrow_image.Visible := False;
     End;
 
     if kier = 'P' then
     Begin
       ox := X1 + ((x2 - X1) / 2);
-      DrawLineBetweenPoints(linia, PointF(X1, Y1), PointF(ox, Y1));
-      DrawLineBetweenPoints(linia2, PointF(ox, Y1), PointF(ox, y2));
-      DrawLineBetweenPoints(linia3, PointF(ox, y2), PointF(x2, y2));
-      if do_strzalka = True then
+      DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(ox, Y1));
+      DrawLineBetweenPoints(text_line_2, PointF(ox, Y1), PointF(ox, y2));
+      DrawLineBetweenPoints(text_line_3, PointF(ox, y2), PointF(x2, y2));
+      if to_arrow = True then
       Begin
-        strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - (ArrowsPattern.Width) + 7;
-        strzalka_do.Position.y := y2 - (ArrowsPattern.Height / 2);
-        strzalka_do.RotationAngle := 0;
+        to_arrow_image.Visible := True;
+        to_arrow_image.Position.x := x2 - (ArrowsPattern.Width) + 7;
+        to_arrow_image.Position.y := y2 - (ArrowsPattern.Height / 2);
+        to_arrow_image.RotationAngle := 0;
       End
       else
-        strzalka_do.Visible := False;
-      if od_strzalka = True then
+        to_arrow_image.Visible := False;
+      if from_arrow = True then
       Begin
-        strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - 7;
-        strzalka_od.Position.y := Y1 - (ArrowsPattern.Height / 2);
-        strzalka_od.RotationAngle := 180;
+        from_arrow_image.Visible := True;
+        from_arrow_image.Position.x := X1 - 7;
+        from_arrow_image.Position.y := Y1 - (ArrowsPattern.Height / 2);
+        from_arrow_image.RotationAngle := 180;
       End
       else
-        strzalka_od.Visible := False;
+        from_arrow_image.Visible := False;
     End;
     if kier = 'L' then
     Begin
       ox := x2 + ((X1 - x2) / 2);
-      DrawLineBetweenPoints(linia, PointF(X1, Y1), PointF(ox, Y1));
-      DrawLineBetweenPoints(linia2, PointF(ox, Y1), PointF(ox, y2));
-      DrawLineBetweenPoints(linia3, PointF(ox, y2), PointF(x2, y2));
-      if do_strzalka = True then
+      DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(ox, Y1));
+      DrawLineBetweenPoints(text_line_2, PointF(ox, Y1), PointF(ox, y2));
+      DrawLineBetweenPoints(text_line_3, PointF(ox, y2), PointF(x2, y2));
+      if to_arrow = True then
       Begin
-        strzalka_do.Visible := True;
-        strzalka_do.Position.x := x2 - 7;
-        strzalka_do.Position.y := y2 - (ArrowsPattern.Height / 2);
-        strzalka_do.RotationAngle := 180;
+        to_arrow_image.Visible := True;
+        to_arrow_image.Position.x := x2 - 7;
+        to_arrow_image.Position.y := y2 - (ArrowsPattern.Height / 2);
+        to_arrow_image.RotationAngle := 180;
       End
       else
-        strzalka_do.Visible := False;
-      if od_strzalka = True then
+        to_arrow_image.Visible := False;
+      if from_arrow = True then
       Begin
-        strzalka_od.Visible := True;
-        strzalka_od.Position.x := X1 - (ArrowsPattern.Width) + 7;
-        strzalka_od.Position.y := Y1 - (ArrowsPattern.Height / 2);
-        strzalka_od.RotationAngle := 0;
+        from_arrow_image.Visible := True;
+        from_arrow_image.Position.x := X1 - (ArrowsPattern.Width) + 7;
+        from_arrow_image.Position.y := Y1 - (ArrowsPattern.Height / 2);
+        from_arrow_image.RotationAngle := 0;
       End
       else
-        strzalka_od.Visible := False;
+        from_arrow_image.Visible := False;
     End;
 
     od_rect.BringToFront;
@@ -1048,9 +1046,10 @@ begin
 
   end;
 
+
 end;
 
-procedure TAOknoGl.Dodaj_wskaznik(proces: TRectangle; index_procesu: Integer);
+procedure TAOknoGl.Add_pointer(process: TRectangle; process_index: Integer);
 var
   i: Integer;
   nowy: Integer;
@@ -1062,11 +1061,11 @@ Begin
       nowy := i;
   End;
 
-  objects_array[nowy].id_object := index_procesu;
-  objects_array[nowy].indicator := proces;
+  objects_array[nowy].id_object := process_index;
+  objects_array[nowy].indicator := process;
 End;
 
-function TAOknoGl.Ostatni_obiekt: Integer;
+function TAOknoGl.Last_Object: Integer;
 Var
   wynik: Integer;
   i: Integer;
@@ -1080,7 +1079,7 @@ Begin
       Break;
      End;
   End;
-  Ostatni_obiekt := wynik;
+  Last_Object := wynik;
 End;
 
 procedure TAOknoGl.btn_dodaj_nowy_procesClick(Sender: TObject);
@@ -1096,7 +1095,7 @@ begin
   tmp.Parent := ScrollBox;
   tmp.Visible := True;
   tmp.Position.x := +10;
-  tmp.Position.y := GridMenuGornego.Position.y + GridMenuGornego.Height + 10;
+  tmp.Position.y := TopMenuGrid.Position.y + TopMenuGrid.Height + 10;
   tmp.OnMouseDown := ObjectPatternMouseDown;
   tmp.OnMouseMove := ObjectPatternMouseMove;
   tmp.OnMouseUp := ObjectPatternMouseUp;
@@ -1104,8 +1103,8 @@ begin
   tmp.OnMouseLeave := ObjectPatternMouseLeave;
   tmp.OnTap := LabelPatternTap;
 
-  index_obiektu := Ostatni_obiekt + 1;
-  Dodaj_wskaznik(tmp, index_obiektu);
+  index_obiektu := Last_Object + 1;
+  Add_pointer(tmp, index_obiektu);
 
   for i := 0 to tmp.ChildrenCount - 1 do
   Begin
@@ -1115,7 +1114,7 @@ begin
     End;
   End;
 
-  Rysuj_powiazania;
+  Draw_links;
 end;
 
 procedure TAOknoGl.btn_hamburgerClick(Sender: TObject);
@@ -1128,7 +1127,7 @@ begin
   Odznacz_wybrane(True, True);
 end;
 
-procedure TAOknoGl.Czysc_obiekty_i_powiazania;
+procedure TAOknoGl.Clear_Objects_And_Links;
 var
   i: Integer;
 Begin
@@ -1168,7 +1167,7 @@ Begin
     objects_links_array[i].arrow_image_to := nil;
 {$ENDIF}
   End;
-  Rysuj_powiazania;
+  Draw_links;
 End;
 
 procedure TAOknoGl.FormCreate(Sender: TObject);
@@ -1178,7 +1177,7 @@ begin
   MouseIsDown := False;
   ObjectPattern.Visible := False;
   LinePattern.Visible := False;
-  Czysc_obiekty_i_powiazania;
+  Clear_Objects_And_Links;
   RamkaMenuGlowne1.Visible := False;
   RamkaEdycjaProcesu1.Visible := False;
 
@@ -1203,16 +1202,16 @@ begin
     End
     else
     Begin
-      // Jeœli pierwszy jest ju¿ wybrany
+      // If the first one is already selected
       if TRectangle(Sender) = selected_first then
       Begin
-        // Jeœli nowo klikniêty jest wybranym
+        // If the newly clicked is selected
         selected_first.Fill.Color := TAlphaColor($AA0F077A);
         selected_first := Nil;
       End
       else
       Begin
-        // Jeœli pierwszy jest wybrany i teraz wybraliœmy drugi!
+        // If the first is chosen and now we have chosen the second!
         selected_second := TRectangle(Sender);
         selected_second.BringToFront;
         selected_second.Fill.Color := TAlphaColor($AA7A0707);
@@ -1262,7 +1261,7 @@ end;
 procedure TAOknoGl.ObjectPatternMouseLeave(Sender: TObject);
 begin
  if btn_laczenie_procesow.IsPressed = False then
-    Deaktywuj_obiekt;
+    Deactivate_Object;
 end;
 
 procedure TAOknoGl.ObjectPatternMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
@@ -1277,18 +1276,17 @@ begin
   End;
 end;
 
-procedure TAOknoGl.Deaktywuj_obiekt;
+procedure TAOknoGl.Deactivate_Object;
 Begin
   MouseIsDown := False;
   if Assigned(selected) then selected.Fill.Color := TAlphaColor($AA0F077A);
   DrawingTimer.Enabled := False;
-  Rysuj_powiazania;
+  Draw_links;
 End;
 
 procedure TAOknoGl.ObjectPatternMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
 begin
-  if btn_laczenie_procesow.IsPressed = False then
-    Deaktywuj_obiekt;
+  if btn_laczenie_procesow.IsPressed = False then Deactivate_Object;
 end;
 
 procedure TAOknoGl.Edycja_danych_procesu;

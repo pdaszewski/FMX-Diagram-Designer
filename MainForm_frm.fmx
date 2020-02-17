@@ -11,7 +11,7 @@ object AOknoGl: TAOknoGl
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 0
-  object Tlo: TImage
+  object BackgroundImage: TImage
     MultiResBitmap.Height = 670
     MultiResBitmap.Width = 1191
     MultiResBitmap = <
@@ -21828,7 +21828,7 @@ object AOknoGl: TAOknoGl
     Size.PlatformDefault = False
     WrapMode = Stretch
   end
-  object GridGlowny: TGridPanelLayout
+  object MainGrid: TGridPanelLayout
     Align = Client
     Size.Width = 1037.000000000000000000
     Size.Height = 554.000000000000000000
@@ -21841,7 +21841,7 @@ object AOknoGl: TAOknoGl
     ControlCollection = <
       item
         Column = 0
-        Control = GridMenuGornego
+        Control = TopMenuGrid
         Row = 0
       end
       item
@@ -21868,7 +21868,7 @@ object AOknoGl: TAOknoGl
       item
         SizeStyle = Auto
       end>
-    object GridMenuGornego: TGridPanelLayout
+    object TopMenuGrid: TGridPanelLayout
       Align = Top
       Size.Width = 1037.000000000000000000
       Size.Height = 40.000000000000000000
