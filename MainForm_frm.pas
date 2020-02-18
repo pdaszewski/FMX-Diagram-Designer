@@ -64,13 +64,13 @@ type
     procedure Add_link(from_object_index, to_object_index: Integer; from_arrow, to_arrow: Boolean);
     procedure Remove_link(from_object_index, to_object_index: Integer);
     procedure Editing_process_data;
-    function Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
-    function Ktory_obiekt(obiekt: TRectangle): Integer;
-    procedure Zmien_styl_linii(nowy_styl : TStrokeDash);
+    function Which_connection(from_object, to_object: TRectangle): Integer;
+    function Which_object(indicated_object: TRectangle): Integer;
+    procedure Change_line_style(new_style : TStrokeDash);
 
-    procedure Czysc_punkty_styku;
-    procedure Dodaj_punkt_styku(x, y: Single);
-    function Czy_juz_jest_tu_punkt_styku(x, y: Single): Boolean;
+    procedure Clean_contact_points;
+    procedure Add_contact_point(x, y: Single);
+    function Is_there_already_a_point_of_contact_here(x, y: Single): Boolean;
 
     procedure Odznacz_wybrane(pierwszy, drugi: Boolean);
     procedure Ustaw_strzalke_powiazania(strzalka: String);
@@ -108,7 +108,7 @@ type
   end;
 
 const
-  version = '1.0.2.0';
+  version = '1.0.2.1';
   build_date = '2020-02-18';
 
   max_objects = 100;
@@ -133,36 +133,36 @@ implementation
 
 {$R *.fmx}
 
-procedure TMainForm.Zmien_styl_linii(nowy_styl : TStrokeDash);
+procedure TMainForm.Change_line_style(new_style : TStrokeDash);
 var
   i: Integer;
 Begin
- LinePattern.Stroke.Dash:=nowy_styl;
- RamkaPowiazanie1.WzorLinii.Stroke.Dash:=nowy_styl;
+ LinePattern.Stroke.Dash:=new_style;
+ RamkaPowiazanie1.WzorLinii.Stroke.Dash:=new_style;
  for i := 1 to max_objects_links do
   Begin
    if objects_links_array[i].from_object>0 then
     Begin
-     objects_links_array[i].text_line_1.Stroke.Dash:=nowy_styl;
-     objects_links_array[i].text_line_2.Stroke.Dash:=nowy_styl;
-     objects_links_array[i].text_line_3.Stroke.Dash:=nowy_styl;
+     objects_links_array[i].text_line_1.Stroke.Dash:=new_style;
+     objects_links_array[i].text_line_2.Stroke.Dash:=new_style;
+     objects_links_array[i].text_line_3.Stroke.Dash:=new_style;
     End;
   End;
 End;
 
-function TMainForm.Ktory_obiekt(obiekt: TRectangle): Integer;
+function TMainForm.Which_object(indicated_object: TRectangle): Integer;
 Var
- wynik, i : Integer;
+ outcome, i : Integer;
 Begin
- wynik:=0;
+ outcome:=0;
  for i := 1 to max_objects do
   Begin
-    if objects_array[i].indicator = obiekt then wynik:=i;
+    if objects_array[i].indicator = indicated_object then outcome:=i;
   End;
- Ktory_obiekt:=wynik;
+ Which_object:=outcome;
 End;
 
-function TMainForm.Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
+function TMainForm.Which_connection(from_object, to_object: TRectangle): Integer;
 Var
   wynik: Integer;
   od_obiektu_index, do_obiektu_index: Integer;
@@ -171,9 +171,9 @@ Begin
   wynik := 0;
   for i := 1 to max_objects do
   Begin
-    if objects_array[i].indicator = od_obiektu then
+    if objects_array[i].indicator = from_object then
       od_obiektu_index := objects_array[i].id_object;
-    if objects_array[i].indicator = do_obiektu then
+    if objects_array[i].indicator = to_object then
       do_obiektu_index := objects_array[i].id_object;
   End;
 
@@ -185,7 +185,7 @@ Begin
       wynik := i;
   End;
 
-  Ktore_powiazanie := wynik;
+  Which_connection := wynik;
 End;
 
 procedure TMainForm.Ustaw_strzalke_powiazania(strzalka: string);
@@ -226,24 +226,24 @@ Begin
   End;
 End;
 
-function TMainForm.Czy_juz_jest_tu_punkt_styku(x, y: Single): Boolean;
+function TMainForm.Is_there_already_a_point_of_contact_here(x, y: Single): Boolean;
 Var
-  wynik: Boolean;
+  outcome: Boolean;
   i: Integer;
 Begin
-  wynik := False;
+  outcome := False;
   for i := 1 to max_poinst_of_contact do
   Begin
     if (point_of_contact_array[i].x = x) and (point_of_contact_array[i].y = y) then
     Begin
-      wynik := True;
+      outcome := True;
       Break;
     End;
   End;
-  Czy_juz_jest_tu_punkt_styku := wynik;
+  Is_there_already_a_point_of_contact_here := outcome;
 End;
 
-procedure TMainForm.Czysc_punkty_styku;
+procedure TMainForm.Clean_contact_points;
 var
   i: Integer;
 Begin
@@ -254,7 +254,7 @@ Begin
   End;
 End;
 
-procedure TMainForm.Dodaj_punkt_styku(x, y: Single);
+procedure TMainForm.Add_contact_point(x, y: Single);
 Var
   i: Integer;
 Begin
@@ -818,7 +818,7 @@ var
   obiekt_index_od: Integer;
   obiekt_index_do: Integer;
 Begin
-  Czysc_punkty_styku;
+  Clean_contact_points;
   for i := 1 to max_objects_links do
   Begin
     if objects_links_array[i].from_object > 0 then
@@ -901,7 +901,7 @@ if (from_arrow) or (to_arrow) then
       x2 := do_rect.Position.x + (do_rect.Width / 2);
     End;
 
-    if Czy_juz_jest_tu_punkt_styku(X1, Y1) = True then
+    if Is_there_already_a_point_of_contact_here(X1, Y1) = True then
     Begin
       pozycja_test := line_spacing;
       licznik_obrotow := 1;
@@ -916,11 +916,11 @@ if (from_arrow) or (to_arrow) then
           licznik_obrotow := licznik_obrotow + 1;
         licznik_obrotow := licznik_obrotow * -1;
         pozycja_test := line_spacing * licznik_obrotow;
-      Until Czy_juz_jest_tu_punkt_styku(X1, Y1) = False;
+      Until Is_there_already_a_point_of_contact_here(X1, Y1) = False;
     End;
-    Dodaj_punkt_styku(X1, Y1);
+    Add_contact_point(X1, Y1);
 
-    if Czy_juz_jest_tu_punkt_styku(x2, y2) = True then
+    if Is_there_already_a_point_of_contact_here(x2, y2) = True then
     Begin
       pozycja_test := line_spacing;
       licznik_obrotow := 1;
@@ -935,9 +935,9 @@ if (from_arrow) or (to_arrow) then
           licznik_obrotow := licznik_obrotow + 1;
         licznik_obrotow := licznik_obrotow * -1;
         pozycja_test := line_spacing * -licznik_obrotow;
-      Until Czy_juz_jest_tu_punkt_styku(x2, y2) = False;
+      Until Is_there_already_a_point_of_contact_here(x2, y2) = False;
     End;
-    Dodaj_punkt_styku(x2, y2);
+    Add_contact_point(x2, y2);
 
     if kier = 'D' then
     Begin
@@ -1220,7 +1220,7 @@ begin
         RamkaPowiazanie1.lbl_od_procesu.Text := TLabel(selected_first.Children[0]).Text;
         RamkaPowiazanie1.lbl_do_procesu.Text := TLabel(selected_second.Children[0]).Text;
 
-        powiazanie_aktywne := Ktore_powiazanie(selected_first, selected_second);
+        powiazanie_aktywne := Which_connection(selected_first, selected_second);
         if powiazanie_aktywne = 0 then
         Begin
           RamkaPowiazanie1.img_od.Visible := False;
@@ -1232,14 +1232,14 @@ begin
           RamkaPowiazanie1.img_od.Visible := False;
           RamkaPowiazanie1.img_do.Visible := False;
           if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Ktory_obiekt(selected_first)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_od.Visible := True;
           if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Ktory_obiekt(selected_second)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_do.Visible := True;
 
           if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Ktory_obiekt(selected_second)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_do.Visible := True;
           if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Ktory_obiekt(selected_first)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_od.Visible := True;
 
           RamkaPowiazanie1.btn_add.Text := 'change the association';
         End;

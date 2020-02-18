@@ -24,3 +24,7 @@ Still must TO DO write function to save and open in android.
 2020-02-15 More code translations to english.
 
 2020-02-16 More translations to english, and windows icons added.
+
+2020-02-17 More procedures and functions translation.
+
+2020-02-18 More procedures and functions translation
