@@ -44,11 +44,11 @@ uses MainForm_frm;
 
 procedure TMainMenuFrame.rbtn_SolidChange(Sender: TObject);
 begin
- if rbtn_Solid.IsChecked      then AOknoGl.Zmien_styl_linii(sett_line_Solid.Stroke.Dash);
- if rbtn_Dash.IsChecked       then AOknoGl.Zmien_styl_linii(sett_line_Dash.Stroke.Dash);
- if rbtn_DashDot.IsChecked    then AOknoGl.Zmien_styl_linii(sett_line_DashDot.Stroke.Dash);
- if rbtn_DashDotDot.IsChecked then AOknoGl.Zmien_styl_linii(sett_line_DashDotDot.Stroke.Dash);
- if rbtn_Dot.IsChecked        then AOknoGl.Zmien_styl_linii(sett_line_Dot.Stroke.Dash);
+ if rbtn_Solid.IsChecked      then MainForm.Zmien_styl_linii(sett_line_Solid.Stroke.Dash);
+ if rbtn_Dash.IsChecked       then MainForm.Zmien_styl_linii(sett_line_Dash.Stroke.Dash);
+ if rbtn_DashDot.IsChecked    then MainForm.Zmien_styl_linii(sett_line_DashDot.Stroke.Dash);
+ if rbtn_DashDotDot.IsChecked then MainForm.Zmien_styl_linii(sett_line_DashDotDot.Stroke.Dash);
+ if rbtn_Dot.IsChecked        then MainForm.Zmien_styl_linii(sett_line_Dot.Stroke.Dash);
 end;
 
 end.

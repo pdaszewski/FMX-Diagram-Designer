@@ -34,7 +34,7 @@ type
   end;
 
 type
-  TAOknoGl = class(TForm)
+  TMainForm = class(TForm)
     BackgroundImage: TImage;
     MainGrid: TGridPanelLayout;
     TopMenuGrid: TGridPanelLayout;
@@ -61,9 +61,9 @@ type
     procedure Draw_links;
     procedure Draw_link(from_object, to_object: Integer; from_arrow, to_arrow: Boolean; text_line_1, text_line_2, text_line_3: TLine; from_arrow_image, to_arrow_image: TImage);
     procedure DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
-    procedure Dodaj_powiazanie(od_obiektu_index, do_obiektu_index: Integer; od_strzalka, do_strzalka: Boolean);
-    procedure Usun_powiazanie(od_obiektu_index, do_obiektu_index: Integer);
-    procedure Edycja_danych_procesu;
+    procedure Add_link(from_object_index, to_object_index: Integer; from_arrow, to_arrow: Boolean);
+    procedure Remove_link(from_object_index, to_object_index: Integer);
+    procedure Editing_process_data;
     function Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
     function Ktory_obiekt(obiekt: TRectangle): Integer;
     procedure Zmien_styl_linii(nowy_styl : TStrokeDash);
@@ -108,8 +108,8 @@ type
   end;
 
 const
-  version = '1.0.1.8';
-  build_date = '2020-02-17';
+  version = '1.0.2.0';
+  build_date = '2020-02-18';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -118,7 +118,7 @@ const
   line_spacing = 10;
 
 var
-  AOknoGl: TAOknoGl;
+  MainForm: TMainForm;
   MouseIsDown: Boolean;
   X1, Y1: Integer;
   selected: TRectangle;
@@ -133,7 +133,7 @@ implementation
 
 {$R *.fmx}
 
-procedure TAOknoGl.Zmien_styl_linii(nowy_styl : TStrokeDash);
+procedure TMainForm.Zmien_styl_linii(nowy_styl : TStrokeDash);
 var
   i: Integer;
 Begin
@@ -150,7 +150,7 @@ Begin
   End;
 End;
 
-function TAOknoGl.Ktory_obiekt(obiekt: TRectangle): Integer;
+function TMainForm.Ktory_obiekt(obiekt: TRectangle): Integer;
 Var
  wynik, i : Integer;
 Begin
@@ -162,7 +162,7 @@ Begin
  Ktory_obiekt:=wynik;
 End;
 
-function TAOknoGl.Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
+function TMainForm.Ktore_powiazanie(od_obiektu, do_obiektu: TRectangle): Integer;
 Var
   wynik: Integer;
   od_obiektu_index, do_obiektu_index: Integer;
@@ -188,7 +188,7 @@ Begin
   Ktore_powiazanie := wynik;
 End;
 
-procedure TAOknoGl.Ustaw_strzalke_powiazania(strzalka: string);
+procedure TMainForm.Ustaw_strzalke_powiazania(strzalka: string);
 begin
   strzalka := Trim(AnsiLowerCase(strzalka));
   if strzalka = 'do' then
@@ -212,7 +212,7 @@ begin
     RamkaPowiazanie1.btn_add.Text := 'add association';
 end;
 
-procedure TAOknoGl.Odznacz_wybrane(pierwszy, drugi: Boolean);
+procedure TMainForm.Odznacz_wybrane(pierwszy, drugi: Boolean);
 Begin
   if (pierwszy) and (selected_first <> nil) then
   Begin
@@ -226,7 +226,7 @@ Begin
   End;
 End;
 
-function TAOknoGl.Czy_juz_jest_tu_punkt_styku(x, y: Single): Boolean;
+function TMainForm.Czy_juz_jest_tu_punkt_styku(x, y: Single): Boolean;
 Var
   wynik: Boolean;
   i: Integer;
@@ -243,7 +243,7 @@ Begin
   Czy_juz_jest_tu_punkt_styku := wynik;
 End;
 
-procedure TAOknoGl.Czysc_punkty_styku;
+procedure TMainForm.Czysc_punkty_styku;
 var
   i: Integer;
 Begin
@@ -254,7 +254,7 @@ Begin
   End;
 End;
 
-procedure TAOknoGl.Dodaj_punkt_styku(x, y: Single);
+procedure TMainForm.Dodaj_punkt_styku(x, y: Single);
 Var
   i: Integer;
 Begin
@@ -269,56 +269,56 @@ Begin
   End;
 End;
 
-procedure TAOknoGl.Usun_powiazanie(od_obiektu_index, do_obiektu_index: Integer);
+procedure TMainForm.Remove_link(from_object_index, to_object_index: Integer);
 var
   i: Integer;
-  czy_istnieje: Boolean;
-  istniejacy: Integer;
+  is_exists: Boolean;
+  existing_object: Integer;
 Begin
-  istniejacy := 0;
-  czy_istnieje := False;
+  existing_object := 0;
+  is_exists := False;
   for i := 1 to max_objects_links do
   Begin
-    if (objects_links_array[i].from_object = od_obiektu_index) and (objects_links_array[i].to_object = do_obiektu_index) then
+    if (objects_links_array[i].from_object = from_object_index) and (objects_links_array[i].to_object = to_object_index) then
     Begin
-      istniejacy := i;
-      czy_istnieje := True;
+      existing_object := i;
+      is_exists := True;
     End;
-    if (objects_links_array[i].from_object = do_obiektu_index) and (objects_links_array[i].to_object = od_obiektu_index) then
+    if (objects_links_array[i].from_object = to_object_index) and (objects_links_array[i].to_object = from_object_index) then
     Begin
-      istniejacy := i;
-      czy_istnieje := True;
+      existing_object := i;
+      is_exists := True;
     End;
   End;
 
-  if czy_istnieje = True then
+  if is_exists = True then
   Begin
-    objects_links_array[istniejacy].from_object := 0;
-    objects_links_array[istniejacy].to_object := 0;
-    objects_links_array[istniejacy].from_arrow := False;
-    objects_links_array[istniejacy].to_arrow := False;
+    objects_links_array[existing_object].from_object := 0;
+    objects_links_array[existing_object].to_object := 0;
+    objects_links_array[existing_object].from_arrow := False;
+    objects_links_array[existing_object].to_arrow := False;
 {$IFDEF ANDROID}
-    objects_links_array[istniejacy].linia.DisposeOf;
-    objects_links_array[istniejacy].linia2.DisposeOf;
-    objects_links_array[istniejacy].linia3.DisposeOf;
-    objects_links_array[istniejacy].strzalka_od.DisposeOf;
-    objects_links_array[istniejacy].strzalka_do.DisposeOf;
+    objects_links_array[existing_object].linia.DisposeOf;
+    objects_links_array[existing_object].linia2.DisposeOf;
+    objects_links_array[existing_object].linia3.DisposeOf;
+    objects_links_array[existing_object].strzalka_od.DisposeOf;
+    objects_links_array[existing_object].strzalka_do.DisposeOf;
 {$ELSE}
-    objects_links_array[istniejacy].text_line_1.Free;
-    objects_links_array[istniejacy].text_line_1 := nil;
-    objects_links_array[istniejacy].text_line_2.Free;
-    objects_links_array[istniejacy].text_line_2 := nil;
-    objects_links_array[istniejacy].text_line_3.Free;
-    objects_links_array[istniejacy].text_line_3 := nil;
-    objects_links_array[istniejacy].arrow_image_from.Free;
-    objects_links_array[istniejacy].arrow_image_from := nil;
-    objects_links_array[istniejacy].arrow_image_to.Free;
-    objects_links_array[istniejacy].arrow_image_to := nil;
+    objects_links_array[existing_object].text_line_1.Free;
+    objects_links_array[existing_object].text_line_1 := nil;
+    objects_links_array[existing_object].text_line_2.Free;
+    objects_links_array[existing_object].text_line_2 := nil;
+    objects_links_array[existing_object].text_line_3.Free;
+    objects_links_array[existing_object].text_line_3 := nil;
+    objects_links_array[existing_object].arrow_image_from.Free;
+    objects_links_array[existing_object].arrow_image_from := nil;
+    objects_links_array[existing_object].arrow_image_to.Free;
+    objects_links_array[existing_object].arrow_image_to := nil;
 {$ENDIF}
   End;
 End;
 
-procedure TAOknoGl.Dodaj_powiazanie(od_obiektu_index, do_obiektu_index: Integer; od_strzalka, do_strzalka: Boolean);
+procedure TMainForm.Add_link(from_object_index, to_object_index: Integer; from_arrow, to_arrow: Boolean);
 var
   i: Integer;
   nowy: Integer;
@@ -334,12 +334,12 @@ Begin
   Begin
     if (objects_links_array[i].from_object = 0) and (nowy = 0) then
       nowy := i;
-    if (objects_links_array[i].from_object = od_obiektu_index) and (objects_links_array[i].to_object = do_obiektu_index) then
+    if (objects_links_array[i].from_object = from_object_index) and (objects_links_array[i].to_object = to_object_index) then
     Begin
       istniejacy := i;
       czy_istnieje := True;
     End;
-    if (objects_links_array[i].from_object = do_obiektu_index) and (objects_links_array[i].to_object = od_obiektu_index) then
+    if (objects_links_array[i].from_object = to_object_index) and (objects_links_array[i].to_object = from_object_index) then
     Begin
       istniejacy := i;
       czy_istnieje := True;
@@ -348,10 +348,10 @@ Begin
 
   if (nowy > 0) and (czy_istnieje = False) then
   Begin
-    objects_links_array[nowy].from_object := od_obiektu_index;
-    objects_links_array[nowy].to_object := do_obiektu_index;
-    objects_links_array[nowy].from_arrow := od_strzalka;
-    objects_links_array[nowy].to_arrow := do_strzalka;
+    objects_links_array[nowy].from_object := from_object_index;
+    objects_links_array[nowy].to_object := to_object_index;
+    objects_links_array[nowy].from_arrow := from_arrow;
+    objects_links_array[nowy].to_arrow := to_arrow;
 
     tmpl := TLine(LinePattern.Clone(self));
     tmpl.Parent := ScrollBox;
@@ -383,14 +383,14 @@ Begin
 
   if czy_istnieje = True then
   Begin
-    objects_links_array[istniejacy].from_object := od_obiektu_index;
-    objects_links_array[istniejacy].to_object := do_obiektu_index;
-    objects_links_array[istniejacy].from_arrow := od_strzalka;
-    objects_links_array[istniejacy].to_arrow := do_strzalka;
+    objects_links_array[istniejacy].from_object := from_object_index;
+    objects_links_array[istniejacy].to_object := to_object_index;
+    objects_links_array[istniejacy].from_arrow := from_arrow;
+    objects_links_array[istniejacy].to_arrow := to_arrow;
   End;
 End;
 
-procedure TAOknoGl.DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
+procedure TMainForm.DrawLineBetweenPoints(L: TLine; p1, p2: TPointF);
 begin
   L.LineType := TLineType.Diagonal;
   L.RotationCenter.x := 0.0;
@@ -447,7 +447,7 @@ begin
     L.Width := 0.1;
 end;
 
-procedure TAOknoGl.RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
+procedure TMainForm.RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
 Var
   i, id_procesu, ktory_w_tablicy: Integer;
 begin
@@ -511,7 +511,7 @@ begin
   End;
 end;
 
-procedure TAOknoGl.RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject);
+procedure TMainForm.RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject);
 var
   i: Integer;
 begin
@@ -526,7 +526,7 @@ begin
   Deactivate_Object;
 end;
 
-procedure TAOknoGl.RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
+procedure TMainForm.RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
 Var
   i, id_procesu, ktory_w_tablicy: Integer;
 begin
@@ -581,24 +581,24 @@ begin
   End;
 end;
 
-procedure TAOknoGl.RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
+procedure TMainForm.RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
 begin
   RamkaMenuGlowne1.Visible := False;
 end;
 
-procedure TAOknoGl.RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
+procedure TMainForm.RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
 begin
- if AOknoGl.FullScreen then AOknoGl.FullScreen:=False
- else AOknoGl.FullScreen:=True;
+ if MainForm.FullScreen then MainForm.FullScreen:=False
+ else MainForm.FullScreen:=True;
 end;
 
-procedure TAOknoGl.RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
+procedure TMainForm.RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
 begin
   Clear_Objects_And_Links;
   RamkaMenuGlowne1.Visible := False;
 end;
 
-function TAOknoGl.Wartosc_XML(rekord: string): String;
+function TMainForm.Wartosc_XML(rekord: string): String;
 Var
  wynik : String;
   poz: Integer;
@@ -609,7 +609,7 @@ Begin
  Wartosc_XML:=wynik;
 End;
 
-procedure TAOknoGl.RamkaMenuGlowne1btn_openClick(Sender: TObject);
+procedure TMainForm.RamkaMenuGlowne1btn_openClick(Sender: TObject);
 Var
   tmp: TRectangle;
   plik : TStringList;
@@ -685,7 +685,7 @@ begin
        to_obiekt   :=Wartosc_XML(plik.Strings[i+2]);
        from_arrow  :=Wartosc_XML(plik.Strings[i+3]);
        to_arrow    :=Wartosc_XML(plik.Strings[i+4]);
-       Dodaj_powiazanie(StrToInt(from_obiekt),StrToInt(to_obiekt),StrToBool(from_arrow),StrToBool(to_arrow));
+       Add_link(StrToInt(from_obiekt),StrToInt(to_obiekt),StrToBool(from_arrow),StrToBool(to_arrow));
       end;
 
     End;
@@ -694,7 +694,7 @@ begin
  plik.Free;
 end;
 
-procedure TAOknoGl.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
+procedure TMainForm.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
 Var
   plik : TStringList;
   tekst_obiektu : String;
@@ -757,62 +757,62 @@ begin
  linie_tekstowe_obiektu.Free;
 end;
 
-procedure TAOknoGl.RamkaPowiazanie1btn_addClick(Sender: TObject);
+procedure TMainForm.RamkaPowiazanie1btn_addClick(Sender: TObject);
 Var
-  od_obiektu, do_obiektu: Integer;
+  from_object, to_object: Integer;
   i: Integer;
 begin
   for i := 1 to max_objects do
   Begin
     if objects_array[i].indicator = selected_first then
-      od_obiektu := objects_array[i].id_object;
+      from_object := objects_array[i].id_object;
     if objects_array[i].indicator = selected_second then
-      do_obiektu := objects_array[i].id_object;
+      to_object := objects_array[i].id_object;
   End;
 
   // If there are no arrows, the association is deleted!
   if (RamkaPowiazanie1.img_od.Visible = False) and (RamkaPowiazanie1.img_do.Visible = False) then
-    Usun_powiazanie(od_obiektu, do_obiektu)
+    Remove_link(from_object, to_object)
   else
-    Dodaj_powiazanie(od_obiektu, do_obiektu, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
+    Add_link(from_object, to_object, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
 
   Draw_links;
   RamkaPowiazanie1.Visible := False;
   Odznacz_wybrane(False, True);
 end;
 
-procedure TAOknoGl.RamkaPowiazanie1but_cancelClick(Sender: TObject);
+procedure TMainForm.RamkaPowiazanie1but_cancelClick(Sender: TObject);
 begin
   RamkaPowiazanie1.Visible := False;
   Odznacz_wybrane(False, True);
 end;
 
-procedure TAOknoGl.RamkaPowiazanie1img_doClick(Sender: TObject);
+procedure TMainForm.RamkaPowiazanie1img_doClick(Sender: TObject);
 begin
   Ustaw_strzalke_powiazania('do');
 end;
 
-procedure TAOknoGl.RamkaPowiazanie1img_odClick(Sender: TObject);
+procedure TMainForm.RamkaPowiazanie1img_odClick(Sender: TObject);
 begin
   Ustaw_strzalke_powiazania('od');
 end;
 
-procedure TAOknoGl.RamkaPowiazanie1rec_doClick(Sender: TObject);
+procedure TMainForm.RamkaPowiazanie1rec_doClick(Sender: TObject);
 begin
   Ustaw_strzalke_powiazania('do');
 end;
 
-procedure TAOknoGl.RamkaPowiazanie1rec_odClick(Sender: TObject);
+procedure TMainForm.RamkaPowiazanie1rec_odClick(Sender: TObject);
 begin
   Ustaw_strzalke_powiazania('od');
 end;
 
-procedure TAOknoGl.DrawingTimerTimer(Sender: TObject);
+procedure TMainForm.DrawingTimerTimer(Sender: TObject);
 begin
   Draw_links;
 end;
 
-procedure TAOknoGl.Draw_links;
+procedure TMainForm.Draw_links;
 var
   i, o: Integer;
   obiekt_index_od: Integer;
@@ -840,7 +840,7 @@ Begin
   End;
 End;
 
-procedure TAOknoGl.Draw_link(from_object, to_object: Integer; from_arrow, to_arrow: Boolean; text_line_1, text_line_2, text_line_3: TLine; from_arrow_image, to_arrow_image: TImage);
+procedure TMainForm.Draw_link(from_object, to_object: Integer; from_arrow, to_arrow: Boolean; text_line_1, text_line_2, text_line_3: TLine; from_arrow_image, to_arrow_image: TImage);
 var
   od_rect, do_rect: TRectangle;
   poy, koy: Single;
@@ -1049,7 +1049,7 @@ if (from_arrow) or (to_arrow) then
 
 end;
 
-procedure TAOknoGl.Add_pointer(process: TRectangle; process_index: Integer);
+procedure TMainForm.Add_pointer(process: TRectangle; process_index: Integer);
 var
   i: Integer;
   nowy: Integer;
@@ -1065,7 +1065,7 @@ Begin
   objects_array[nowy].indicator := process;
 End;
 
-function TAOknoGl.Last_Object: Integer;
+function TMainForm.Last_Object: Integer;
 Var
   wynik: Integer;
   i: Integer;
@@ -1082,7 +1082,7 @@ Begin
   Last_Object := wynik;
 End;
 
-procedure TAOknoGl.btn_dodaj_nowy_procesClick(Sender: TObject);
+procedure TMainForm.btn_dodaj_nowy_procesClick(Sender: TObject);
 Var
   tmp: TRectangle;
   i: Integer;
@@ -1117,17 +1117,17 @@ begin
   Draw_links;
 end;
 
-procedure TAOknoGl.btn_hamburgerClick(Sender: TObject);
+procedure TMainForm.btn_hamburgerClick(Sender: TObject);
 begin
   RamkaMenuGlowne1.Visible := Not(RamkaMenuGlowne1.Visible);
 end;
 
-procedure TAOknoGl.btn_laczenie_procesowClick(Sender: TObject);
+procedure TMainForm.btn_laczenie_procesowClick(Sender: TObject);
 begin
   Odznacz_wybrane(True, True);
 end;
 
-procedure TAOknoGl.Clear_Objects_And_Links;
+procedure TMainForm.Clear_Objects_And_Links;
 var
   i: Integer;
 Begin
@@ -1170,7 +1170,7 @@ Begin
   Draw_links;
 End;
 
-procedure TAOknoGl.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Caption := 'FMX Diagram Designer - version: ' + version;
   lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - version: ' + version;
@@ -1188,7 +1188,7 @@ begin
 {$ENDIF}
 end;
 
-procedure TAOknoGl.ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
+procedure TMainForm.ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
 var
   powiazanie_aktywne: Integer;
 begin
@@ -1258,13 +1258,13 @@ begin
   End;
 end;
 
-procedure TAOknoGl.ObjectPatternMouseLeave(Sender: TObject);
+procedure TMainForm.ObjectPatternMouseLeave(Sender: TObject);
 begin
  if btn_laczenie_procesow.IsPressed = False then
     Deactivate_Object;
 end;
 
-procedure TAOknoGl.ObjectPatternMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
+procedure TMainForm.ObjectPatternMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
 begin
   if btn_laczenie_procesow.IsPressed = False then
   Begin
@@ -1276,7 +1276,7 @@ begin
   End;
 end;
 
-procedure TAOknoGl.Deactivate_Object;
+procedure TMainForm.Deactivate_Object;
 Begin
   MouseIsDown := False;
   if Assigned(selected) then selected.Fill.Color := TAlphaColor($AA0F077A);
@@ -1284,12 +1284,12 @@ Begin
   Draw_links;
 End;
 
-procedure TAOknoGl.ObjectPatternMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
+procedure TMainForm.ObjectPatternMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
 begin
   if btn_laczenie_procesow.IsPressed = False then Deactivate_Object;
 end;
 
-procedure TAOknoGl.Edycja_danych_procesu;
+procedure TMainForm.Editing_process_data;
 var
   i: Integer;
 begin
@@ -1306,14 +1306,14 @@ begin
   End;
 end;
 
-procedure TAOknoGl.LabelPatternDblClick(Sender: TObject);
+procedure TMainForm.LabelPatternDblClick(Sender: TObject);
 begin
-  Edycja_danych_procesu;
+  Editing_process_data;
 end;
 
-procedure TAOknoGl.LabelPatternTap(Sender: TObject; const Point: TPointF);
+procedure TMainForm.LabelPatternTap(Sender: TObject; const Point: TPointF);
 begin
-  Edycja_danych_procesu;
+  Editing_process_data;
 end;
 
 end.

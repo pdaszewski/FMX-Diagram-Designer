@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<diagram date="2020-02-18">
+<objects>
+ <object>
+  <object_id>1</object_id>
+  <object_caption>New agreement</object_caption>
+  <object_x>293</object_x>
+  <object_y>147</object_y>
+ </object>
+ <object>
+  <object_id>2</object_id>
+  <object_caption>Verification</object_caption>
+  <object_x>293</object_x>
+  <object_y>350</object_y>
+ </object>
+ <object>
+  <object_id>3</object_id>
+  <object_caption>Removal</object_caption>
+  <object_x>592</object_x>
+  <object_y>527</object_y>
+ </object>
+ <object>
+  <object_id>4</object_id>
+  <object_caption>Activation</object_caption>
+  <object_x>598</object_x>
+  <object_y>350</object_y>
+ </object>
+ <object>
+  <object_id>5</object_id>
+  <object_caption>Block</object_caption>
+  <object_x>786</object_x>
+  <object_y>218</object_y>
+ </object>
+ <object>
+  <object_id>6</object_id>
+  <object_caption>Unlocking#13(reactivation)</object_caption>
+  <object_x>608</object_x>
+  <object_y>101</object_y>
+ </object>
+ <object>
+  <object_id>7</object_id>
+  <object_caption>End of an agreement</object_caption>
+  <object_x>989</object_x>
+  <object_y>350</object_y>
+ </object>
+</objects>
+<links>
+ <link>
+  <link_from>1</link_from>
+  <link_to>2</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+ <link>
+  <link_from>2</link_from>
+  <link_to>3</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+ <link>
+  <link_from>2</link_from>
+  <link_to>4</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+ <link>
+  <link_from>4</link_from>
+  <link_to>5</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+ <link>
+  <link_from>4</link_from>
+  <link_to>7</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+ <link>
+  <link_from>6</link_from>
+  <link_to>4</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+ <link>
+  <link_from>6</link_from>
+  <link_to>5</link_to>
+  <arrow_from>-1</arrow_from>
+  <arrow_to>0</arrow_to>
+ </link>
+ <link>
+  <link_from>7</link_from>
+  <link_to>3</link_to>
+  <arrow_from>0</arrow_from>
+  <arrow_to>-1</arrow_to>
+ </link>
+</links>
+</diagram>

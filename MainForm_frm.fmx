@@ -1,4 +1,4 @@
-object AOknoGl: TAOknoGl
+object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'FMX Diagram Designer'

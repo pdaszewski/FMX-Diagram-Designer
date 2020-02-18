@@ -1,4 +1,4 @@
-object RamkaMenuGlowne: TMainMenuFrame
+object MainMenuFrame: TMainMenuFrame
   Size.Width = 937.000000000000000000
   Size.Height = 456.000000000000000000
   Size.PlatformDefault = False
