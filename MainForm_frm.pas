@@ -72,9 +72,9 @@ type
     procedure Add_contact_point(x, y: Single);
     function Is_there_already_a_point_of_contact_here(x, y: Single): Boolean;
 
-    procedure Odznacz_wybrane(pierwszy, drugi: Boolean);
-    procedure Ustaw_strzalke_powiazania(strzalka: String);
-    function Wartosc_XML(rekord: string): String;
+    procedure Deselect_objects(first, second: Boolean);
+    procedure Set_link_arrow(arrow: String);
+    function XML_value(record_line: string): String;
 
     procedure FormCreate(Sender: TObject);
     procedure ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
@@ -108,8 +108,8 @@ type
   end;
 
 const
-  version = '1.0.2.1';
-  build_date = '2020-02-18';
+  version = '1.0.2.2';
+  build_date = '2020-02-19';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -164,34 +164,34 @@ End;
 
 function TMainForm.Which_connection(from_object, to_object: TRectangle): Integer;
 Var
-  wynik: Integer;
-  od_obiektu_index, do_obiektu_index: Integer;
+  outcome: Integer;
+  from_object_index, to_object_index: Integer;
   i: Integer;
 Begin
-  wynik := 0;
+  outcome := 0;
   for i := 1 to max_objects do
   Begin
     if objects_array[i].indicator = from_object then
-      od_obiektu_index := objects_array[i].id_object;
+      from_object_index := objects_array[i].id_object;
     if objects_array[i].indicator = to_object then
-      do_obiektu_index := objects_array[i].id_object;
+      to_object_index := objects_array[i].id_object;
   End;
 
   for i := 1 to max_objects_links do
   Begin
-    if (objects_links_array[i].from_object = od_obiektu_index) and (objects_links_array[i].to_object = do_obiektu_index) then
-      wynik := i;
-    if (objects_links_array[i].from_object = do_obiektu_index) and (objects_links_array[i].to_object = od_obiektu_index) then
-      wynik := i;
+    if (objects_links_array[i].from_object = from_object_index) and (objects_links_array[i].to_object = to_object_index) then
+      outcome := i;
+    if (objects_links_array[i].from_object = to_object_index) and (objects_links_array[i].to_object = from_object_index) then
+      outcome := i;
   End;
 
-  Which_connection := wynik;
+  Which_connection := outcome;
 End;
 
-procedure TMainForm.Ustaw_strzalke_powiazania(strzalka: string);
+procedure TMainForm.Set_link_arrow(arrow: String);
 begin
-  strzalka := Trim(AnsiLowerCase(strzalka));
-  if strzalka = 'do' then
+  arrow := Trim(AnsiLowerCase(arrow));
+  if arrow = 'do' then
   Begin
     if RamkaPowiazanie1.img_do.Visible then
       RamkaPowiazanie1.img_do.Visible := False
@@ -212,14 +212,14 @@ begin
     RamkaPowiazanie1.btn_add.Text := 'add association';
 end;
 
-procedure TMainForm.Odznacz_wybrane(pierwszy, drugi: Boolean);
+procedure TMainForm.Deselect_objects(first, second: Boolean);
 Begin
-  if (pierwszy) and (selected_first <> nil) then
+  if (first) and (selected_first <> nil) then
   Begin
     selected_first.Fill.Color := TAlphaColor($AA0F077A);
     selected_first := nil;
   End;
-  if (drugi) and (selected_second <> nil) then
+  if (second) and (selected_second <> nil) then
   Begin
     selected_second.Fill.Color := TAlphaColor($AA0F077A);
     selected_second := nil;
@@ -598,15 +598,15 @@ begin
   RamkaMenuGlowne1.Visible := False;
 end;
 
-function TMainForm.Wartosc_XML(rekord: string): String;
+function TMainForm.XML_value(record_line: string): String;
 Var
  wynik : String;
   poz: Integer;
 Begin
- poz:=Pos('>',rekord); wynik:=Copy(rekord,poz+1,Length(rekord));
+ poz:=Pos('>',record_line); wynik:=Copy(record_line,poz+1,Length(record_line));
  poz:=Pos('</',wynik); wynik:=Copy(wynik,1,poz-1);
  wynik:=Trim(wynik);
- Wartosc_XML:=wynik;
+ XML_value:=wynik;
 End;
 
 procedure TMainForm.RamkaMenuGlowne1btn_openClick(Sender: TObject);
@@ -650,11 +650,11 @@ begin
      if Pos('<object>',linia)>0 then
       Begin
        //now I have access to the given objects
-       id_obiektu :=Wartosc_XML(plik.Strings[i+1]);
-       wpis       :=Wartosc_XML(plik.Strings[i+2]);
+       id_obiektu :=XML_value(plik.Strings[i+1]);
+       wpis       :=XML_value(plik.Strings[i+2]);
        wpis       :=StringReplace(wpis,'#13',#13,[rfReplaceAll]);
-       x_obiektu  :=Wartosc_XML(plik.Strings[i+3]);
-       y_obiektu  :=Wartosc_XML(plik.Strings[i+4]);
+       x_obiektu  :=XML_value(plik.Strings[i+3]);
+       y_obiektu  :=XML_value(plik.Strings[i+4]);
 
         tmp := TRectangle(ObjectPattern.Clone(self));
         tmp.Parent := ScrollBox;
@@ -681,10 +681,10 @@ begin
 
      if Pos('<link>',linia)>0 then
       Begin
-       from_obiekt :=Wartosc_XML(plik.Strings[i+1]);
-       to_obiekt   :=Wartosc_XML(plik.Strings[i+2]);
-       from_arrow  :=Wartosc_XML(plik.Strings[i+3]);
-       to_arrow    :=Wartosc_XML(plik.Strings[i+4]);
+       from_obiekt :=XML_value(plik.Strings[i+1]);
+       to_obiekt   :=XML_value(plik.Strings[i+2]);
+       from_arrow  :=XML_value(plik.Strings[i+3]);
+       to_arrow    :=XML_value(plik.Strings[i+4]);
        Add_link(StrToInt(from_obiekt),StrToInt(to_obiekt),StrToBool(from_arrow),StrToBool(to_arrow));
       end;
 
@@ -778,33 +778,33 @@ begin
 
   Draw_links;
   RamkaPowiazanie1.Visible := False;
-  Odznacz_wybrane(False, True);
+  Deselect_objects(False, True);
 end;
 
 procedure TMainForm.RamkaPowiazanie1but_cancelClick(Sender: TObject);
 begin
   RamkaPowiazanie1.Visible := False;
-  Odznacz_wybrane(False, True);
+  Deselect_objects(False, True);
 end;
 
 procedure TMainForm.RamkaPowiazanie1img_doClick(Sender: TObject);
 begin
-  Ustaw_strzalke_powiazania('do');
+  Set_link_arrow('do');
 end;
 
 procedure TMainForm.RamkaPowiazanie1img_odClick(Sender: TObject);
 begin
-  Ustaw_strzalke_powiazania('od');
+  Set_link_arrow('od');
 end;
 
 procedure TMainForm.RamkaPowiazanie1rec_doClick(Sender: TObject);
 begin
-  Ustaw_strzalke_powiazania('do');
+  Set_link_arrow('do');
 end;
 
 procedure TMainForm.RamkaPowiazanie1rec_odClick(Sender: TObject);
 begin
-  Ustaw_strzalke_powiazania('od');
+  Set_link_arrow('od');
 end;
 
 procedure TMainForm.DrawingTimerTimer(Sender: TObject);
@@ -1088,7 +1088,7 @@ Var
   i: Integer;
   index_obiektu: Integer;
 begin
-  Odznacz_wybrane(True, True);
+  Deselect_objects(True, True);
   btn_laczenie_procesow.IsPressed := False;
 
   tmp := TRectangle(ObjectPattern.Clone(self));
@@ -1124,7 +1124,7 @@ end;
 
 procedure TMainForm.btn_laczenie_procesowClick(Sender: TObject);
 begin
-  Odznacz_wybrane(True, True);
+  Deselect_objects(True, True);
 end;
 
 procedure TMainForm.Clear_Objects_And_Links;
