@@ -44,12 +44,12 @@ type
     LinePattern: TLine;
     ObjectPattern: TRectangle;
     LabelPattern: TLabel;
-    RamkaEdycjaProcesu1: TProcessEditingFrame;
+    ProcessEditingFrame1: TProcessEditingFrame;
+    MainMenuFrame1: TMainMenuFrame;
+    LinkageFrame1: TLinkageFrame;
     DrawingTimer: TTimer;
-    RamkaMenuGlowne1: TMainMenuFrame;
     ArrowsPattern: TImage;
     btn_laczenie_procesow: TButton;
-    RamkaPowiazanie1: TLinkageFrame;
     lbl_bottom_info: TLabel;
     SaveProjectDialog: TSaveDialog;
     OpenProjectDialog: TOpenDialog;
@@ -84,23 +84,23 @@ type
     procedure LabelPatternTap(Sender: TObject; const Point: TPointF);
     procedure btn_dodaj_nowy_procesClick(Sender: TObject);
     procedure btn_hamburgerClick(Sender: TObject);
-    procedure RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject);
+    procedure ProcessEditingFrame1btn_save_process_dataClick(Sender: TObject);
     procedure DrawingTimerTimer(Sender: TObject);
-    procedure RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
-    procedure RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
-    procedure RamkaPowiazanie1but_cancelClick(Sender: TObject);
+    procedure MainMenuFrame1btn_new_diagramClick(Sender: TObject);
+    procedure MainMenuFrame1btn_close_menuClick(Sender: TObject);
+    procedure LinkageFrame1but_cancelClick(Sender: TObject);
     procedure btn_laczenie_procesowClick(Sender: TObject);
-    procedure RamkaPowiazanie1rec_doClick(Sender: TObject);
-    procedure RamkaPowiazanie1img_doClick(Sender: TObject);
-    procedure RamkaPowiazanie1rec_odClick(Sender: TObject);
-    procedure RamkaPowiazanie1img_odClick(Sender: TObject);
-    procedure RamkaPowiazanie1btn_addClick(Sender: TObject);
-    procedure RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
-    procedure RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
+    procedure LinkageFrame1rec_doClick(Sender: TObject);
+    procedure LinkageFrame1img_doClick(Sender: TObject);
+    procedure LinkageFrame1rec_odClick(Sender: TObject);
+    procedure LinkageFrame1img_odClick(Sender: TObject);
+    procedure LinkageFrame1btn_addClick(Sender: TObject);
+    procedure ProcessEditingFrame1btn_delete_processClick(Sender: TObject);
+    procedure ProcessEditingFrame1btn_udelete_linksClick(Sender: TObject);
     procedure ObjectPatternMouseLeave(Sender: TObject);
-    procedure RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
-    procedure RamkaMenuGlowne1btn_openClick(Sender: TObject);
-    procedure RamkaMenuGlowne1btn_saveClick(Sender: TObject);
+    procedure MainMenuFrame1btn_full_screen_modeClick(Sender: TObject);
+    procedure MainMenuFrame1btn_openClick(Sender: TObject);
+    procedure MainMenuFrame1btn_saveClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -108,8 +108,8 @@ type
   end;
 
 const
-  version = '1.0.2.2';
-  build_date = '2020-02-19';
+  version = '1.0.2.3';
+  build_date = '2020-02-20';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -138,7 +138,7 @@ var
   i: Integer;
 Begin
  LinePattern.Stroke.Dash:=new_style;
- RamkaPowiazanie1.WzorLinii.Stroke.Dash:=new_style;
+ LinkageFrame1.WzorLinii.Stroke.Dash:=new_style;
  for i := 1 to max_objects_links do
   Begin
    if objects_links_array[i].from_object>0 then
@@ -193,23 +193,23 @@ begin
   arrow := Trim(AnsiLowerCase(arrow));
   if arrow = 'do' then
   Begin
-    if RamkaPowiazanie1.img_do.Visible then
-      RamkaPowiazanie1.img_do.Visible := False
+    if LinkageFrame1.img_do.Visible then
+      LinkageFrame1.img_do.Visible := False
     else
-      RamkaPowiazanie1.img_do.Visible := True;
+      LinkageFrame1.img_do.Visible := True;
   End
   else
   Begin
-    if RamkaPowiazanie1.img_od.Visible then
-      RamkaPowiazanie1.img_od.Visible := False
+    if LinkageFrame1.img_od.Visible then
+      LinkageFrame1.img_od.Visible := False
     else
-      RamkaPowiazanie1.img_od.Visible := True;
+      LinkageFrame1.img_od.Visible := True;
   End;
 
-  if (RamkaPowiazanie1.img_od.Visible = False) and (RamkaPowiazanie1.img_do.Visible = False) then
-    RamkaPowiazanie1.btn_add.Text := 'remove association'
+  if (LinkageFrame1.img_od.Visible = False) and (LinkageFrame1.img_do.Visible = False) then
+    LinkageFrame1.btn_add.Text := 'remove association'
   else
-    RamkaPowiazanie1.btn_add.Text := 'add association';
+    LinkageFrame1.btn_add.Text := 'add association';
 end;
 
 procedure TMainForm.Deselect_objects(first, second: Boolean);
@@ -447,7 +447,7 @@ begin
     L.Width := 0.1;
 end;
 
-procedure TMainForm.RamkaEdycjaProcesu1btn_delete_processClick(Sender: TObject);
+procedure TMainForm.ProcessEditingFrame1btn_delete_processClick(Sender: TObject);
 Var
   i, id_procesu, ktory_w_tablicy: Integer;
 begin
@@ -505,13 +505,13 @@ begin
       End;
     End;
 
-    RamkaEdycjaProcesu1.Visible := False;
+    ProcessEditingFrame1.Visible := False;
     Draw_links;
     DrawingTimer.Enabled := True;
   End;
 end;
 
-procedure TMainForm.RamkaEdycjaProcesu1btn_save_process_dataClick(Sender: TObject);
+procedure TMainForm.ProcessEditingFrame1btn_save_process_dataClick(Sender: TObject);
 var
   i: Integer;
 begin
@@ -519,14 +519,14 @@ begin
   Begin
     if selected.Children[i] is TLabel then
     Begin
-      TLabel(selected.Children[i]).Text := RamkaEdycjaProcesu1.memo_process_name.Text;
+      TLabel(selected.Children[i]).Text := ProcessEditingFrame1.memo_process_name.Text;
     End;
   End;
-  RamkaEdycjaProcesu1.Visible := False;
+  ProcessEditingFrame1.Visible := False;
   Deactivate_Object;
 end;
 
-procedure TMainForm.RamkaEdycjaProcesu1btn_udelete_linksClick(Sender: TObject);
+procedure TMainForm.ProcessEditingFrame1btn_udelete_linksClick(Sender: TObject);
 Var
   i, id_procesu, ktory_w_tablicy: Integer;
 begin
@@ -575,27 +575,27 @@ begin
       End;
     End;
 
-    RamkaEdycjaProcesu1.Visible := False;
+    ProcessEditingFrame1.Visible := False;
     Draw_links;
     DrawingTimer.Enabled := True;
   End;
 end;
 
-procedure TMainForm.RamkaMenuGlowne1btn_close_menuClick(Sender: TObject);
+procedure TMainForm.MainMenuFrame1btn_close_menuClick(Sender: TObject);
 begin
-  RamkaMenuGlowne1.Visible := False;
+  MainMenuFrame1.Visible := False;
 end;
 
-procedure TMainForm.RamkaMenuGlowne1btn_full_screen_modeClick(Sender: TObject);
+procedure TMainForm.MainMenuFrame1btn_full_screen_modeClick(Sender: TObject);
 begin
  if MainForm.FullScreen then MainForm.FullScreen:=False
  else MainForm.FullScreen:=True;
 end;
 
-procedure TMainForm.RamkaMenuGlowne1btn_new_diagramClick(Sender: TObject);
+procedure TMainForm.MainMenuFrame1btn_new_diagramClick(Sender: TObject);
 begin
   Clear_Objects_And_Links;
-  RamkaMenuGlowne1.Visible := False;
+  MainMenuFrame1.Visible := False;
 end;
 
 function TMainForm.XML_value(record_line: string): String;
@@ -609,7 +609,7 @@ Begin
  XML_value:=wynik;
 End;
 
-procedure TMainForm.RamkaMenuGlowne1btn_openClick(Sender: TObject);
+procedure TMainForm.MainMenuFrame1btn_openClick(Sender: TObject);
 Var
   tmp: TRectangle;
   plik : TStringList;
@@ -642,7 +642,7 @@ begin
 
  if czy_wczytano=True then
   Begin
-   RamkaMenuGlowne1.Visible := False;
+   MainMenuFrame1.Visible := False;
    for i := 0 to plik.Count-1 do
     Begin
      linia:=Trim(plik.Strings[i]);
@@ -694,7 +694,7 @@ begin
  plik.Free;
 end;
 
-procedure TMainForm.RamkaMenuGlowne1btn_saveClick(Sender: TObject);
+procedure TMainForm.MainMenuFrame1btn_saveClick(Sender: TObject);
 Var
   plik : TStringList;
   tekst_obiektu : String;
@@ -757,7 +757,7 @@ begin
  linie_tekstowe_obiektu.Free;
 end;
 
-procedure TMainForm.RamkaPowiazanie1btn_addClick(Sender: TObject);
+procedure TMainForm.LinkageFrame1btn_addClick(Sender: TObject);
 Var
   from_object, to_object: Integer;
   i: Integer;
@@ -771,38 +771,38 @@ begin
   End;
 
   // If there are no arrows, the association is deleted!
-  if (RamkaPowiazanie1.img_od.Visible = False) and (RamkaPowiazanie1.img_do.Visible = False) then
+  if (LinkageFrame1.img_od.Visible = False) and (LinkageFrame1.img_do.Visible = False) then
     Remove_link(from_object, to_object)
   else
-    Add_link(from_object, to_object, RamkaPowiazanie1.img_od.Visible, RamkaPowiazanie1.img_do.Visible);
+    Add_link(from_object, to_object, LinkageFrame1.img_od.Visible, LinkageFrame1.img_do.Visible);
 
   Draw_links;
-  RamkaPowiazanie1.Visible := False;
+  LinkageFrame1.Visible := False;
   Deselect_objects(False, True);
 end;
 
-procedure TMainForm.RamkaPowiazanie1but_cancelClick(Sender: TObject);
+procedure TMainForm.LinkageFrame1but_cancelClick(Sender: TObject);
 begin
-  RamkaPowiazanie1.Visible := False;
+  LinkageFrame1.Visible := False;
   Deselect_objects(False, True);
 end;
 
-procedure TMainForm.RamkaPowiazanie1img_doClick(Sender: TObject);
+procedure TMainForm.LinkageFrame1img_doClick(Sender: TObject);
 begin
   Set_link_arrow('do');
 end;
 
-procedure TMainForm.RamkaPowiazanie1img_odClick(Sender: TObject);
+procedure TMainForm.LinkageFrame1img_odClick(Sender: TObject);
 begin
   Set_link_arrow('od');
 end;
 
-procedure TMainForm.RamkaPowiazanie1rec_doClick(Sender: TObject);
+procedure TMainForm.LinkageFrame1rec_doClick(Sender: TObject);
 begin
   Set_link_arrow('do');
 end;
 
-procedure TMainForm.RamkaPowiazanie1rec_odClick(Sender: TObject);
+procedure TMainForm.LinkageFrame1rec_odClick(Sender: TObject);
 begin
   Set_link_arrow('od');
 end;
@@ -1119,7 +1119,7 @@ end;
 
 procedure TMainForm.btn_hamburgerClick(Sender: TObject);
 begin
-  RamkaMenuGlowne1.Visible := Not(RamkaMenuGlowne1.Visible);
+  MainMenuFrame1.Visible := Not(MainMenuFrame1.Visible);
 end;
 
 procedure TMainForm.btn_laczenie_procesowClick(Sender: TObject);
@@ -1178,8 +1178,8 @@ begin
   ObjectPattern.Visible := False;
   LinePattern.Visible := False;
   Clear_Objects_And_Links;
-  RamkaMenuGlowne1.Visible := False;
-  RamkaEdycjaProcesu1.Visible := False;
+  MainMenuFrame1.Visible := False;
+  ProcessEditingFrame1.Visible := False;
 
 {$IFDEF ANDROID}
   Wzor_label.TextSettings.Font.Size := 10;
@@ -1215,33 +1215,33 @@ begin
         selected_second := TRectangle(Sender);
         selected_second.BringToFront;
         selected_second.Fill.Color := TAlphaColor($AA7A0707);
-        RamkaPowiazanie1.Visible := True;
+        LinkageFrame1.Visible := True;
 
-        RamkaPowiazanie1.lbl_od_procesu.Text := TLabel(selected_first.Children[0]).Text;
-        RamkaPowiazanie1.lbl_do_procesu.Text := TLabel(selected_second.Children[0]).Text;
+        LinkageFrame1.lbl_od_procesu.Text := TLabel(selected_first.Children[0]).Text;
+        LinkageFrame1.lbl_do_procesu.Text := TLabel(selected_second.Children[0]).Text;
 
         powiazanie_aktywne := Which_connection(selected_first, selected_second);
         if powiazanie_aktywne = 0 then
         Begin
-          RamkaPowiazanie1.img_od.Visible := False;
-          RamkaPowiazanie1.img_do.Visible := True;
-          RamkaPowiazanie1.btn_add.Text := 'add association';
+          LinkageFrame1.img_od.Visible := False;
+          LinkageFrame1.img_do.Visible := True;
+          LinkageFrame1.btn_add.Text := 'add association';
         End
         else
         Begin
-          RamkaPowiazanie1.img_od.Visible := False;
-          RamkaPowiazanie1.img_do.Visible := False;
+          LinkageFrame1.img_od.Visible := False;
+          LinkageFrame1.img_do.Visible := False;
           if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].from_object ) then LinkageFrame1.img_od.Visible := True;
           if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].from_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].from_object ) then LinkageFrame1.img_do.Visible := True;
 
           if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_do.Visible := True;
+          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].to_object ) then LinkageFrame1.img_do.Visible := True;
           if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].to_object ) then RamkaPowiazanie1.img_od.Visible := True;
+          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].to_object ) then LinkageFrame1.img_od.Visible := True;
 
-          RamkaPowiazanie1.btn_add.Text := 'change the association';
+          LinkageFrame1.btn_add.Text := 'change the association';
         End;
       End;
     End;
@@ -1299,8 +1299,8 @@ begin
     Begin
       if selected.Children[i] is TLabel then
       Begin
-        RamkaEdycjaProcesu1.Visible := True;
-        RamkaEdycjaProcesu1.memo_process_name.Text := TLabel(selected.Children[i]).Text;
+        ProcessEditingFrame1.Visible := True;
+        ProcessEditingFrame1.memo_process_name.Text := TLabel(selected.Children[i]).Text;
       End;
     End;
   End;

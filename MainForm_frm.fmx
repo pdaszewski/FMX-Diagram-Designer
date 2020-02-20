@@ -22037,7 +22037,7 @@ object MainForm: TMainForm
       TabOrder = 5
     end
   end
-  inline RamkaEdycjaProcesu1: TProcessEditingFrame
+  inline ProcessEditingFrame1: TProcessEditingFrame
     Align = Client
     Size.Width = 1037.000000000000000000
     Size.Height = 554.000000000000000000
@@ -22053,7 +22053,7 @@ object MainForm: TMainForm
       end
       inherited btn_save_process_data: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaEdycjaProcesu1btn_save_process_dataClick
+        OnClick = ProcessEditingFrame1btn_save_process_dataClick
       end
       inherited memo_process_name: TMemo
         Viewport.Width = 380.000000000000000000
@@ -22061,15 +22061,15 @@ object MainForm: TMainForm
       end
       inherited btn_delete_process: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaEdycjaProcesu1btn_delete_processClick
+        OnClick = ProcessEditingFrame1btn_delete_processClick
       end
       inherited btn_delete_links: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaEdycjaProcesu1btn_udelete_linksClick
+        OnClick = ProcessEditingFrame1btn_udelete_linksClick
       end
     end
   end
-  inline RamkaMenuGlowne1: TMainMenuFrame
+  inline MainMenuFrame1: TMainMenuFrame
     Align = Client
     Size.Width = 1021.000000000000000000
     Size.Height = 514.000000000000000000
@@ -22082,23 +22082,23 @@ object MainForm: TMainForm
     inherited Menu: TRectangle
       inherited btn_new_diagram: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaMenuGlowne1btn_new_diagramClick
+        OnClick = MainMenuFrame1btn_new_diagramClick
       end
       inherited btn_close_menu: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaMenuGlowne1btn_close_menuClick
+        OnClick = MainMenuFrame1btn_close_menuClick
       end
       inherited btn_full_screen_mode: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaMenuGlowne1btn_full_screen_modeClick
+        OnClick = MainMenuFrame1btn_full_screen_modeClick
       end
       inherited btn_open: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaMenuGlowne1btn_openClick
+        OnClick = MainMenuFrame1btn_openClick
       end
       inherited btn_save: TButton
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        OnClick = RamkaMenuGlowne1btn_saveClick
+        OnClick = MainMenuFrame1btn_saveClick
       end
     end
   end
@@ -22109,7 +22109,7 @@ object MainForm: TMainForm
     Left = 424
     Top = 456
   end
-  inline RamkaPowiazanie1: TLinkageFrame
+  inline LinkageFrame1: TLinkageFrame
     Align = Client
     Size.Width = 1037.000000000000000000
     Size.Height = 554.000000000000000000
@@ -22124,12 +22124,12 @@ object MainForm: TMainForm
         ControlCollection = <
           item
             Column = 0
-            Control = RamkaPowiazanie1.btn_add
+            Control = LinkageFrame1.btn_add
             Row = 0
           end
           item
             Column = 1
-            Control = RamkaPowiazanie1.but_cancel
+            Control = LinkageFrame1.but_cancel
             Row = 0
           end>
         RowCollection = <
@@ -22141,15 +22141,15 @@ object MainForm: TMainForm
           end>
         inherited btn_add: TButton
           TextSettings.Font.StyleExt = {00070000000000000004000000}
-          OnClick = RamkaPowiazanie1btn_addClick
+          OnClick = LinkageFrame1btn_addClick
         end
         inherited but_cancel: TButton
           TextSettings.Font.StyleExt = {00070000000000000004000000}
-          OnClick = RamkaPowiazanie1but_cancelClick
+          OnClick = LinkageFrame1but_cancelClick
         end
       end
       inherited rec_do: TRectangle
-        OnClick = RamkaPowiazanie1rec_doClick
+        OnClick = LinkageFrame1rec_doClick
         inherited img_do: TImage
           MultiResBitmap = <
             item
@@ -22167,11 +22167,11 @@ object MainForm: TMainForm
                 'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
                 '0.3.0\Projektowanie\arrow.png'
             end>
-          OnClick = RamkaPowiazanie1img_doClick
+          OnClick = LinkageFrame1img_doClick
         end
       end
       inherited rec_od: TRectangle
-        OnClick = RamkaPowiazanie1rec_odClick
+        OnClick = LinkageFrame1rec_odClick
         inherited img_od: TImage
           MultiResBitmap = <
             item
@@ -22189,7 +22189,7 @@ object MainForm: TMainForm
                 'D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja ' +
                 '0.3.0\Projektowanie\arrow.png'
             end>
-          OnClick = RamkaPowiazanie1img_odClick
+          OnClick = LinkageFrame1img_odClick
         end
       end
     end
