@@ -16,15 +16,15 @@ type
     GridPanelLayout1: TGridPanelLayout;
     btn_add: TButton;
     but_cancel: TButton;
-    od_procesu: TRectangle;
-    do_procesu: TRectangle;
+    from_process_rectangle: TRectangle;
+    to_process_rectangle: TRectangle;
     lbl_od_procesu: TLabel;
     lbl_do_procesu: TLabel;
-    rec_do: TRectangle;
+    rec_to: TRectangle;
     img_do: TImage;
-    rec_od: TRectangle;
+    rec_from: TRectangle;
     img_od: TImage;
-    WzorLinii: TLine;
+    LinePattern: TLine;
   private
     { Private declarations }
   public

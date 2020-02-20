@@ -28,7 +28,7 @@ type
     rbtn_DashDot: TRadioButton;
     rbtn_DashDotDot: TRadioButton;
     rbtn_Dot: TRadioButton;
-    rect_rodzaje_linii: TRectangle;
+    rect_types_of_lines: TRectangle;
     procedure rbtn_SolidChange(Sender: TObject);
   private
     { Private declarations }

@@ -10,7 +10,7 @@ uses
 type
   TProcessEditingFrame = class(TFrame)
     Menu: TRectangle;
-    Label1: TLabel;
+    lbl_menu_name: TLabel;
     btn_save_process_data: TButton;
     memo_process_name: TMemo;
     BackGround: TRectangle;

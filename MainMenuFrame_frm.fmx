@@ -105,7 +105,7 @@ object MainMenuFrame: TMainMenuFrame
       TextSettings.Font.StyleExt = {00070000000000000004000000}
       TextSettings.FontColor = claAliceblue
     end
-    object rect_rodzaje_linii: TRectangle
+    object rect_types_of_lines: TRectangle
       Align = Top
       Fill.Color = x000B064F
       Margins.Left = 70.000000000000000000

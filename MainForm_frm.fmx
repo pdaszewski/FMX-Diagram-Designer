@@ -22048,7 +22048,7 @@ object MainForm: TMainForm
       Size.Height = 554.000000000000000000
     end
     inherited Menu: TRectangle
-      inherited Label1: TLabel
+      inherited lbl_menu_name: TLabel
         TextSettings.Font.Size = 10.000000000000000000
       end
       inherited btn_save_process_data: TButton
@@ -22148,7 +22148,7 @@ object MainForm: TMainForm
           OnClick = LinkageFrame1but_cancelClick
         end
       end
-      inherited rec_do: TRectangle
+      inherited rec_to: TRectangle
         OnClick = LinkageFrame1rec_doClick
         inherited img_do: TImage
           MultiResBitmap = <
@@ -22170,7 +22170,7 @@ object MainForm: TMainForm
           OnClick = LinkageFrame1img_doClick
         end
       end
-      inherited rec_od: TRectangle
+      inherited rec_from: TRectangle
         OnClick = LinkageFrame1rec_odClick
         inherited img_od: TImage
           MultiResBitmap = <

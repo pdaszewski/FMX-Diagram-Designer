@@ -108,7 +108,7 @@ type
   end;
 
 const
-  version = '1.0.2.3';
+  version = '1.0.2.4';
   build_date = '2020-02-20';
 
   max_objects = 100;
@@ -138,7 +138,7 @@ var
   i: Integer;
 Begin
  LinePattern.Stroke.Dash:=new_style;
- LinkageFrame1.WzorLinii.Stroke.Dash:=new_style;
+ LinkageFrame1.LinePattern.Stroke.Dash:=new_style;
  for i := 1 to max_objects_links do
   Begin
    if objects_links_array[i].from_object>0 then
@@ -321,72 +321,72 @@ End;
 procedure TMainForm.Add_link(from_object_index, to_object_index: Integer; from_arrow, to_arrow: Boolean);
 var
   i: Integer;
-  nowy: Integer;
+  new: Integer;
   tmpl, tmpl2, tmpl3: TLine;
   img1, img2: TImage;
-  czy_istnieje: Boolean;
-  istniejacy: Integer;
+  is_exists: Boolean;
+  existing: Integer;
 Begin
-  nowy := 0;
-  istniejacy := 0;
-  czy_istnieje := False;
+  new := 0;
+  existing := 0;
+  is_exists := False;
   for i := 1 to max_objects_links do
   Begin
-    if (objects_links_array[i].from_object = 0) and (nowy = 0) then
-      nowy := i;
+    if (objects_links_array[i].from_object = 0) and (new = 0) then
+      new := i;
     if (objects_links_array[i].from_object = from_object_index) and (objects_links_array[i].to_object = to_object_index) then
     Begin
-      istniejacy := i;
-      czy_istnieje := True;
+      existing := i;
+      is_exists := True;
     End;
     if (objects_links_array[i].from_object = to_object_index) and (objects_links_array[i].to_object = from_object_index) then
     Begin
-      istniejacy := i;
-      czy_istnieje := True;
+      existing := i;
+      is_exists := True;
     End;
   End;
 
-  if (nowy > 0) and (czy_istnieje = False) then
+  if (new > 0) and (is_exists = False) then
   Begin
-    objects_links_array[nowy].from_object := from_object_index;
-    objects_links_array[nowy].to_object := to_object_index;
-    objects_links_array[nowy].from_arrow := from_arrow;
-    objects_links_array[nowy].to_arrow := to_arrow;
+    objects_links_array[new].from_object := from_object_index;
+    objects_links_array[new].to_object := to_object_index;
+    objects_links_array[new].from_arrow := from_arrow;
+    objects_links_array[new].to_arrow := to_arrow;
 
     tmpl := TLine(LinePattern.Clone(self));
     tmpl.Parent := ScrollBox;
     tmpl.Visible := True;
-    objects_links_array[nowy].text_line_1 := tmpl;
+    objects_links_array[new].text_line_1 := tmpl;
 
     tmpl2 := TLine(LinePattern.Clone(self));
     tmpl2.Parent := ScrollBox;
     tmpl2.Visible := True;
-    objects_links_array[nowy].text_line_2 := tmpl2;
+    objects_links_array[new].text_line_2 := tmpl2;
 
     tmpl3 := TLine(LinePattern.Clone(self));
     tmpl3.Parent := ScrollBox;
     tmpl3.Visible := True;
-    objects_links_array[nowy].text_line_3 := tmpl3;
+    objects_links_array[new].text_line_3 := tmpl3;
 
     img1 := TImage(ArrowsPattern.Clone(self));
     img1.Parent := ScrollBox;
     img1.Visible := True;
-    objects_links_array[nowy].arrow_image_from := img1;
+    objects_links_array[new].arrow_image_from := img1;
 
     img2 := TImage(ArrowsPattern.Clone(self));
     img2.Parent := ScrollBox;
     img2.Visible := True;
-    objects_links_array[nowy].arrow_image_to := img2;
+    objects_links_array[new].arrow_image_to := img2;
 
     Draw_links;
   End;
 
-  if czy_istnieje = True then
+  if is_exists = True then
   Begin
-    objects_links_array[istniejacy].from_object := from_object_index;
-    objects_links_array[istniejacy].to_object := to_object_index;
-    objects_links_array[istniejacy].from_arrow := from_arrow;
-    objects_links_array[istniejacy].to_arrow := to_arrow;
+    objects_links_array[existing].from_object := from_object_index;
+    objects_links_array[existing].to_object := to_object_index;
+    objects_links_array[existing].from_arrow := from_arrow;
+    objects_links_array[existing].to_arrow := to_arrow;
   End;
 End;
 
@@ -449,36 +449,36 @@ end;
 
 procedure TMainForm.ProcessEditingFrame1btn_delete_processClick(Sender: TObject);
 Var
-  i, id_procesu, ktory_w_tablicy: Integer;
+  i, process_id, which_in_array: Integer;
 begin
-  ktory_w_tablicy := 0;
-  id_procesu := 0;
+  which_in_array := 0;
+  process_id := 0;
   for i := 1 to max_objects do
   Begin
     if objects_array[i].indicator = selected then
     Begin
-      id_procesu := objects_array[i].id_object;
-      ktory_w_tablicy := i;
+      process_id := objects_array[i].id_object;
+      which_in_array := i;
     End;
   End;
 
-  if ktory_w_tablicy > 0 then
+  if which_in_array > 0 then
   Begin
     DrawingTimer.Enabled := False;
     Deactivate_Object;
     selected := nil;
     // Delete the object first
-    objects_array[ktory_w_tablicy].id_object := 0;
+    objects_array[which_in_array].id_object := 0;
 {$IFDEF ANDROID}
-    obiekty[ktory_w_tablicy].wskaznik.DisposeOf;
+    obiekty[which_in_array].wskaznik.DisposeOf;
 {$ELSE}
-    objects_array[ktory_w_tablicy].indicator.Free;
-    objects_array[ktory_w_tablicy].indicator := nil;
+    objects_array[which_in_array].indicator.Free;
+    objects_array[which_in_array].indicator := nil;
 {$ENDIF}
     // Now deleting the connections
     for i := 1 to max_objects_links do
     Begin
-      if (objects_links_array[i].from_object = id_procesu) OR (objects_links_array[i].to_object = id_procesu) then
+      if (objects_links_array[i].from_object = process_id) OR (objects_links_array[i].to_object = process_id) then
       Begin
         objects_links_array[i].from_object := 0;
         objects_links_array[i].to_object := 0;
@@ -528,27 +528,27 @@ end;
 
 procedure TMainForm.ProcessEditingFrame1btn_udelete_linksClick(Sender: TObject);
 Var
-  i, id_procesu, ktory_w_tablicy: Integer;
+  i, process_id, which_in_array: Integer;
 begin
-  ktory_w_tablicy := 0;
-  id_procesu := 0;
+  which_in_array := 0;
+  process_id := 0;
   for i := 1 to max_objects do
   Begin
     if objects_array[i].indicator = selected then
     Begin
-      id_procesu := objects_array[i].id_object;
-      ktory_w_tablicy := i;
+      process_id := objects_array[i].id_object;
+      which_in_array := i;
     End;
   End;
 
-  if ktory_w_tablicy > 0 then
+  if which_in_array > 0 then
   Begin
     DrawingTimer.Enabled := False;
     Deactivate_Object;
     // Now deleting the connections
     for i := 1 to max_objects_links do
     Begin
-      if (objects_links_array[i].from_object = id_procesu) OR (objects_links_array[i].to_object = id_procesu) then
+      if (objects_links_array[i].from_object = process_id) OR (objects_links_array[i].to_object = process_id) then
       Begin
         objects_links_array[i].from_object := 0;
         objects_links_array[i].to_object := 0;
@@ -600,34 +600,34 @@ end;
 
 function TMainForm.XML_value(record_line: string): String;
 Var
- wynik : String;
-  poz: Integer;
+ outcome : String;
+ poz: Integer;
 Begin
- poz:=Pos('>',record_line); wynik:=Copy(record_line,poz+1,Length(record_line));
- poz:=Pos('</',wynik); wynik:=Copy(wynik,1,poz-1);
- wynik:=Trim(wynik);
- XML_value:=wynik;
+ poz:=Pos('>',record_line); outcome:=Copy(record_line,poz+1,Length(record_line));
+ poz:=Pos('</',outcome); outcome:=Copy(outcome,1,poz-1);
+ outcome:=Trim(outcome);
+ XML_value:=outcome;
 End;
 
 procedure TMainForm.MainMenuFrame1btn_openClick(Sender: TObject);
 Var
   tmp: TRectangle;
-  plik : TStringList;
-  linia : String;
+  file_body : TStringList;
+  text_line : String;
   o,i: Integer;
-  czy_wczytano: Boolean;
-  id_obiektu: string;
-  wpis: string;
-  x_obiektu: string;
-  y_obiektu: string;
-  from_obiekt: string;
-  to_obiekt: string;
+  is_loaded: Boolean;
+  object_id: string;
+  inscription: string;
+  x_object: string;
+  y_object: string;
+  from_object: string;
+  to_object: string;
   from_arrow: string;
   to_arrow: string;
 begin
  Clear_Objects_And_Links;
- plik := TStringList.Create;
- czy_wczytano:=False;
+ file_body := TStringList.Create;
+ is_loaded:=False;
 
  { TODO : Add the project load from the file for Android and possibly iOS}
 {$IFDEF ANDROID}
@@ -635,32 +635,32 @@ begin
 {$ELSE}
   if OpenProjectDialog.Execute then
    Begin
-    plik.LoadFromFile(OpenProjectDialog.FileName);
-    czy_wczytano:=True;
+    file_body.LoadFromFile(OpenProjectDialog.FileName);
+    is_loaded:=True;
    End;
 {$ENDIF}
 
- if czy_wczytano=True then
+ if is_loaded=True then
   Begin
    MainMenuFrame1.Visible := False;
-   for i := 0 to plik.Count-1 do
+   for i := 0 to file_body.Count-1 do
     Begin
-     linia:=Trim(plik.Strings[i]);
+     text_line:=Trim(file_body.Strings[i]);
 
-     if Pos('<object>',linia)>0 then
+     if Pos('<object>',text_line)>0 then
       Begin
        //now I have access to the given objects
-       id_obiektu :=XML_value(plik.Strings[i+1]);
-       wpis       :=XML_value(plik.Strings[i+2]);
-       wpis       :=StringReplace(wpis,'#13',#13,[rfReplaceAll]);
-       x_obiektu  :=XML_value(plik.Strings[i+3]);
-       y_obiektu  :=XML_value(plik.Strings[i+4]);
+       object_id  :=XML_value(file_body.Strings[i+1]);
+       inscription:=XML_value(file_body.Strings[i+2]);
+       inscription:=StringReplace(inscription,'#13',#13,[rfReplaceAll]);
+       x_object   :=XML_value(file_body.Strings[i+3]);
+       y_object   :=XML_value(file_body.Strings[i+4]);
 
         tmp := TRectangle(ObjectPattern.Clone(self));
         tmp.Parent := ScrollBox;
         tmp.Visible := True;
-        tmp.Position.x := StrToFloat(x_obiektu);
-        tmp.Position.y := StrToFloat(y_obiektu);
+        tmp.Position.x := StrToFloat(x_object);
+        tmp.Position.y := StrToFloat(y_object);
         tmp.OnMouseDown := ObjectPatternMouseDown;
         tmp.OnMouseMove := ObjectPatternMouseMove;
         tmp.OnMouseUp := ObjectPatternMouseUp;
@@ -668,93 +668,93 @@ begin
         tmp.OnMouseLeave := ObjectPatternMouseLeave;
         tmp.OnTap := LabelPatternTap;
 
-        Add_pointer(tmp, StrToInt(id_obiektu));
+        Add_pointer(tmp, StrToInt(object_id));
 
         for o := 0 to tmp.ChildrenCount - 1 do
          Begin
           if tmp.Children[o] is TLabel then
            Begin
-            TLabel(tmp.Children[o]).Text := wpis;
+            TLabel(tmp.Children[o]).Text := inscription;
            End;
          End;
       End;
 
-     if Pos('<link>',linia)>0 then
+     if Pos('<link>',text_line)>0 then
       Begin
-       from_obiekt :=XML_value(plik.Strings[i+1]);
-       to_obiekt   :=XML_value(plik.Strings[i+2]);
-       from_arrow  :=XML_value(plik.Strings[i+3]);
-       to_arrow    :=XML_value(plik.Strings[i+4]);
-       Add_link(StrToInt(from_obiekt),StrToInt(to_obiekt),StrToBool(from_arrow),StrToBool(to_arrow));
+       from_object :=XML_value(file_body.Strings[i+1]);
+       to_object   :=XML_value(file_body.Strings[i+2]);
+       from_arrow  :=XML_value(file_body.Strings[i+3]);
+       to_arrow    :=XML_value(file_body.Strings[i+4]);
+       Add_link(StrToInt(from_object),StrToInt(to_object),StrToBool(from_arrow),StrToBool(to_arrow));
       end;
 
     End;
   End;
 
- plik.Free;
+ file_body.Free;
 end;
 
 procedure TMainForm.MainMenuFrame1btn_saveClick(Sender: TObject);
 Var
-  plik : TStringList;
-  tekst_obiektu : String;
-  linie_tekstowe_obiektu : TStringList;
+  file_body : TStringList;
+  object_text : String;
+  object_text_lines : TStringList;
   t, i: Integer;
 begin
  { TODO : Replace XML "assembly" manually with XML classes }
- linie_tekstowe_obiektu := TStringList.Create;
- plik := TStringList.Create;
- plik.Add('<?xml version="1.0" encoding="utf-8"?>');
- plik.Add('<diagram date="'+DateToStr(Date)+'">');
+ object_text_lines := TStringList.Create;
+ file_body := TStringList.Create;
+ file_body.Add('<?xml version="1.0" encoding="utf-8"?>');
+ file_body.Add('<diagram date="'+DateToStr(Date)+'">');
 
- plik.Add('<objects>');
+ file_body.Add('<objects>');
   for i := 1 to max_objects do
    Begin
     if objects_array[i].id_object>0 then
      Begin
-      linie_tekstowe_obiektu.Text:=TLabel(objects_array[i].indicator.Children[0]).Text;
-      tekst_obiektu:='';
-      for t := 0 to linie_tekstowe_obiektu.Count-1 do
+      object_text_lines.Text:=TLabel(objects_array[i].indicator.Children[0]).Text;
+      object_text:='';
+      for t := 0 to object_text_lines.Count-1 do
        Begin
-        if t=0 then tekst_obiektu:=linie_tekstowe_obiektu.Strings[t]
-        else tekst_obiektu:=tekst_obiektu+'#13'+linie_tekstowe_obiektu.Strings[t];
+        if t=0 then object_text:=object_text_lines.Strings[t]
+        else object_text:=object_text+'#13'+object_text_lines.Strings[t];
        End;
 
-      plik.Add(' <object>');
-      plik.Add('  <object_id>'+IntToStr(objects_array[i].id_object)+'</object_id>');
-      plik.Add('  <object_caption>'+tekst_obiektu+'</object_caption>');
-      plik.Add('  <object_x>'+FloatToStr(objects_array[i].indicator.Position.X)+'</object_x>');
-      plik.Add('  <object_y>'+FloatToStr(objects_array[i].indicator.Position.Y)+'</object_y>');
-      plik.Add(' </object>');
+      file_body.Add(' <object>');
+      file_body.Add('  <object_id>'+IntToStr(objects_array[i].id_object)+'</object_id>');
+      file_body.Add('  <object_caption>'+object_text+'</object_caption>');
+      file_body.Add('  <object_x>'+FloatToStr(objects_array[i].indicator.Position.X)+'</object_x>');
+      file_body.Add('  <object_y>'+FloatToStr(objects_array[i].indicator.Position.Y)+'</object_y>');
+      file_body.Add(' </object>');
      End;
    End;
-  plik.Add('</objects>');
+  file_body.Add('</objects>');
 
-  plik.Add('<links>');
+  file_body.Add('<links>');
   for i := 1 to max_objects_links do
    Begin
     if objects_links_array[i].from_object>0 then
      Begin
-      plik.Add(' <link>');
-      plik.Add('  <link_from>'+IntToStr(objects_links_array[i].from_object)+'</link_from>');
-      plik.Add('  <link_to>'+IntToStr(objects_links_array[i].to_object)+'</link_to>');
-      plik.Add('  <arrow_from>'+BoolToStr(objects_links_array[i].from_arrow)+'</arrow_from>');
-      plik.Add('  <arrow_to>'+BoolToStr(objects_links_array[i].to_arrow)+'</arrow_to>');
-      plik.Add(' </link>');
+      file_body.Add(' <link>');
+      file_body.Add('  <link_from>'+IntToStr(objects_links_array[i].from_object)+'</link_from>');
+      file_body.Add('  <link_to>'+IntToStr(objects_links_array[i].to_object)+'</link_to>');
+      file_body.Add('  <arrow_from>'+BoolToStr(objects_links_array[i].from_arrow)+'</arrow_from>');
+      file_body.Add('  <arrow_to>'+BoolToStr(objects_links_array[i].to_arrow)+'</arrow_to>');
+      file_body.Add(' </link>');
      End;
    End;
-  plik.Add('</links>');
-  plik.Add('</diagram>');
+  file_body.Add('</links>');
+  file_body.Add('</diagram>');
 
 { TODO : Add project save to file for android and iOS}
 {$IFDEF ANDROID}
 
 {$ELSE}
-  if SaveProjectDialog.Execute then plik.SaveToFile(SaveProjectDialog.FileName, TEncoding.UTF8);
+  if SaveProjectDialog.Execute then file_body.SaveToFile(SaveProjectDialog.FileName, TEncoding.UTF8);
 {$ENDIF}
 
- plik.Free;
- linie_tekstowe_obiektu.Free;
+ file_body.Free;
+ object_text_lines.Free;
 end;
 
 procedure TMainForm.LinkageFrame1btn_addClick(Sender: TObject);
@@ -815,8 +815,8 @@ end;
 procedure TMainForm.Draw_links;
 var
   i, o: Integer;
-  obiekt_index_od: Integer;
-  obiekt_index_do: Integer;
+  object_index_from: Integer;
+  object_index_to: Integer;
 Begin
   Clean_contact_points;
   for i := 1 to max_objects_links do
@@ -826,14 +826,14 @@ Begin
       for o := 1 to max_objects do
       Begin
         if objects_array[o].id_object = objects_links_array[i].from_object then
-          obiekt_index_od := o;
+          object_index_from := o;
       End;
       for o := 1 to max_objects do
       Begin
         if objects_array[o].id_object = objects_links_array[i].to_object then
-          obiekt_index_do := o;
+          object_index_to := o;
       End;
-      Draw_link(obiekt_index_od, obiekt_index_do, objects_links_array[i].from_arrow, objects_links_array[i].to_arrow,
+      Draw_link(object_index_from, object_index_to, objects_links_array[i].from_arrow, objects_links_array[i].to_arrow,
         objects_links_array[i].text_line_1, objects_links_array[i].text_line_2, objects_links_array[i].text_line_3,
         objects_links_array[i].arrow_image_from, objects_links_array[i].arrow_image_to);
     End;
@@ -1052,41 +1052,41 @@ end;
 procedure TMainForm.Add_pointer(process: TRectangle; process_index: Integer);
 var
   i: Integer;
-  nowy: Integer;
+  new: Integer;
 Begin
-  nowy := 0;
+  new := 0;
   for i := 1 to max_objects do
   Begin
-    if (objects_array[i].id_object = 0) and (nowy = 0) then
-      nowy := i;
+    if (objects_array[i].id_object = 0) and (new = 0) then
+      new := i;
   End;
 
-  objects_array[nowy].id_object := process_index;
-  objects_array[nowy].indicator := process;
+  objects_array[new].id_object := process_index;
+  objects_array[new].indicator := process;
 End;
 
 function TMainForm.Last_Object: Integer;
 Var
-  wynik: Integer;
+  outcome: Integer;
   i: Integer;
 Begin
-  wynik := 0;
+  outcome := 0;
   for i := 1 to max_objects do
   Begin
     if objects_array[i].id_object = 0 then
      Begin
-      wynik := i-1;
+      outcome := i-1;
       Break;
      End;
   End;
-  Last_Object := wynik;
+  Last_Object := outcome;
 End;
 
 procedure TMainForm.btn_dodaj_nowy_procesClick(Sender: TObject);
 Var
   tmp: TRectangle;
   i: Integer;
-  index_obiektu: Integer;
+  object_index: Integer;
 begin
   Deselect_objects(True, True);
   btn_laczenie_procesow.IsPressed := False;
@@ -1103,14 +1103,14 @@ begin
   tmp.OnMouseLeave := ObjectPatternMouseLeave;
   tmp.OnTap := LabelPatternTap;
 
-  index_obiektu := Last_Object + 1;
-  Add_pointer(tmp, index_obiektu);
+  object_index := Last_Object + 1;
+  Add_pointer(tmp, object_index);
 
   for i := 0 to tmp.ChildrenCount - 1 do
   Begin
     if tmp.Children[i] is TLabel then
     Begin
-      TLabel(tmp.Children[i]).Text := 'New process' + #13 + '(' + IntToStr(index_obiektu) + ')';
+      TLabel(tmp.Children[i]).Text := 'New process' + #13 + '(' + IntToStr(object_index) + ')';
     End;
   End;
 
@@ -1190,7 +1190,7 @@ end;
 
 procedure TMainForm.ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
 var
-  powiazanie_aktywne: Integer;
+  active_association: Integer;
 begin
   if btn_laczenie_procesow.IsPressed then
   Begin
@@ -1220,8 +1220,8 @@ begin
         LinkageFrame1.lbl_od_procesu.Text := TLabel(selected_first.Children[0]).Text;
         LinkageFrame1.lbl_do_procesu.Text := TLabel(selected_second.Children[0]).Text;
 
-        powiazanie_aktywne := Which_connection(selected_first, selected_second);
-        if powiazanie_aktywne = 0 then
+        active_association := Which_connection(selected_first, selected_second);
+        if active_association = 0 then
         Begin
           LinkageFrame1.img_od.Visible := False;
           LinkageFrame1.img_do.Visible := True;
@@ -1231,15 +1231,15 @@ begin
         Begin
           LinkageFrame1.img_od.Visible := False;
           LinkageFrame1.img_do.Visible := False;
-          if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].from_object ) then LinkageFrame1.img_od.Visible := True;
-          if (objects_links_array[powiazanie_aktywne].from_arrow=True)
-          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].from_object ) then LinkageFrame1.img_do.Visible := True;
+          if (objects_links_array[active_association].from_arrow=True)
+          and (Which_object(selected_first)=objects_links_array[active_association].from_object ) then LinkageFrame1.img_od.Visible := True;
+          if (objects_links_array[active_association].from_arrow=True)
+          and (Which_object(selected_second)=objects_links_array[active_association].from_object ) then LinkageFrame1.img_do.Visible := True;
 
-          if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Which_object(selected_second)=objects_links_array[powiazanie_aktywne].to_object ) then LinkageFrame1.img_do.Visible := True;
-          if (objects_links_array[powiazanie_aktywne].to_arrow=True)
-          and (Which_object(selected_first)=objects_links_array[powiazanie_aktywne].to_object ) then LinkageFrame1.img_od.Visible := True;
+          if (objects_links_array[active_association].to_arrow=True)
+          and (Which_object(selected_second)=objects_links_array[active_association].to_object ) then LinkageFrame1.img_do.Visible := True;
+          if (objects_links_array[active_association].to_arrow=True)
+          and (Which_object(selected_first)=objects_links_array[active_association].to_object ) then LinkageFrame1.img_od.Visible := True;
 
           LinkageFrame1.btn_add.Text := 'change the association';
         End;

@@ -1,4 +1,4 @@
-object RamkaEdycjaProcesu: TProcessEditingFrame
+object ProcessEditingFrame: TProcessEditingFrame
   Size.Width = 937.000000000000000000
   Size.Height = 456.000000000000000000
   Size.PlatformDefault = False
@@ -24,7 +24,7 @@ object RamkaEdycjaProcesu: TProcessEditingFrame
     Stroke.Color = claAliceblue
     XRadius = 3.000000000000000000
     YRadius = 3.000000000000000000
-    object Label1: TLabel
+    object lbl_menu_name: TLabel
       Align = Top
       StyledSettings = [Family, Style]
       Size.Width = 400.000000000000000000

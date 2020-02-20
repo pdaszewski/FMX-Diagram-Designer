@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<diagram date="2020-02-18">
+<diagram date="2020-02-20">
 <objects>
  <object>
   <object_id>1</object_id>
@@ -34,8 +34,8 @@
  <object>
   <object_id>6</object_id>
   <object_caption>Unlocking#13(reactivation)</object_caption>
-  <object_x>608</object_x>
-  <object_y>101</object_y>
+  <object_x>546</object_x>
+  <object_y>98</object_y>
  </object>
  <object>
   <object_id>7</object_id>
