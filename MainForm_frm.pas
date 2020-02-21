@@ -298,11 +298,11 @@ Begin
     objects_links_array[existing_object].from_arrow := False;
     objects_links_array[existing_object].to_arrow := False;
 {$IFDEF ANDROID}
-    objects_links_array[existing_object].linia.DisposeOf;
-    objects_links_array[existing_object].linia2.DisposeOf;
-    objects_links_array[existing_object].linia3.DisposeOf;
-    objects_links_array[existing_object].strzalka_od.DisposeOf;
-    objects_links_array[existing_object].strzalka_do.DisposeOf;
+    objects_links_array[existing_object].text_line_1.DisposeOf;
+    objects_links_array[existing_object].text_line_2.DisposeOf;
+    objects_links_array[existing_object].text_line_3.DisposeOf;
+    objects_links_array[existing_object].arrow_image_from.DisposeOf;
+    objects_links_array[existing_object].arrow_image_to.DisposeOf;
 {$ELSE}
     objects_links_array[existing_object].text_line_1.Free;
     objects_links_array[existing_object].text_line_1 := nil;
@@ -468,7 +468,7 @@ begin
     // Delete the object first
     objects_array[which_in_array].id_object := 0;
 {$IFDEF ANDROID}
-    obiekty[which_in_array].indicator.DisposeOf;
+    objects_array[which_in_array].indicator.DisposeOf;
 {$ELSE}
     objects_array[which_in_array].indicator.Free;
     objects_array[which_in_array].indicator := nil;
@@ -1130,7 +1130,7 @@ Begin
   Begin
     objects_array[i].id_object := 0;
 {$IFDEF ANDROID}
-    obiekty[i].wskaznik.DisposeOf;
+    objects_array[i].indicator.DisposeOf;
 {$ELSE}
     objects_array[i].indicator.Free;
     objects_array[i].indicator := nil;
@@ -1144,11 +1144,11 @@ Begin
     objects_links_array[i].from_arrow := False;
     objects_links_array[i].to_arrow := False;
 {$IFDEF ANDROID}
-    objects_links_array[i].linia.DisposeOf;
-    objects_links_array[i].linia2.DisposeOf;
-    objects_links_array[i].linia3.DisposeOf;
-    objects_links_array[i].strzalka_od.DisposeOf;
-    objects_links_array[i].strzalka_do.DisposeOf;
+    objects_links_array[i].text_line_1.DisposeOf;
+    objects_links_array[i].text_line_2.DisposeOf;
+    objects_links_array[i].text_line_3.DisposeOf;
+    objects_links_array[i].arrow_image_from.DisposeOf;
+    objects_links_array[i].arrow_image_to.DisposeOf;
 {$ELSE}
     objects_links_array[i].text_line_1.Free;
     objects_links_array[i].text_line_1 := nil;
@@ -1177,7 +1177,7 @@ begin
   ProcessEditingFrame1.Visible := False;
 
 {$IFDEF ANDROID}
-  Wzor_label.TextSettings.Font.Size := 10;
+  LabelPattern.TextSettings.Font.Size := 10;
 {$ELSE}
   LabelPattern.TextSettings.Font.Size := 12;
 {$ENDIF}

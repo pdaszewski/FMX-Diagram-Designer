@@ -1,30 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899-12-30 00:00:00.000.647,D:\2\FMX-Diagram-Designer\RamkaPowiazanie_frm.pas=D:\2\FMX-Diagram-Designer\LinkageFrame_frm.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.234,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.1.0\FMXDiagramDesigner.dproj=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
     <Transaction>1899-12-30 00:00:00.000.965,=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.543,D:\2\FMX-Diagram-Designer\ProcessEditingFrame_frm.fmx=D:\2\FMX-Diagram-Designer\RamkaEdycjaProcesu_frm.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.370,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaEdycjaProcesu_frm.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.378,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\RamkaPowiazanie_frm.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\Unit1.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.764,=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.516,D:\2\FMX-Diagram-Designer\MainMenuFrame_frm.fmx=D:\2\FMX-Diagram-Designer\RamkaMenuGlowne_frm.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.558,=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.797,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.1.0\MainForm_frm.fmx=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.860,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaMenuGlowne_frm.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.516,D:\2\FMX-Diagram-Designer\MainMenuFrame_frm.pas=D:\2\FMX-Diagram-Designer\RamkaMenuGlowne_frm.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.370,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaEdycjaProcesu_frm.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.797,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.1.0\MainForm_frm.pas=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.543,D:\2\FMX-Diagram-Designer\ProcessEditingFrame_frm.pas=D:\2\FMX-Diagram-Designer\RamkaEdycjaProcesu_frm.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.860,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaMenuGlowne_frm.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.378,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\RamkaPowiazanie_frm.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.964,=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.647,D:\2\FMX-Diagram-Designer\RamkaPowiazanie_frm.fmx=D:\2\FMX-Diagram-Designer\LinkageFrame_frm.fmx</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.527,=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.378,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\Unit1.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\RamkaPowiazanie_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.378,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\Unit1.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.4.0\RamkaPowiazanie_frm.fmx</Transaction>
     <Transaction>1899-12-30 00:00:00.000.589,=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
     <Transaction>1899-12-30 00:00:00.000.187,=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.516,D:\2\FMX-Diagram-Designer\RamkaMenuGlowne_frm.pas=D:\2\FMX-Diagram-Designer\MainMenuFrame_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.558,=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.860,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaMenuGlowne_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.764,=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.543,D:\2\FMX-Diagram-Designer\RamkaEdycjaProcesu_frm.fmx=D:\2\FMX-Diagram-Designer\ProcessEditingFrame_frm.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.370,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaEdycjaProcesu_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.234,C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Project1.dproj=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.1.0\FMXDiagramDesigner.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.370,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaEdycjaProcesu_frm.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.647,D:\2\FMX-Diagram-Designer\LinkageFrame_frm.fmx=D:\2\FMX-Diagram-Designer\RamkaPowiazanie_frm.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.797,C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.1.0\MainForm_frm.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.647,D:\2\FMX-Diagram-Designer\LinkageFrame_frm.pas=D:\2\FMX-Diagram-Designer\RamkaPowiazanie_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.860,D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\Unit1.fmx=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.2.0\RamkaMenuGlowne_frm.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.964,=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.527,=C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.797,C:\Users\Piotr Daszewski\Documents\Embarcadero\Studio\Projects\Unit1.pas=D:\Prace\FXSystems\!Projekty Delphi\FMX Diagram Designer\Wersja 0.1.0\MainForm_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.543,D:\2\FMX-Diagram-Designer\RamkaEdycjaProcesu_frm.pas=D:\2\FMX-Diagram-Designer\ProcessEditingFrame_frm.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.516,D:\2\FMX-Diagram-Designer\RamkaMenuGlowne_frm.fmx=D:\2\FMX-Diagram-Designer\MainMenuFrame_frm.fmx</Transaction>
   </Transactions>
 	<ActiveMobileDevice>
-		<NoProfile iOSSimulator="iPhone5" Android=""/>
+		<NoProfile iOSSimulator="iPhone5" Android="HT7661803318"/>
 	</ActiveMobileDevice>
 </BorlandProject>
