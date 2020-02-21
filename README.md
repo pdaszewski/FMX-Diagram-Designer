@@ -32,3 +32,5 @@ Still must TO DO write function to save and open in android.
 2020-02-19 More code translations to english.
 
 2020-02-20 More code translations to english (with frames names and components).
+
+2020-02-21 Complete translation of the code into English. Refining the operation of parts for the Android platform and adding icons for Android.
