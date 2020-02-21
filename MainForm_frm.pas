@@ -108,8 +108,8 @@ type
   end;
 
 const
-  version = '1.0.2.4';
-  build_date = '2020-02-20';
+  version = '1.0.2.6';
+  build_date = '2020-02-21';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -441,10 +441,8 @@ begin
       L.Height := p1.x - p2.x;
     end;
   end;
-  if (L.Height < 0.01) then
-    L.Height := 0.1;
-  if (L.Width < 0.01) then
-    L.Width := 0.1;
+  if (L.Height < 0.01) then L.Height := 0.1;
+  if (L.Width < 0.01) then L.Width := 0.1;
 end;
 
 procedure TMainForm.ProcessEditingFrame1btn_delete_processClick(Sender: TObject);
@@ -470,7 +468,7 @@ begin
     // Delete the object first
     objects_array[which_in_array].id_object := 0;
 {$IFDEF ANDROID}
-    obiekty[which_in_array].wskaznik.DisposeOf;
+    obiekty[which_in_array].indicator.DisposeOf;
 {$ELSE}
     objects_array[which_in_array].indicator.Free;
     objects_array[which_in_array].indicator := nil;
@@ -485,11 +483,11 @@ begin
         objects_links_array[i].from_arrow := False;
         objects_links_array[i].to_arrow := False;
 {$IFDEF ANDROID}
-        objects_links_array[i].linia.DisposeOf;
-        objects_links_array[i].linia2.DisposeOf;
-        objects_links_array[i].linia3.DisposeOf;
-        objects_links_array[i].strzalka_od.DisposeOf;
-        objects_links_array[i].strzalka_do.DisposeOf;
+        objects_links_array[i].text_line_1.DisposeOf;
+        objects_links_array[i].text_line_2.DisposeOf;
+        objects_links_array[i].text_line_3.DisposeOf;
+        objects_links_array[i].arrow_image_from.DisposeOf;
+        objects_links_array[i].arrow_image_to.DisposeOf;
 {$ELSE}
         objects_links_array[i].text_line_1.Free;
         objects_links_array[i].text_line_1 := nil;
@@ -555,11 +553,11 @@ begin
         objects_links_array[i].from_arrow := False;
         objects_links_array[i].to_arrow := False;
 {$IFDEF ANDROID}
-        objects_links_array[i].linia.DisposeOf;
-        objects_links_array[i].linia2.DisposeOf;
-        objects_links_array[i].linia3.DisposeOf;
-        objects_links_array[i].strzalka_od.DisposeOf;
-        objects_links_array[i].strzalka_do.DisposeOf;
+        objects_links_array[i].text_line_1.DisposeOf;
+        objects_links_array[i].text_line_2.DisposeOf;
+        objects_links_array[i].text_line_3.DisposeOf;
+        objects_links_array[i].arrow_image_from.DisposeOf;
+        objects_links_array[i].arrow_image_to.DisposeOf;
 {$ELSE}
         objects_links_array[i].text_line_1.Free;
         objects_links_array[i].text_line_1 := nil;
@@ -847,9 +845,9 @@ var
   X1, Y1: Single;
   x2, y2: Single;
   ox, oy: Single;
-  kier: Char;
-  pozycja_test: Integer;
-  licznik_obrotow: Integer;
+  direction: Char;
+  position_test: Integer;
+  rev_counter: Integer;
 begin
 if (from_arrow) or (to_arrow) then
   Begin
@@ -870,14 +868,14 @@ if (from_arrow) or (to_arrow) then
         // docelowy jest na prawo
         X1 := od_rect.Position.x + od_rect.Width;
         x2 := do_rect.Position.x;
-        kier := 'P';
+        direction := 'P';
       End
       else
       Begin
         // docelowy jest na lewo
         X1 := od_rect.Position.x;
         x2 := do_rect.Position.x + do_rect.Width;
-        kier := 'L';
+        direction := 'L';
       End;
 
     End
@@ -888,13 +886,13 @@ if (from_arrow) or (to_arrow) then
         // Je?li obiekt docelowy jest ni?ej ni? obiekt ?ród?owy
         Y1 := od_rect.Position.y + od_rect.Height;
         y2 := do_rect.Position.y;
-        kier := 'D';
+        direction := 'D';
       End
       else
       Begin
         Y1 := od_rect.Position.y;
         y2 := do_rect.Position.y + do_rect.Height;
-        kier := 'G';
+        direction := 'G';
       End;
 
       X1 := od_rect.Position.x + (od_rect.Width / 2);
@@ -903,43 +901,43 @@ if (from_arrow) or (to_arrow) then
 
     if Is_there_already_a_point_of_contact_here(X1, Y1) = True then
     Begin
-      pozycja_test := line_spacing;
-      licznik_obrotow := 1;
+      position_test := line_spacing;
+      rev_counter := 1;
       Repeat
-        if kier IN ['L', 'P'] then
-          Y1 := Y1 + pozycja_test;
-        if kier IN ['D', 'G'] then
-          X1 := X1 + pozycja_test;
-        if licznik_obrotow < 0 then
-          licznik_obrotow := licznik_obrotow - 1
+        if direction IN ['L', 'P'] then
+          Y1 := Y1 + position_test;
+        if direction IN ['D', 'G'] then
+          X1 := X1 + position_test;
+        if rev_counter < 0 then
+          rev_counter := rev_counter - 1
         else
-          licznik_obrotow := licznik_obrotow + 1;
-        licznik_obrotow := licznik_obrotow * -1;
-        pozycja_test := line_spacing * licznik_obrotow;
+          rev_counter := rev_counter + 1;
+        rev_counter := rev_counter * -1;
+        position_test := line_spacing * rev_counter;
       Until Is_there_already_a_point_of_contact_here(X1, Y1) = False;
     End;
     Add_contact_point(X1, Y1);
 
     if Is_there_already_a_point_of_contact_here(x2, y2) = True then
     Begin
-      pozycja_test := line_spacing;
-      licznik_obrotow := 1;
+      position_test := line_spacing;
+      rev_counter := 1;
       Repeat
-        if kier IN ['L', 'P'] then
-          y2 := y2 + pozycja_test;
-        if kier IN ['D', 'G'] then
-          x2 := x2 + pozycja_test;
-        if licznik_obrotow < 0 then
-          licznik_obrotow := licznik_obrotow - 1
+        if direction IN ['L', 'P'] then
+          y2 := y2 + position_test;
+        if direction IN ['D', 'G'] then
+          x2 := x2 + position_test;
+        if rev_counter < 0 then
+          rev_counter := rev_counter - 1
         else
-          licznik_obrotow := licznik_obrotow + 1;
-        licznik_obrotow := licznik_obrotow * -1;
-        pozycja_test := line_spacing * -licznik_obrotow;
+          rev_counter := rev_counter + 1;
+        rev_counter := rev_counter * -1;
+        position_test := line_spacing * -rev_counter;
       Until Is_there_already_a_point_of_contact_here(x2, y2) = False;
     End;
     Add_contact_point(x2, y2);
 
-    if kier = 'D' then
+    if direction = 'D' then
     Begin
       oy := Y1 + ((y2 - Y1) / 2);
       DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(X1, oy));
@@ -964,7 +962,7 @@ if (from_arrow) or (to_arrow) then
       else
         from_arrow_image.Visible := False;
     End;
-    if kier = 'G' then
+    if direction = 'G' then
     Begin
       oy := y2 + ((Y1 - y2) / 2);
       DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(X1, oy));
@@ -990,7 +988,7 @@ if (from_arrow) or (to_arrow) then
         from_arrow_image.Visible := False;
     End;
 
-    if kier = 'P' then
+    if direction = 'P' then
     Begin
       ox := X1 + ((x2 - X1) / 2);
       DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(ox, Y1));
@@ -1015,7 +1013,7 @@ if (from_arrow) or (to_arrow) then
       else
         from_arrow_image.Visible := False;
     End;
-    if kier = 'L' then
+    if direction = 'L' then
     Begin
       ox := x2 + ((X1 - x2) / 2);
       DrawLineBetweenPoints(text_line_1, PointF(X1, Y1), PointF(ox, Y1));
@@ -1043,10 +1041,7 @@ if (from_arrow) or (to_arrow) then
 
     od_rect.BringToFront;
     do_rect.BringToFront;
-
   end;
-
-
 end;
 
 procedure TMainForm.Add_pointer(process: TRectangle; process_index: Integer);
