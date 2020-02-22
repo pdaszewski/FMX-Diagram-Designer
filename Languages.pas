@@ -26,6 +26,12 @@ Var
  REMOVE_ASSOCIATIONS : string;
  PROCESS_CONNECTIONS : string;
  CANCEL : string;
+ APPLICATION_MENU : string;
+ NEW_DIAGRAM : string;
+ FULL_SCREEN : string;
+ LOAD_PROJECT : string;
+ SAVE_PROJECT : string;
+ CLOSE_THE_MENU : string;
 
 implementation
 
@@ -43,6 +49,12 @@ Begin
  language_array[1,9]  := 'save process data';
  language_array[1,10] := 'Process connections';
  language_array[1,11] := 'cancel';
+ language_array[1,12] := 'Application menu';
+ language_array[1,13] := 'new diagram';
+ language_array[1,14] := 'full screen';
+ language_array[1,15] := 'load project';
+ language_array[1,16] := 'save project';
+ language_array[1,17] := 'close the menu';
 
  //PL dictionary
  language_array[2,1]  := 'usuñ powi¹zanie';
@@ -56,6 +68,12 @@ Begin
  language_array[2,9]  := 'zapisz dane procesu';
  language_array[2,10] := 'Powi¹zania procesów';
  language_array[2,11] := 'anuluj';
+ language_array[2,12] := 'Menu g³ówne aplikacji';
+ language_array[2,13] := 'nowy diagram';
+ language_array[2,14] := 'pe³en ekran';
+ language_array[2,15] := 'wczytaj projekt';
+ language_array[2,16] := 'zapisz projekt';
+ language_array[2,17] := 'zamknij menu g³ówne';
 End;
 
 procedure Set_language(language : String);
@@ -77,6 +95,12 @@ Begin
  SAVE_PROCESS_DATA      := language_array[array_lang,9];
  PROCESS_CONNECTIONS    := language_array[array_lang,10];
  CANCEL                 := language_array[array_lang,11];
+ APPLICATION_MENU       := language_array[array_lang,12];
+ NEW_DIAGRAM            := language_array[array_lang,13];
+ FULL_SCREEN            := language_array[array_lang,14];
+ LOAD_PROJECT           := language_array[array_lang,15];
+ SAVE_PROJECT           := language_array[array_lang,16];
+ CLOSE_THE_MENU         := language_array[array_lang,17];
 End;
 
 end.

@@ -1178,6 +1178,13 @@ begin
   LinkageFrame1.lbl_menu_name.Text := languages.PROCESS_CONNECTIONS;
   LinkageFrame1.btn_cancel.Text := languages.CANCEL;
 
+  MainMenuFrame1.lbl_menu_name.Text := languages.APPLICATION_MENU;
+  MainMenuFrame1.btn_new_diagram.Text := languages.NEW_DIAGRAM;
+  MainMenuFrame1.btn_full_screen_mode.Text := languages.FULL_SCREEN;
+  MainMenuFrame1.btn_open.Text := languages.LOAD_PROJECT;
+  MainMenuFrame1.btn_save.Text := languages.SAVE_PROJECT;
+  MainMenuFrame1.btn_close_menu.Text := languages.CLOSE_THE_MENU;
+
   Caption := 'FMX Diagram Designer - '+Languages.VERSION+': ' + version;
   lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - '+Languages.VERSION+': ' + version;
   MouseIsDown := False;
