@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.ExtCtrls, FMX.Objects, FMX.Effects,
   FMX.Controls.Presentation, FMX.StdCtrls, FMX.Layouts, FMX.ListBox, ProcessEditingFrame_frm, FMX.ScrollBox, FMX.Memo,
-  MainMenuFrame_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList, LinkageFrame_frm;
+  MainMenuFrame_frm, FMX.MaterialSources, System.ImageList, FMX.ImgList, LinkageFrame_frm, Languages;
 
 type
   diagram_object = record
@@ -108,8 +108,8 @@ type
   end;
 
 const
-  version = '1.0.2.6';
-  build_date = '2020-02-21';
+  version = '1.0.2.8';
+  build_date = '2020-02-22';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -207,9 +207,9 @@ begin
   End;
 
   if (LinkageFrame1.img_od.Visible = False) and (LinkageFrame1.img_do.Visible = False) then
-    LinkageFrame1.btn_add.Text := 'remove association'
+    LinkageFrame1.btn_add.Text := languages.REMOVE_ASSOCIATION
   else
-    LinkageFrame1.btn_add.Text := 'add association';
+    LinkageFrame1.btn_add.Text := languages.ADD_ASSOCIATION;
 end;
 
 procedure TMainForm.Deselect_objects(first, second: Boolean);
@@ -1105,7 +1105,7 @@ begin
   Begin
     if tmp.Children[i] is TLabel then
     Begin
-      TLabel(tmp.Children[i]).Text := 'New process' + #13 + '(' + IntToStr(object_index) + ')';
+      TLabel(tmp.Children[i]).Text := languages.NEW_PROCESS + #13 + '(' + IntToStr(object_index) + ')';
     End;
   End;
 
@@ -1167,8 +1167,19 @@ End;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  Caption := 'FMX Diagram Designer - version: ' + version;
-  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - version: ' + version;
+  Languages.Set_dictionaries;
+  Languages.Set_language('en');
+
+  ProcessEditingFrame1.lbl_menu_name.Text := languages.PROCESS_NAME;
+  ProcessEditingFrame1.btn_save_process_data.Text := languages.SAVE_PROCESS_DATA;
+  ProcessEditingFrame1.btn_delete_process.Text := languages.DELETE_PROCESS;
+  ProcessEditingFrame1.btn_delete_links.Text := languages.REMOVE_ASSOCIATIONS;
+
+  LinkageFrame1.lbl_menu_name.Text := languages.PROCESS_CONNECTIONS;
+  LinkageFrame1.btn_cancel.Text := languages.CANCEL;
+
+  Caption := 'FMX Diagram Designer - '+Languages.VERSION+': ' + version;
+  lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - '+Languages.VERSION+': ' + version;
   MouseIsDown := False;
   ObjectPattern.Visible := False;
   LinePattern.Visible := False;
@@ -1220,7 +1231,7 @@ begin
         Begin
           LinkageFrame1.img_od.Visible := False;
           LinkageFrame1.img_do.Visible := True;
-          LinkageFrame1.btn_add.Text := 'add association';
+          LinkageFrame1.btn_add.Text := languages.ADD_ASSOCIATION;
         End
         else
         Begin
@@ -1236,7 +1247,7 @@ begin
           if (objects_links_array[active_association].to_arrow=True)
           and (Which_object(selected_first)=objects_links_array[active_association].to_object ) then LinkageFrame1.img_od.Visible := True;
 
-          LinkageFrame1.btn_add.Text := 'change the association';
+          LinkageFrame1.btn_add.Text := languages.CHANGE_THE_ASSOCIATION;
         End;
       End;
     End;

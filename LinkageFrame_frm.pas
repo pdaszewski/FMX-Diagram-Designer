@@ -15,7 +15,7 @@ type
     lbl_menu_name: TLabel;
     GridPanelLayout1: TGridPanelLayout;
     btn_add: TButton;
-    but_cancel: TButton;
+    btn_cancel: TButton;
     from_process_rectangle: TRectangle;
     to_process_rectangle: TRectangle;
     lbl_od_procesu: TLabel;

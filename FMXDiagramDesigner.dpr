@@ -6,7 +6,8 @@ uses
   MainForm_frm in 'MainForm_frm.pas' {MainForm},
   ProcessEditingFrame_frm in 'ProcessEditingFrame_frm.pas' {ProcessEditingFrame: TFrame},
   MainMenuFrame_frm in 'MainMenuFrame_frm.pas' {MainMenuFrame: TFrame},
-  LinkageFrame_frm in 'LinkageFrame_frm.pas' {LinkageFrame: TFrame};
+  LinkageFrame_frm in 'LinkageFrame_frm.pas' {LinkageFrame: TFrame},
+  Languages in 'Languages.pas';
 
 {$R *.res}
 
