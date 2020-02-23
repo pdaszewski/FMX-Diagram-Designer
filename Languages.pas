@@ -9,8 +9,8 @@ interface
  procedure Set_language(language : String);
 
 const
- max_languages = 2;
- max_entries = 20;
+ max_languages = 4;
+ max_entries = 18;
 
 Var
  language_array : array[1..max_languages, 1..max_entries] of string;
@@ -32,6 +32,7 @@ Var
  LOAD_PROJECT : string;
  SAVE_PROJECT : string;
  CLOSE_THE_MENU : string;
+ INTERFACE_LANGUAGE : string;
 
 implementation
 
@@ -55,6 +56,7 @@ Begin
  language_array[1,15] := 'load project';
  language_array[1,16] := 'save project';
  language_array[1,17] := 'close the menu';
+ language_array[1,18] := 'interface language';
 
  //PL dictionary
  language_array[2,1]  := 'usuñ powi¹zanie';
@@ -74,6 +76,47 @@ Begin
  language_array[2,15] := 'wczytaj projekt';
  language_array[2,16] := 'zapisz projekt';
  language_array[2,17] := 'zamknij menu g³ówne';
+ language_array[2,18] := 'jêzyk interfejsu aplikacji';
+
+ //DE dictionary
+ language_array[3,1]  := 'assoziation entfernen';
+ language_array[3,2]  := 'assoziation hinzufügen';
+ language_array[3,3]  := 'Neuer Prozess';
+ language_array[3,4]  := 'ausführung';
+ language_array[3,5]  := 'Ändern Sie die Zuordnung';
+ language_array[3,6]  := 'Vorgangsname';
+ language_array[3,7]  := 'löschvorgang';
+ language_array[3,8]  := 'assoziationen entfernen';
+ language_array[3,9]  := 'prozessdaten speichern';
+ language_array[3,10] := 'verbindungen verarbeiten';
+ language_array[3,11] := 'stornieren';
+ language_array[3,12] := 'anwendungsmenü';
+ language_array[3,13] := 'neues Diagramm';
+ language_array[3,14] := 'ganzer Bildschirm';
+ language_array[3,15] := 'projekt laden';
+ language_array[3,16] := 'projekt speichern';
+ language_array[3,17] := 'schließen Sie das Menü';
+ language_array[3,18] := 'schnittstellensprache';
+
+ //FR dictionary
+ language_array[4,1]  := 'supprimer l''association';
+ language_array[4,2]  := 'ajouter une association';
+ language_array[4,3]  := 'Nouveau processus';
+ language_array[4,4]  := 'version';
+ language_array[4,5]  := 'changer l''association';
+ language_array[4,6]  := 'Nom du processus';
+ language_array[4,7]  := 'processus de suppression';
+ language_array[4,8]  := 'supprimer les associations';
+ language_array[4,9]  := 'enregistrer les données de processus';
+ language_array[4,10] := 'Connexions de processus';
+ language_array[4,11] := 'Annuler';
+ language_array[4,12] := 'Menu d''application';
+ language_array[4,13] := 'nouveau diagramme';
+ language_array[4,14] := 'plein écran';
+ language_array[4,15] := 'charger le projet';
+ language_array[4,16] := 'sauvegarder le projet';
+ language_array[4,17] := 'fermer le menu';
+ language_array[4,18] := 'langue de l''interface';
 End;
 
 procedure Set_language(language : String);
@@ -83,6 +126,8 @@ Begin
  language:=Trim(AnsiLowerCase(language));
  if language='en' then array_lang := 1;
  if language='pl' then array_lang := 2;
+ if language='de' then array_lang := 3;
+ if language='fr' then array_lang := 4;
 
  REMOVE_ASSOCIATION     := language_array[array_lang,1];
  ADD_ASSOCIATION        := language_array[array_lang,2];
@@ -101,6 +146,7 @@ Begin
  LOAD_PROJECT           := language_array[array_lang,15];
  SAVE_PROJECT           := language_array[array_lang,16];
  CLOSE_THE_MENU         := language_array[array_lang,17];
+ INTERFACE_LANGUAGE     := language_array[array_lang,18];
 End;
 
 end.

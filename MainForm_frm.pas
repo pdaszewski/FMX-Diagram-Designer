@@ -76,6 +76,8 @@ type
     procedure Set_link_arrow(arrow: String);
     function XML_value(record_line: string): String;
 
+    procedure SetGlobalLanguage(language_name: string);
+
     procedure FormCreate(Sender: TObject);
     procedure ObjectPatternMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; x, y: Single);
     procedure ObjectPatternMouseMove(Sender: TObject; Shift: TShiftState; x, y: Single);
@@ -108,8 +110,8 @@ type
   end;
 
 const
-  version = '1.0.2.8';
-  build_date = '2020-02-22';
+  version = '1.0.3.0';
+  build_date = '2020-02-23';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -755,6 +757,27 @@ begin
  object_text_lines.Free;
 end;
 
+procedure TMainForm.SetGlobalLanguage(language_name: string);
+begin
+  Languages.Set_language(language_name);
+
+  ProcessEditingFrame1.lbl_menu_name.Text := languages.PROCESS_NAME;
+  ProcessEditingFrame1.btn_save_process_data.Text := languages.SAVE_PROCESS_DATA;
+  ProcessEditingFrame1.btn_delete_process.Text := languages.DELETE_PROCESS;
+  ProcessEditingFrame1.btn_delete_links.Text := languages.REMOVE_ASSOCIATIONS;
+
+  LinkageFrame1.lbl_menu_name.Text := languages.PROCESS_CONNECTIONS;
+  LinkageFrame1.btn_cancel.Text := languages.CANCEL;
+
+  MainMenuFrame1.lbl_menu_name.Text := languages.APPLICATION_MENU;
+  MainMenuFrame1.btn_new_diagram.Text := languages.NEW_DIAGRAM;
+  MainMenuFrame1.btn_full_screen_mode.Text := languages.FULL_SCREEN;
+  MainMenuFrame1.btn_open.Text := languages.LOAD_PROJECT;
+  MainMenuFrame1.btn_save.Text := languages.SAVE_PROJECT;
+  MainMenuFrame1.btn_close_menu.Text := languages.CLOSE_THE_MENU;
+  MainMenuFrame1.lbl_language_name.Text := languages.INTERFACE_LANGUAGE;
+end;
+
 procedure TMainForm.LinkageFrame1btn_addClick(Sender: TObject);
 Var
   from_object, to_object: Integer;
@@ -1168,22 +1191,7 @@ End;
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Languages.Set_dictionaries;
-  Languages.Set_language('en');
-
-  ProcessEditingFrame1.lbl_menu_name.Text := languages.PROCESS_NAME;
-  ProcessEditingFrame1.btn_save_process_data.Text := languages.SAVE_PROCESS_DATA;
-  ProcessEditingFrame1.btn_delete_process.Text := languages.DELETE_PROCESS;
-  ProcessEditingFrame1.btn_delete_links.Text := languages.REMOVE_ASSOCIATIONS;
-
-  LinkageFrame1.lbl_menu_name.Text := languages.PROCESS_CONNECTIONS;
-  LinkageFrame1.btn_cancel.Text := languages.CANCEL;
-
-  MainMenuFrame1.lbl_menu_name.Text := languages.APPLICATION_MENU;
-  MainMenuFrame1.btn_new_diagram.Text := languages.NEW_DIAGRAM;
-  MainMenuFrame1.btn_full_screen_mode.Text := languages.FULL_SCREEN;
-  MainMenuFrame1.btn_open.Text := languages.LOAD_PROJECT;
-  MainMenuFrame1.btn_save.Text := languages.SAVE_PROJECT;
-  MainMenuFrame1.btn_close_menu.Text := languages.CLOSE_THE_MENU;
+  SetGlobalLanguage('en');
 
   Caption := 'FMX Diagram Designer - '+Languages.VERSION+': ' + version;
   lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - '+Languages.VERSION+': ' + version;

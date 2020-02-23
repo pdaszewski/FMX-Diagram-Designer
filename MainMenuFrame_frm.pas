@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants, 
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls, FMX.Controls.Presentation, FMX.Objects,
-  FMX.Effects;
+  FMX.Effects, FMX.ListBox;
 
 type
   TMainMenuFrame = class(TFrame)
@@ -29,7 +29,10 @@ type
     rbtn_DashDotDot: TRadioButton;
     rbtn_Dot: TRadioButton;
     rect_types_of_lines: TRectangle;
+    lbl_language_name: TLabel;
+    cbox_language: TComboBox;
     procedure rbtn_SolidChange(Sender: TObject);
+    procedure cbox_languageChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -41,6 +44,11 @@ implementation
 {$R *.fmx}
 
 uses MainForm_frm;
+
+procedure TMainMenuFrame.cbox_languageChange(Sender: TObject);
+begin
+ MainForm.SetGlobalLanguage(cbox_language.Items.Strings[cbox_language.ItemIndex]);
+end;
 
 procedure TMainMenuFrame.rbtn_SolidChange(Sender: TObject);
 begin
