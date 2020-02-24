@@ -110,8 +110,8 @@ type
   end;
 
 const
-  version = '1.0.3.0';
-  build_date = '2020-02-23';
+  version = '1.0.3.2';
+  build_date = '2020-02-24';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -631,7 +631,7 @@ begin
 
  { TODO : Add the project load from the file for Android and possibly iOS}
 {$IFDEF ANDROID}
-
+ ShowMessage(languages.NOT_AVAILABLE_ON_SYSTEM);
 {$ELSE}
   if OpenProjectDialog.Execute then
    Begin
@@ -748,7 +748,7 @@ begin
 
 { TODO : Add project save to file for android and iOS}
 {$IFDEF ANDROID}
-
+ ShowMessage(languages.NOT_AVAILABLE_ON_SYSTEM);
 {$ELSE}
   if SaveProjectDialog.Execute then file_body.SaveToFile(SaveProjectDialog.FileName, TEncoding.UTF8);
 {$ENDIF}

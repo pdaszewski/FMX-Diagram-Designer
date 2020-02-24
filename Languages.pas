@@ -10,7 +10,7 @@ interface
 
 const
  max_languages = 4;
- max_entries = 18;
+ max_entries = 19;
 
 Var
  language_array : array[1..max_languages, 1..max_entries] of string;
@@ -33,6 +33,7 @@ Var
  SAVE_PROJECT : string;
  CLOSE_THE_MENU : string;
  INTERFACE_LANGUAGE : string;
+ NOT_AVAILABLE_ON_SYSTEM : string;
 
 implementation
 
@@ -57,6 +58,7 @@ Begin
  language_array[1,16] := 'save project';
  language_array[1,17] := 'close the menu';
  language_array[1,18] := 'interface language';
+ language_array[1,19] := 'not available on this system';
 
  //PL dictionary
  language_array[2,1]  := 'usuñ powi¹zanie';
@@ -77,6 +79,7 @@ Begin
  language_array[2,16] := 'zapisz projekt';
  language_array[2,17] := 'zamknij menu g³ówne';
  language_array[2,18] := 'jêzyk interfejsu aplikacji';
+ language_array[2,19] := 'opcja niedostêpna na tym systemie';
 
  //DE dictionary
  language_array[3,1]  := 'assoziation entfernen';
@@ -97,6 +100,7 @@ Begin
  language_array[3,16] := 'projekt speichern';
  language_array[3,17] := 'schließen Sie das Menü';
  language_array[3,18] := 'schnittstellensprache';
+ language_array[3,19] := 'auf diesem System nicht verfügbar';
 
  //FR dictionary
  language_array[4,1]  := 'supprimer l''association';
@@ -117,6 +121,7 @@ Begin
  language_array[4,16] := 'sauvegarder le projet';
  language_array[4,17] := 'fermer le menu';
  language_array[4,18] := 'langue de l''interface';
+ language_array[4,19] := 'non disponible sur ce syst?me';
 End;
 
 procedure Set_language(language : String);
@@ -147,6 +152,7 @@ Begin
  SAVE_PROJECT           := language_array[array_lang,16];
  CLOSE_THE_MENU         := language_array[array_lang,17];
  INTERFACE_LANGUAGE     := language_array[array_lang,18];
+ NOT_AVAILABLE_ON_SYSTEM:= language_array[array_lang,19];
 End;
 
 end.
