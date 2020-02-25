@@ -110,8 +110,8 @@ type
   end;
 
 const
-  version = '1.0.3.2';
-  build_date = '2020-02-24';
+  version = '1.0.3.4';
+  build_date = '2020-02-25';
 
   max_objects = 100;
   max_objects_links = 1000;
@@ -1192,6 +1192,27 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Languages.Set_dictionaries;
   SetGlobalLanguage('en');
+
+  {$IFDEF ANDROID}
+    MainMenuFrame1.btn_new_diagram.StyleLookup      := '';
+    MainMenuFrame1.btn_close_menu.StyleLookup       := '';
+    MainMenuFrame1.btn_full_screen_mode.StyleLookup := '';
+    MainMenuFrame1.btn_open.StyleLookup             := '';
+    MainMenuFrame1.btn_save.StyleLookup             := '';
+
+    MainMenuFrame1.btn_new_diagram.Height     := 30;
+    MainMenuFrame1.btn_close_menu.Height      := 30;
+    MainMenuFrame1.btn_full_screen_mode.Height:= 30;
+    MainMenuFrame1.btn_open.Height            := 30;
+    MainMenuFrame1.btn_save.Height            := 30;
+
+    MainMenuFrame1.btn_new_diagram.TextSettings.Font.Size       := 16;
+    MainMenuFrame1.btn_close_menu.TextSettings.Font.Size        := 16;
+    MainMenuFrame1.btn_full_screen_mode.TextSettings.Font.Size  := 16;
+    MainMenuFrame1.btn_open.TextSettings.Font.Size              := 16;
+    MainMenuFrame1.btn_save.TextSettings.Font.Size              := 16;
+  {$ENDIF}
+
 
   Caption := 'FMX Diagram Designer - '+Languages.VERSION+': ' + version;
   lbl_bottom_info.Text:='FX Systems Piotr Daszewski FMX Diagram Designer - '+Languages.VERSION+': ' + version;
