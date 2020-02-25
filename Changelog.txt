@@ -25,3 +25,6 @@ Still must TO DO write function to save and open in android.
 
 2020-02-23 Addition of two new languages: German (DE) and French (FR).
 Adding components that allow changing the interface language from the main application menu.
+
+2020-02-25 Added support for scaling the main menu buttons for Android. 
+In the new version, the buttons are better scaled for small diagonal screens.
